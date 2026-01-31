@@ -1,6 +1,7 @@
 """
 Script generation for Veo video pipeline.
 STRICT visual consistency - same simple studio for ALL AI clips.
+RICH dialogue with stats, numbers, and storyline from research.
 """
 import os
 import json
@@ -52,24 +53,50 @@ class ScriptGenerator:
         print("[ScriptGenerator] ✅ Ready")
 
     def _get_prompt(self, research: ResearchContext, duration: int = 120) -> str:
+        # Format research data for richer dialogue
+        facts_str = "\n".join(f"  • {f}" for f in research.key_facts[:8])
+        figures_str = "\n".join(f"  • {f}" for f in research.key_figures[:6])
+        timeline_str = "\n".join(f"  • {t}" for t in research.timeline[:6])
+        controversy_str = "\n".join(f"  • {c}" for c in research.controversy_points[:4])
+        
         return f"""Generate a sports broadcast script for Veo AI video.
 
 STRICT RULES:
 1. Each AI segment MAX 8 SECONDS
 2. ALL AI segments use this EXACT same studio prompt:
    "{STUDIO_PROMPT}"
-3. Pattern: ai, ai, real_clip, ai, ai, real_clip, ai, real_clip, ai
-4. EXACTLY 3 real clips total
-5. EXACTLY 6 AI segments total
+3. Pattern: ai, ai, real_clip, ai, ai, real_clip, ai, ai
 
-REAL CLIP SEARCH QUERIES - KEEP GENERIC:
-- Use simple searches like: "seahawks touchdown highlights", "team name playoffs", "player name catch"
-- Do NOT use specific dates, exact scores, or complex phrases
-- Keep it 2-4 words max for searchability
+═══════════════════════════════════════════════════════════════
+RESEARCH DATA - USE THESE STATS IN DIALOGUE!
+═══════════════════════════════════════════════════════════════
 
 STORYLINE: {research.original_prompt}
-SUMMARY: {research.storyline_summary[:500]}
-FACTS: {json.dumps(research.key_facts[:4])}
+
+SUMMARY:
+{research.storyline_summary}
+
+KEY FACTS (use these numbers!):
+{facts_str}
+
+KEY FIGURES (mention these names!):
+{figures_str}
+
+TIMELINE (reference dates!):
+{timeline_str}
+
+HOT TAKES:
+{controversy_str}
+
+═══════════════════════════════════════════════════════════════
+
+**DIALOGUE MUST BE STAT-HEAVY** like real sports analysts:
+- "13-3 record, number one seed - this team was DOMINANT!"
+- "Russell Wilson: 26 touchdowns, only 9 interceptions!"  
+- "February 2nd, 2014 - they destroyed the Broncos 43-8!"
+- "The defense held opponents to just 14 points per game!"
+
+Every dialogue line should drop a stat, date, score, or player name.
 
 Generate JSON:
 
@@ -93,7 +120,7 @@ Generate JSON:
             "duration_seconds": 8,
             "visual_prompt": "{STUDIO_PROMPT} Camera on center host Marcus Webb, medium shot, he speaks seriously.",
             "speaker": "Marcus Webb",
-            "dialogue": "Opening hook line about the story",
+            "dialogue": "Opening with KEY STAT or DATE",
             "delivery": "Serious",
             "camera": "Medium shot center host",
             "graphics": ["LOWER THIRD: Title"],
@@ -104,12 +131,12 @@ Generate JSON:
             "order": 2,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen left side, medium shot.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen left side, medium shot, she gestures while speaking.",
             "speaker": "Sarah Chen",
-            "dialogue": "Context and key background",
-            "delivery": "Informative",
+            "dialogue": "Analysis with SPECIFIC STAT and PLAYER NAME",
+            "delivery": "Analytical",
             "camera": "Medium shot left host",
-            "graphics": [],
+            "graphics": ["STAT: Key number"],
             "studio": {json.dumps(STUDIO)},
             "hosts": {json.dumps(HOSTS)}
         }},
@@ -117,17 +144,17 @@ Generate JSON:
             "order": 3,
             "type": "real_clip",
             "duration_seconds": 8,
-            "description": "Key highlight moment",
-            "search_query": "GENERIC 2-4 word search like: team name highlights",
-            "context": "Why this matters"
+            "description": "Key sports moment from the storyline",
+            "search_query": "Specific descriptive search for YouTube/clips",
+            "context": "Why this clip matters to the narrative"
         }},
         {{
             "order": 4,
             "type": "ai_generated", 
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera on Tony Martinez right side, close-up.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Tony Martinez right side, close-up, passionate expression.",
             "speaker": "Tony Martinez",
-            "dialogue": "Former player insight",
+            "dialogue": "Player perspective with STAT or HOT TAKE",
             "delivery": "Passionate",
             "camera": "Close-up right host",
             "graphics": [],
@@ -138,9 +165,9 @@ Generate JSON:
             "order": 5,
             "type": "ai_generated",
             "duration_seconds": 8, 
-            "visual_prompt": "{STUDIO_PROMPT} Wide shot all three hosts.",
+            "visual_prompt": "{STUDIO_PROMPT} Wide shot all three hosts at desk, conversation energy.",
             "speaker": "Marcus Webb",
-            "dialogue": "Question or transition",
+            "dialogue": "Follow-up with DATE or KEY FIGURE reference",
             "delivery": "Engaged",
             "camera": "Wide shot all hosts",
             "graphics": [],
@@ -151,9 +178,9 @@ Generate JSON:
             "order": 6,
             "type": "real_clip",
             "duration_seconds": 8,
-            "description": "Another key moment",
-            "search_query": "GENERIC search like: player name touchdown",
-            "context": "Relevance"
+            "description": "Another pivotal moment",
+            "search_query": "Specific descriptive search",
+            "context": "Narrative relevance"
         }},
         {{
             "order": 7,
@@ -161,7 +188,7 @@ Generate JSON:
             "duration_seconds": 8,
             "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen, medium shot.",
             "speaker": "Sarah Chen", 
-            "dialogue": "Analysis point",
+            "dialogue": "Deep analysis with NUMBERS and CONTEXT",
             "delivery": "Thoughtful",
             "camera": "Medium shot left host",
             "graphics": [],
@@ -170,19 +197,11 @@ Generate JSON:
         }},
         {{
             "order": 8,
-            "type": "real_clip",
-            "duration_seconds": 8,
-            "description": "Final highlight",
-            "search_query": "GENERIC search like: team celebration",
-            "context": "Closing visual"
-        }},
-        {{
-            "order": 9,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera slowly pushes in on Marcus Webb center.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera slowly pushes in on Marcus Webb center, closing thought.",
             "speaker": "Marcus Webb",
-            "dialogue": "Closing statement",
+            "dialogue": "Closing with MEMORABLE STAT or FINAL SCORE",
             "delivery": "Conclusive",
             "camera": "Push in on center host",
             "graphics": ["LOWER THIRD: Show title"],
@@ -191,15 +210,15 @@ Generate JSON:
         }}
     ],
     
-    "research_summary": "{research.storyline_summary[:300]}",
+    "research_summary": "Summary with key stats",
     "key_facts": {json.dumps(research.key_facts[:4])}
 }}
 
 CRITICAL: 
+- Every dialogue MUST include a specific stat, number, date, or player name from research
 - Every visual_prompt MUST start with exactly: "{STUDIO_PROMPT}"
-- search_query for real clips MUST be generic and short (2-4 words)
+- search_query should be descriptive for finding the right clip
 - Keep dialogue short (fits in 8 seconds when spoken)
-- EXACTLY 6 AI segments, EXACTLY 3 real clips
 
 Return ONLY valid JSON."""
 

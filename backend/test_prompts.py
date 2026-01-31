@@ -30,6 +30,8 @@ def test_full_pipeline(prompt: str, duration: int = 120, output_file: str = "tes
     print("\n--- RESEARCH ---")
     research = research_agent.research_storyline_sync(prompt)
     print(f"✅ {len(research.key_facts)} facts found")
+    for fact in research.key_facts[:4]:
+        print(f"   • {fact[:60]}...")
     
     # Script
     print("\n--- SCRIPT ---")
@@ -42,7 +44,7 @@ def test_full_pipeline(prompt: str, duration: int = 120, output_file: str = "tes
     for seg in script.segments:
         if seg.get("type") == "ai_generated":
             print(f"  {seg['order']}. [AI] {seg['speaker']} ({seg['duration_seconds']}s)")
-            print(f"     \"{seg['dialogue'][:50]}...\"")
+            print(f"     \"{seg['dialogue'][:70]}...\"")
         else:
             print(f"  {seg['order']}. [CLIP] \"{seg['search_query']}\" ({seg['duration_seconds']}s)")
     
@@ -66,6 +68,6 @@ def test_full_pipeline(prompt: str, duration: int = 120, output_file: str = "tes
 
 if __name__ == "__main__":
     # Usage: python test_prompts.py "prompt" [output_file.json]
-    prompt = sys.argv[1] if len(sys.argv) > 1 else "seahawks path to superbowl"
+    prompt = sys.argv[1] if len(sys.argv) > 1 else "Why didn't the 49ers make it to the Super Bowl"
     output_file = sys.argv[2] if len(sys.argv) > 2 else "test_output.json"
     test_full_pipeline(prompt, output_file=output_file)
