@@ -1,344 +1,261 @@
 {
-  "prompt": "Why didn't the 49ers make it to the Super Bowl",
-  "research": {
-    "original_prompt": "Why didn't the 49ers make it to the Super Bowl",
-    "storyline_summary": "The San Francisco 49ers' Super Bowl dreams were dashed in a heartbreaking 25-22 overtime loss to the Kansas City Chiefs in Super Bowl LVIII on February 11, 2024. After a dominant regular season, the 49ers navigated a tough playoff bracket, overcoming a slow start against the Green Bay Packers in the divisional round (24-21) and clawing back from a 17-point deficit against the Detroit Lions in the NFC Championship Game (34-31). However, against the Chiefs, despite leading for much of the game and showcasing a strong defensive performance, crucial mistakes and the brilliance of Patrick Mahomes in the final minutes proved to be their undoing. The Niners defense held Mahomes and the Chiefs to just 19 points through regulation, but in overtime, the Chiefs marched down the field, with Mahomes connecting with Mecole Hardman for the game-winning touchdown, leaving the 49ers and their faithful fans in despair.",
-    "key_facts": [
-      "The 49ers led the Chiefs for the majority of Super Bowl LVIII, holding a 10-0 lead at one point.",
-      "Patrick Mahomes passed for 333 yards and 2 touchdowns, earning him Super Bowl MVP.",
-      "The game went into overtime, the second Super Bowl to utilize the new overtime rules.",
-      "Rookie kicker Jake Moody set a Super Bowl record with a 55-yard field goal.",
-      "The 49ers defense sacked Patrick Mahomes 6 times, but failed to contain him on crucial late-game scrambles.",
-      "Kyle Shanahan is now 0-2 as a head coach in Super Bowls.",
-      "Christian McCaffrey had 80 rushing yards and a touchdown, but struggled to break free for explosive plays.",
-      "The 49ers committed several costly penalties, including a pass interference in overtime that extended the Chiefs' game-winning drive."
-    ],
-    "key_figures": [
-      "Kyle Shanahan - 49ers Head Coach. His play-calling in crucial moments is under scrutiny.",
-      "Patrick Mahomes - Chiefs Quarterback. His ability to perform under pressure sealed the victory.",
-      "Brock Purdy - 49ers Quarterback. Played well but didn't deliver the game-winning drive.",
-      "Christian McCaffrey - 49ers Running Back. A key offensive weapon, but contained by the Chiefs' defense."
-    ],
-    "timeline": [
-      "January 20, 2024: 49ers defeat the Green Bay Packers 24-21 in the Divisional Round.",
-      "January 28, 2024: 49ers defeat the Detroit Lions 34-31 in the NFC Championship Game after trailing 24-7 at halftime.",
-      "February 11, 2024: Super Bowl LVIII - 49ers lose to the Kansas City Chiefs 25-22 in overtime."
-    ],
-    "controversy_points": [
-      "Kyle Shanahan's late-game play-calling: Some question his conservative approach, particularly in overtime.",
-      "The pass interference penalty in overtime: Was it a legitimate call, or a game-changing mistake by the referees?",
-      "Brock Purdy's performance: Did he do enough to win the Super Bowl, or did his limitations hold the team back?"
-    ],
-    "emotional_angles": [
-      "The 49ers' Super Bowl drought continues: The team hasn't won a Super Bowl since 1995.",
-      "The heartbreak for 49ers fans: Seeing their team come so close, only to lose in overtime, is devastating.",
-      "The resilience of the Chiefs: Overcoming adversity and winning their second consecutive Super Bowl is a testament to their team's character."
-    ],
-    "sources": [
-      {
-        "query": "Why didn't the 49ers make it to the Super Bowl",
-        "source": "ESPN",
-        "title": "ESPN Recap: Chiefs defeat 49ers in Super Bowl LVIII",
-        "snippet": "Detailed game summary, stats, and key moments.",
-        "url": null,
-        "date": null,
-        "relevance_score": 0.9
-      },
-      {
-        "query": "Why didn't the 49ers make it to the Super Bowl",
-        "source": "NFL.com",
-        "title": "NFL.com Game Center: Super Bowl LVIII",
-        "snippet": "Live updates, play-by-play, and official statistics from the game.",
-        "url": null,
-        "date": null,
-        "relevance_score": 0.9
-      },
-      {
-        "query": "Why didn't the 49ers make it to the Super Bowl",
-        "source": "San Francisco Chronicle",
-        "title": "San Francisco Chronicle: 49ers' Super Bowl loss",
-        "snippet": "Local coverage and analysis of the game from a 49ers perspective.",
-        "url": null,
-        "date": null,
-        "relevance_score": 0.9
-      },
-      {
-        "query": "Why didn't the 49ers make it to the Super Bowl",
-        "source": "Pro Football Focus",
-        "title": "Pro Football Focus: Super Bowl LVIII Grades",
-        "snippet": "Player grades and analysis of individual performances.",
-        "url": null,
-        "date": null,
-        "relevance_score": 0.9
-      }
-    ]
+  "title": "49ers' Super Bowl Dream Derailed: What Went Wrong?",
+  "storyline": "Why didn't the 49ers make it to the Super Bowl",
+  "total_duration_seconds": 64,
+  "studio": {
+    "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+    "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+    "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
   },
-  "script": {
-    "title": "49ers Super Bowl Heartbreak: What Went Wrong?",
-    "storyline": "Why didn't the 49ers make it to the Super Bowl",
-    "total_duration_seconds": 150,
-    "visual_style": {
-      "studio_description": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic.",
-      "lighting_setup": "Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth",
-      "color_palette": "Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray",
-      "camera_style": "Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis",
-      "graphics_style": "Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions",
-      "overall_mood": "Professional primetime sports broadcast with dramatic tension"
+  "hosts": [
+    {
+      "name": "Marcus Webb",
+      "role": "Lead Anchor",
+      "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
     },
-    "studio": {
-      "description": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic.",
-      "lighting": "Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth",
-      "background_elements": [
-        "Large LED screen",
-        "Team logos",
-        "Stats ticker",
-        "Sports graphics"
+    {
+      "name": "Sarah Chen",
+      "role": "NFL Analyst",
+      "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+    },
+    {
+      "name": "Tony Martinez",
+      "role": "Former Player Analyst",
+      "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
+    }
+  ],
+  "segments": [
+    {
+      "order": 1,
+      "type": "ai_generated",
+      "duration_seconds": 7,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing 49ers logo with cracked effect. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Camera slowly pushes in on center host Marcus Webb who speaks with serious expression.",
+      "speaker": "Marcus Webb",
+      "dialogue": "The 49ers' Super Bowl hopes shattered in a painful NFC Championship loss. What went wrong?",
+      "delivery": "Serious, measured, building tension",
+      "camera": "Wide shot, slow push in to medium",
+      "graphics": [
+        "LOWER THIRD: 49ers' Super Bowl Dream Derailed"
       ],
-      "color_scheme": "Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray",
-      "time_of_day": "Primetime evening broadcast"
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
+        }
+      ]
     },
-    "hosts": [
-      {
-        "name": "Sarah Miller",
-        "role": "Lead Anchor",
-        "appearance": "40s African American woman, burgundy blazer, confident posture, short natural hairstyle",
-        "position": "Center desk"
+    {
+      "order": 2,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing statistical breakdown of the game. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Medium shot of Sarah Chen. Same lighting and colors. She gestures while making analytical point.",
+      "speaker": "Sarah Chen",
+      "dialogue": "The numbers tell a grim story. Purdy's injury, 4 sacks, and 3 turnovers doomed them. They just couldn't recover.",
+      "delivery": "Analytical, citing stats",
+      "camera": "Medium shot on Sarah",
+      "graphics": [
+        "STAT GRAPHIC: 49ers Turnovers: 3, Eagles Turnovers: 0"
+      ],
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
       },
-      {
-        "name": "Tom Evans",
-        "role": "Analyst",
-        "appearance": "50s Caucasian man, gray suit, blue tie, analytical expression, receding hairline",
-        "position": "Left of center"
-      },
-      {
-        "name": "Reggie Bush",
-        "role": "Former Player",
-        "appearance": "30s African American man, athletic build, 49ers jersey under a dark jacket, focused gaze",
-        "position": "Right of center"
-      }
-    ],
-    "premise": "Examining the key moments and decisions that led to the 49ers' Super Bowl loss.",
-    "key_points": [
-      "Missed opportunities on offense",
-      "Defensive lapses in overtime",
-      "Questionable coaching decisions"
-    ],
-    "segments": [
-      {
-        "order": 1,
-        "segment_type": "ai_generated",
-        "ai_segment": {
-          "segment_id": "intro_1",
-          "segment_type": "intro",
-          "total_duration_seconds": 12,
-          "mood": "dramatic",
-          "veo_clips": [
-            {
-              "clip_id": "intro_1a",
-              "duration_seconds": 6,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Wide shot of sports broadcast studio, camera slowly pushes in toward Sarah Miller who begins speaking with serious expression",
-              "dialogue_text": "The 49ers were so close...",
-              "speaker": "Sarah Miller",
-              "camera_angle": "Wide shot, slow push in",
-              "action": "Host speaking to camera, dramatic intro"
-            },
-            {
-              "clip_id": "intro_1b",
-              "duration_seconds": 6,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Now medium shot of Sarah Miller, same lighting and colors, host gesturing with hand",
-              "dialogue_text": "...but victory slipped through their fingers.",
-              "speaker": "Sarah Miller",
-              "camera_angle": "Medium shot",
-              "action": "Host continuing dramatic intro"
-            }
-          ],
-          "dialogue": [
-            {
-              "speaker": "Sarah Miller",
-              "text": "The 49ers were so close...but victory slipped through their fingers. Tonight, we dissect what went wrong.",
-              "delivery": "Dramatic, building tension",
-              "camera_direction": "Push in"
-            }
-          ],
-          "graphics": [
-            "LOWER THIRD: 49ers Super Bowl Heartbreak"
-          ]
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
         },
-        "clip_reference": null
-      },
-      {
-        "order": 2,
-        "segment_type": "real_clip",
-        "ai_segment": null,
-        "clip_reference": {
-          "clip_id": "clip_1",
-          "description": "Footage of Jake Moody's record-breaking field goal",
-          "search_query": "youtube 49ers Jake Moody 55 yard field goal",
-          "duration_seconds": 8,
-          "context": "Highlighting early success and momentum",
-          "transition_in": "cut",
-          "transition_out": "cut"
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
         }
+      ]
+    },
+    {
+      "order": 3,
+      "type": "real_clip",
+      "duration_seconds": 8,
+      "description": "Brock Purdy elbow injury in the first quarter",
+      "search_query": "Brock Purdy injury NFC championship",
+      "context": "Shows the moment Purdy got injured, a key turning point."
+    },
+    {
+      "order": 4,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing Haason Reddick celebrating a sack. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Close-up on Tony Martinez. Same lighting. He speaks passionately with hand gestures.",
+      "speaker": "Tony Martinez",
+      "dialogue": "You could see it in his eyes, Purdy was never the same after that hit. Reddick just dominated that line!",
+      "delivery": "Passionate, emphatic",
+      "camera": "Close-up on Tony",
+      "graphics": [],
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
       },
-      {
-        "order": 3,
-        "segment_type": "ai_generated",
-        "ai_segment": {
-          "segment_id": "analysis_1",
-          "segment_type": "analysis",
-          "total_duration_seconds": 10,
-          "mood": "analytical",
-          "veo_clips": [
-            {
-              "clip_id": "analysis_1a",
-              "duration_seconds": 5,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Medium shot of Tom Evans, gesturing at a screen graphic showing offensive stats.",
-              "dialogue_text": "The 49ers offense sputtered at key moments.",
-              "speaker": "Tom Evans",
-              "camera_angle": "Medium shot",
-              "action": "Analyst pointing at screen"
-            },
-            {
-              "clip_id": "analysis_1b",
-              "duration_seconds": 5,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Close up on Tom Evans, nodding slightly, serious expression.",
-              "dialogue_text": "They left points on the field.",
-              "speaker": "Tom Evans",
-              "camera_angle": "Close up",
-              "action": "Analyst nodding"
-            }
-          ],
-          "dialogue": [
-            {
-              "speaker": "Tom Evans",
-              "text": "The 49ers offense sputtered at key moments. They left points on the field, and you can't do that against Mahomes.",
-              "delivery": "Analytical, measured tone",
-              "camera_direction": "Cut between medium and close up"
-            }
-          ],
-          "graphics": [
-            "LOWER THIRD: Tom Evans - Analyst",
-            "SCREEN GRAPHIC: 49ers Offensive Stats"
-          ]
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
         },
-        "clip_reference": null
-      },
-      {
-        "order": 4,
-        "segment_type": "real_clip",
-        "ai_segment": null,
-        "clip_reference": {
-          "clip_id": "clip_2",
-          "description": "Footage of Mahomes scrambling for a first down in overtime",
-          "search_query": "youtube Mahomes overtime scramble Super Bowl",
-          "duration_seconds": 7,
-          "context": "Demonstrating Mahomes' impact on the game",
-          "transition_in": "cut",
-          "transition_out": "cut"
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
         }
+      ]
+    },
+    {
+      "order": 5,
+      "type": "ai_generated",
+      "duration_seconds": 7,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing 49ers sideline looking dejected. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Three-shot of all hosts. Debate energy. Quick cuts between speakers.",
+      "speaker": "Marcus Webb",
+      "dialogue": "So, was it just the injury or were there deeper problems?",
+      "delivery": "Mediating discussion",
+      "camera": "Three-shot, dynamic cuts",
+      "graphics": [
+        "DEBATE GRAPHIC: Injury vs. System?"
+      ],
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
       },
-      {
-        "order": 5,
-        "segment_type": "ai_generated",
-        "ai_segment": {
-          "segment_id": "reggie_insight",
-          "segment_type": "analysis",
-          "total_duration_seconds": 9,
-          "mood": "critical",
-          "veo_clips": [
-            {
-              "clip_id": "reggie_insight_a",
-              "duration_seconds": 4,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Medium shot of Reggie Bush, shaking his head.",
-              "dialogue_text": "Mahomes is a different breed.",
-              "speaker": "Reggie Bush",
-              "camera_angle": "Medium shot",
-              "action": "Host shaking head"
-            },
-            {
-              "clip_id": "reggie_insight_b",
-              "duration_seconds": 5,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Close up on Reggie Bush, intense look.",
-              "dialogue_text": "You can't give him those opportunities.",
-              "speaker": "Reggie Bush",
-              "camera_angle": "Close up",
-              "action": "Host with intense look"
-            }
-          ],
-          "dialogue": [
-            {
-              "speaker": "Reggie Bush",
-              "text": "Mahomes is a different breed. You can't give him those opportunities in overtime, and the defense couldn't contain him.",
-              "delivery": "Critical, direct tone",
-              "camera_direction": "Focus on Reggie"
-            }
-          ],
-          "graphics": [
-            "LOWER THIRD: Reggie Bush - Former NFL Player"
-          ]
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
         },
-        "clip_reference": null
-      },
-      {
-        "order": 6,
-        "segment_type": "real_clip",
-        "ai_segment": null,
-        "clip_reference": {
-          "clip_id": "clip_3",
-          "description": "Footage of the game-winning touchdown",
-          "search_query": "youtube Chiefs game winning touchdown Super Bowl",
-          "duration_seconds": 8,
-          "context": "Showing the decisive play of the game",
-          "transition_in": "cut",
-          "transition_out": "cut"
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
         }
+      ]
+    },
+    {
+      "order": 6,
+      "type": "real_clip",
+      "duration_seconds": 8,
+      "description": "Eagles sack of 49ers backup QB",
+      "search_query": "Eagles sack 49ers NFC championship",
+      "context": "Shows the continued pressure on the 49ers quarterbacks after Purdy's injury."
+    },
+    {
+      "order": 7,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing Kyle Shanahan looking frustrated. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Medium shot of Sarah Chen. Same lighting and colors. She gestures while making analytical point.",
+      "speaker": "Sarah Chen",
+      "dialogue": "Shanahan's playcalling became predictable. They couldn't adjust to the Eagles' defensive pressure.",
+      "delivery": "Analytical, citing strategy",
+      "camera": "Medium shot on Sarah",
+      "graphics": [
+        "LOWER THIRD: Questionable Playcalling?"
+      ],
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
       },
-      {
-        "order": 7,
-        "segment_type": "ai_generated",
-        "ai_segment": {
-          "segment_id": "outro",
-          "segment_type": "outro",
-          "total_duration_seconds": 14,
-          "mood": "somber",
-          "veo_clips": [
-            {
-              "clip_id": "outro_a",
-              "duration_seconds": 7,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Wide shot of the studio, hosts looking downcast.",
-              "dialogue_text": "A tough loss for the 49ers.",
-              "speaker": "Sarah Miller",
-              "camera_angle": "Wide shot",
-              "action": "Hosts looking somber"
-            },
-            {
-              "clip_id": "outro_b",
-              "duration_seconds": 7,
-              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Zoom in on Sarah Miller, slight head shake.",
-              "dialogue_text": "They'll be back.",
-              "speaker": "Sarah Miller",
-              "camera_angle": "Zoom in",
-              "action": "Head shake, somber expression"
-            }
-          ],
-          "dialogue": [
-            {
-              "speaker": "Sarah Miller",
-              "text": "A tough loss for the 49ers. But they'll learn from this, and I have no doubt they'll be back.",
-              "delivery": "Somber but hopeful",
-              "camera_direction": "Slow zoom"
-            }
-          ],
-          "graphics": [
-            "LOWER THIRD: Thanks for watching!"
-          ]
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
         },
-        "clip_reference": null
-      }
-    ],
-    "research_sources": [
-      "ESPN",
-      "NFL.com"
-    ]
-  }
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "type": "ai_generated",
+      "duration_seconds": 7,
+      "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing Eagles celebrating their victory. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Camera slowly zooms out on all three hosts.",
+      "speaker": "Marcus Webb",
+      "dialogue": "Ultimately, the Eagles were the better team that day. The 49ers will need to regroup for next season.",
+      "delivery": "Reflective, concluding",
+      "camera": "Wide shot, slow zoom out",
+      "graphics": [
+        "LOWER THIRD: End of Segment"
+      ],
+      "studio": {
+        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
+        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
+        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
+        }
+      ]
+    }
+  ],
+  "research_summary": "The San Francisco 49ers' Super Bowl aspirations crashed in a heartbreaking 31-7 defeat against the Philadelphia Eagles in the NFC Championship game on January 29, 2023. A promising season, fueled by the emergence of rookie quarterback Brock Purdy, abruptly derailed due to a series of unfortunate events. Purdy, who had led the 49ers on an improbable eight-game winning streak after taking over for injured quarterbacks Trey Lance and Jimmy Garoppolo, suffered an elbow injury early in the game, seve",
+  "key_facts": [
+    "Brock Purdy suffered an elbow injury early in the first quarter, significantly impacting his throwing ability.",
+    "The Eagles sacked 49ers quarterbacks a total of 4 times.",
+    "The 49ers committed 3 turnovers compared to the Eagles' 0.",
+    "Philadelphia outrushed San Francisco 148 yards to 81 yards.",
+    "The Eagles scored 21 unanswered points in the second and third quarters."
+  ]
 }
