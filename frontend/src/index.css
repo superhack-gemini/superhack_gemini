@@ -46,6 +46,47 @@ body {
   opacity: 0.7;
 }
 
+/* Subtle field geometry to hint at the gridiron without distraction. */
+.field-lines {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.08),
+      rgba(148, 163, 184, 0.08) 1px,
+      transparent 1px,
+      transparent 120px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(148, 163, 184, 0.05),
+      rgba(148, 163, 184, 0.05) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  animation: field-drift 60s linear infinite;
+}
+
+/* Stadium light gradient wash that feels cinematic and distant. */
+.stadium-lights {
+  background-image:
+    radial-gradient(40% 30% at 12% 0%, rgba(226, 232, 240, 0.16), transparent 70%),
+    radial-gradient(40% 30% at 88% 0%, rgba(226, 232, 240, 0.12), transparent 70%);
+  opacity: 0.5;
+  animation: stadium-drift 70s ease-in-out infinite;
+}
+
+/* Gentle vignette to spotlight hero content. */
+.cinematic-vignette {
+  background: radial-gradient(
+    120% 120% at 50% 30%,
+    rgba(2, 6, 23, 0) 55%,
+    rgba(2, 6, 23, 0.6) 100%
+  );
+  opacity: 0.8;
+}
+
 .grain-overlay {
   opacity: 0.15;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
@@ -54,6 +95,52 @@ body {
 
 .broadcast-frame {
   position: relative;
+}
+
+/* Hero-only broadcast styling to tuck cinematic overlays under content. */
+.hero-shell {
+  overflow: hidden;
+}
+
+.hero-shell > :not(.hero-atmosphere):not(.hero-cinematic-background) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Blurred crowd, field glow, and haze layered for Super Bowl scale. */
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-crowd {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 10%, rgba(15, 23, 42, 0.1), transparent 60%),
+    linear-gradient(180deg, rgba(148, 163, 184, 0.12), transparent 55%);
+  filter: blur(12px);
+  opacity: 0.25;
+  animation: hero-float 26s ease-in-out infinite;
+}
+
+.hero-field-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 60% at 50% 90%, rgba(56, 189, 248, 0.18), transparent 70%);
+  opacity: 0.35;
+  animation: hero-drift 32s ease-in-out infinite;
+}
+
+.hero-haze {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 60% at 50% 45%, rgba(226, 232, 240, 0.08), transparent 65%);
+  opacity: 0.3;
+  mix-blend-mode: screen;
+  animation: hero-float 40s ease-in-out infinite reverse;
 }
 
 .console-input {
@@ -85,6 +172,14 @@ body {
   letter-spacing: 0.01em;
 }
 
+.hero-headline {
+  letter-spacing: -0.015em;
+}
+
+.cta-pulse {
+  animation: cta-glow 6s ease-in-out infinite;
+}
+
 .lower-third {
   border-left: 2px solid rgba(56, 189, 248, 0.6);
   padding-left: 16px;
@@ -92,6 +187,23 @@ body {
 
 .replay-frame {
   position: relative;
+}
+
+.replay-label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.55);
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.75);
+  backdrop-filter: blur(10px);
 }
 
 .replay-frame::before {
@@ -116,4 +228,292 @@ body {
     rgba(2, 6, 23, 0.55) 100%
   );
   pointer-events: none;
+}
+
+@keyframes field-drift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 240px 180px, -200px -140px;
+  }
+}
+
+@keyframes stadium-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(10px, -6px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-8px, 6px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(8px, -4px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes cta-glow {
+  0%,
+  100% {
+    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+  }
+  50% {
+    box-shadow: 0 16px 40px rgba(56, 189, 248, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-bg,
+  .field-lines,
+  .stadium-lights,
+  .cta-pulse,
+  .hero-crowd,
+  .hero-field-glow,
+  .hero-haze,
+  .hero-video,
+  .hero-video-parallax {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   CINEMATIC VIDEO BACKGROUND - Landing Hero Section ONLY
+   
+   This styling is exclusively for the main landing/narrative input hero.
+   Do NOT apply to video showcase, playback, results, or editor pages.
+   ========================================================================== */
+
+.hero-cinematic-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Static fallback image for mobile, slow connections, or reduced motion preference */
+.hero-video-fallback {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.8s ease-out;
+  /* Slight desaturation for cinematic feel */
+  filter: saturate(0.7) contrast(1.1) brightness(0.85);
+  /* Fallback gradient if image doesn't load */
+  background-color: #0f172a;
+  background-image: 
+    radial-gradient(ellipse at 30% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 1) 100%);
+}
+
+/* Video element - covers full hero section with 16:9 aspect ratio scaling */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.8s ease-out;
+  /* Make video always visible for debugging - remove opacity classes if needed */
+  opacity: 1 !important;
+  /* Cinematic color treatment: desaturation and contrast enhancement */
+  filter: saturate(0.75) contrast(1.1) brightness(0.9);
+}
+
+/* Container for all cinematic treatment overlays */
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Dark vignette around edges - focuses attention on center content */
+.hero-video-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    transparent 40%,
+    rgba(2, 6, 23, 0.3) 70%,
+    rgba(2, 6, 23, 0.6) 100%
+  );
+}
+
+/* Vertical gradient overlay for text contrast (top to bottom) */
+.hero-video-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 6, 23, 0.35) 0%,
+    rgba(2, 6, 23, 0.1) 30%,
+    rgba(2, 6, 23, 0.05) 50%,
+    rgba(2, 6, 23, 0.2) 80%,
+    rgba(2, 6, 23, 0.5) 100%
+  );
+}
+
+/* Film grain / noise overlay for cinematic texture */
+.hero-video-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23grain)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+  animation: grain-shift 8s steps(10) infinite;
+}
+
+/* Desaturation and color treatment overlay */
+.hero-video-color-treatment {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.15) 0%,
+    rgba(56, 189, 248, 0.05) 50%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  mix-blend-mode: color;
+}
+
+/* Subtle slow zoom parallax effect - very restrained for premium feel */
+.hero-video-parallax {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  pointer-events: none;
+  animation: hero-parallax-zoom 40s ease-in-out infinite alternate;
+}
+
+@keyframes hero-parallax-zoom {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.03) translate3d(-0.5%, 0.3%, 0);
+  }
+}
+
+@keyframes grain-shift {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2%, -2%);
+  }
+  20% {
+    transform: translate(2%, 1%);
+  }
+  30% {
+    transform: translate(-1%, 2%);
+  }
+  40% {
+    transform: translate(1%, -1%);
+  }
+  50% {
+    transform: translate(-2%, 1%);
+  }
+  60% {
+    transform: translate(2%, -2%);
+  }
+  70% {
+    transform: translate(-1%, -1%);
+  }
+  80% {
+    transform: translate(1%, 2%);
+  }
+  90% {
+    transform: translate(0%, -1%);
+  }
+}
+
+/* Glassmorphism panel for hero content - enhanced text readability */
+.hero-content-panel {
+  position: relative;
+  z-index: 2;
+  background: rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced hero shell styling when video background is active */
+.hero-shell-with-video {
+  position: relative;
+  overflow: hidden;
+  /* No background - video shows through */
+  background: none !important;
+}
+
+/* Video sits at the back - must come first and use !important to override */
+.hero-shell-with-video > .hero-cinematic-background {
+  position: absolute !important;
+  z-index: 0 !important;
+}
+
+/* All other content sits above the video */
+.hero-shell-with-video > *:not(.hero-cinematic-background) {
+  position: relative;
+  z-index: 2;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .hero-video-vignette {
+    background: radial-gradient(
+      ellipse 90% 80% at 50% 50%,
+      transparent 20%,
+      rgba(2, 6, 23, 0.5) 50%,
+      rgba(2, 6, 23, 0.9) 100%
+    );
+  }
+  
+  .hero-video-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(2, 6, 23, 0.6) 0%,
+      rgba(2, 6, 23, 0.3) 40%,
+      rgba(2, 6, 23, 0.5) 70%,
+      rgba(2, 6, 23, 0.8) 100%
+    );
+  }
+  
+  .hero-video-parallax {
+    animation: none;
+  }
 }

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { HeroCinematicBackground } from './components/HeroCinematicBackground'
 import { generateNarrative, type VideoResult } from './services/narrativeService'
 
 type AppState = 'idle' | 'generating' | 'complete'
@@ -86,6 +87,13 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="relative min-h-screen overflow-hidden">
+        {/* 
+          CINEMATIC VIDEO PAGE BACKGROUND - Landing hero section ONLY
+          Shows real football gameplay footage as the page background.
+          Hidden when viewing the generated video showcase to keep focus on output.
+        */}
+        {!isComplete && <HeroCinematicBackground />}
+        
         <div className="pointer-events-none absolute inset-0 aurora-bg">
           <div className="absolute -top-64 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[200px]" />
           <div className="absolute -bottom-40 left-[-140px] h-[520px] w-[520px] rounded-full bg-indigo-500/10 blur-[190px]" />
@@ -94,6 +102,9 @@ function App() {
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_10%_10%,_rgba(56,189,248,0.12),_transparent_55%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_90%_0%,_rgba(129,140,248,0.12),_transparent_60%)]" />
         </div>
+        <div className="pointer-events-none absolute inset-0 field-lines" />
+        <div className="pointer-events-none absolute inset-0 stadium-lights" />
+        <div className="pointer-events-none absolute inset-0 cinematic-vignette" />
         <div className="pointer-events-none absolute inset-0 stadium-bloom" />
         <div className="pointer-events-none absolute inset-0 grain-overlay" />
 
@@ -113,15 +124,36 @@ function App() {
               </div>
             </div>
             <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.28em] text-white/80 md:inline-flex">
+              <svg
+                className="h-3.5 w-3.5 text-white/70"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z" />
+                <path d="M19 11a7 7 0 0 1-14 0" />
+                <path d="M12 18v3" />
+                <path d="M8 21h8" />
+              </svg>
               Gemini 3 × Super Bowl Week
             </span>
           </header>
 
           <section className="flex flex-1 flex-col justify-center gap-10">
             {!isComplete && (
-              <div className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl transition">
+              <div className="broadcast-frame hero-shell rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl transition">
+                {/* Cinematic hero layers: soft crowd blur, field glow, and haze for Super Bowl atmosphere. */}
+                <div className="hero-atmosphere" aria-hidden="true">
+                  <div className="hero-crowd" />
+                  <div className="hero-field-glow" />
+                  <div className="hero-haze" />
+                </div>
                 <div className="space-y-3">
-                  <h1 className="text-3xl font-semibold text-white md:text-5xl">
+                  <h1 className="hero-headline text-3xl font-semibold text-white md:text-5xl">
                     Direct a Super Bowl narrative with Gemini 3.
                   </h1>
                   <p className="max-w-2xl text-sm text-slate-300 md:text-base">
@@ -146,7 +178,7 @@ function App() {
                   )}
                   <div className="flex flex-wrap items-center gap-4">
                     <button
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-400 via-indigo-300 to-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="cta-pulse inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-400 via-indigo-300 to-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-60"
                       onClick={handleGenerate}
                       disabled={isGenerating}
                     >
@@ -160,9 +192,12 @@ function App() {
                         strokeLinejoin="round"
                         aria-hidden="true"
                       >
-                        <path d="M4 6.5h16" />
-                        <path d="M4 12h10" />
-                        <path d="M4 17.5h16" />
+                        <path d="M3.5 12h7.5" />
+                        <path d="M11 12l-2.2-2.2" />
+                        <path d="M11 12l-2.2 2.2" />
+                        <path d="M11 12h9.5" />
+                        <path d="M20.5 7.5c-1.4 1.2-3.2 2-5.4 2.4" />
+                        <path d="M20.5 16.5c-1.4-1.2-3.2-2-5.4-2.4" />
                       </svg>
                       {isGenerating ? 'Broadcasting…' : 'Begin Broadcast'}
                     </button>
@@ -186,7 +221,7 @@ function App() {
                 >
                   <div className="flex flex-col gap-6">
                     <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                    <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
                         Live Broadcast
                       </p>
                       <div className="flex items-center gap-3">
@@ -200,10 +235,9 @@ function App() {
                           strokeLinejoin="round"
                           aria-hidden="true"
                         >
-                          <path d="M4 8.5c2.4 0 4.4-2 4.4-4.4" />
-                          <path d="M4 15.5c4.2 0 7.6-3.4 7.6-7.6" />
-                          <path d="M4 22c6 0 10.9-4.9 10.9-10.9" />
-                          <circle cx="18" cy="6" r="2.5" />
+                        <rect x="3.5" y="6" width="10.5" height="8" rx="2" />
+                        <path d="M14 8l6.5-3.5v11L14 12" />
+                        <circle cx="8.75" cy="10" r="1.8" />
                         </svg>
                         <h2 className="text-2xl font-semibold text-white">
                           {steps[activeStep]}
@@ -247,6 +281,16 @@ function App() {
               )}
             </AnimatePresence>
 
+            {/* 
+              VIDEO SHOWCASE / OUTPUT PAGE
+              
+              IMPORTANT: This section intentionally uses the ORIGINAL dark gradient background.
+              Do NOT add video backgrounds here. The clean, non-distracting gradient ensures
+              focus remains on the generated content output.
+              
+              The aurora-bg, stadium-lights, cinematic-vignette, and stadium-bloom layers
+              from the parent container provide the broadcast atmosphere without video.
+            */}
             <AnimatePresence mode="wait">
               {isComplete && result && (
                 <motion.div
@@ -258,18 +302,19 @@ function App() {
                   className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl"
                 >
                   <div className="flex flex-col gap-6">
-                    <div className="lower-third space-y-2">
-                      <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                  <div className="lower-third space-y-2">
+                    <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
                         Featured Replay
                       </p>
-                      <h2 className="text-3xl font-semibold text-white md:text-5xl">
+                    <h2 className="hero-headline text-3xl font-semibold text-white md:text-5xl">
                         {result.title}
                       </h2>
                       <p className="max-w-3xl text-sm text-slate-300 md:text-base">
                         {result.description}
                       </p>
                     </div>
-                    <div className="replay-frame overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(5,10,25,0.75)]">
+                  <div className="replay-frame overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(5,10,25,0.75)]">
+                    <span className="replay-label">FEATURED REPLAY</span>
                       <video
                         className="aspect-video w-full"
                         controls
@@ -292,10 +337,10 @@ function App() {
                           strokeLinejoin="round"
                           aria-hidden="true"
                         >
-                          <path d="M4 12a8 8 0 0 1 13.66-5.66" />
-                          <path d="M20 12a8 8 0 0 1-13.66 5.66" />
-                          <path d="M14 5h3.5V1.5" />
-                          <path d="M10 19H6.5v3.5" />
+                        <path d="M4 12c0-3.3 3.6-6 8-6s8 2.7 8 6-3.6 6-8 6-8-2.7-8-6Z" />
+                        <path d="M8.5 12h7" />
+                        <path d="M10.5 10.5h3" />
+                        <path d="M10.5 13.5h3" />
                         </svg>
                         Run another
                       </button>
