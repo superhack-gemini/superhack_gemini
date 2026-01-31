@@ -3,16 +3,18 @@ Test script for Veo output.
 """
 import os
 import json
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-def test_full_pipeline(prompt: str, duration: int = 120):
+def test_full_pipeline(prompt: str, duration: int = 120, output_file: str = "test_output.json"):
     print("\n" + "="*60)
     print("🏈 VEO SCRIPT GENERATOR")
     print("="*60)
     print(f"Prompt: {prompt}")
+    print(f"Output: {output_file}")
     
     api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -42,7 +44,7 @@ def test_full_pipeline(prompt: str, duration: int = 120):
             print(f"  {seg['order']}. [AI] {seg['speaker']} ({seg['duration_seconds']}s)")
             print(f"     \"{seg['dialogue'][:50]}...\"")
         else:
-            print(f"  {seg['order']}. [CLIP] {seg['search_query']} ({seg['duration_seconds']}s)")
+            print(f"  {seg['order']}. [CLIP] \"{seg['search_query']}\" ({seg['duration_seconds']}s)")
     
     # Save
     output = {
@@ -55,14 +57,15 @@ def test_full_pipeline(prompt: str, duration: int = 120):
         "key_facts": script.key_facts
     }
     
-    with open("test_output.json", "w") as f:
+    with open(output_file, "w") as f:
         json.dump(output, f, indent=2)
     
-    print(f"\n💾 Saved: test_output.json")
+    print(f"\n💾 Saved: {output_file}")
     return script
 
 
 if __name__ == "__main__":
-    import sys
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Why didn't the 49ers make it to the Super Bowl"
-    test_full_pipeline(prompt)
+    # Usage: python test_prompts.py "prompt" [output_file.json]
+    prompt = sys.argv[1] if len(sys.argv) > 1 else "seahawks path to superbowl"
+    output_file = sys.argv[2] if len(sys.argv) > 2 else "test_output.json"
+    test_full_pipeline(prompt, output_file=output_file)

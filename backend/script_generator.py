@@ -58,7 +58,14 @@ STRICT RULES:
 1. Each AI segment MAX 8 SECONDS
 2. ALL AI segments use this EXACT same studio prompt:
    "{STUDIO_PROMPT}"
-3. Pattern: ai, ai, real_clip, ai, ai, real_clip, ai, ai
+3. Pattern: ai, ai, real_clip, ai, ai, real_clip, ai, real_clip, ai
+4. EXACTLY 3 real clips total
+5. EXACTLY 6 AI segments total
+
+REAL CLIP SEARCH QUERIES - KEEP GENERIC:
+- Use simple searches like: "seahawks touchdown highlights", "team name playoffs", "player name catch"
+- Do NOT use specific dates, exact scores, or complex phrases
+- Keep it 2-4 words max for searchability
 
 STORYLINE: {research.original_prompt}
 SUMMARY: {research.storyline_summary[:500]}
@@ -97,12 +104,12 @@ Generate JSON:
             "order": 2,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen left side, medium shot, she gestures while speaking.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen left side, medium shot.",
             "speaker": "Sarah Chen",
-            "dialogue": "Analysis with key stat",
-            "delivery": "Analytical",
+            "dialogue": "Context and key background",
+            "delivery": "Informative",
             "camera": "Medium shot left host",
-            "graphics": ["STAT: Key number"],
+            "graphics": [],
             "studio": {json.dumps(STUDIO)},
             "hosts": {json.dumps(HOSTS)}
         }},
@@ -110,17 +117,17 @@ Generate JSON:
             "order": 3,
             "type": "real_clip",
             "duration_seconds": 8,
-            "description": "Key sports moment",
-            "search_query": "specific youtube search",
+            "description": "Key highlight moment",
+            "search_query": "GENERIC 2-4 word search like: team name highlights",
             "context": "Why this matters"
         }},
         {{
             "order": 4,
             "type": "ai_generated", 
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera on Tony Martinez right side, close-up, passionate expression.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Tony Martinez right side, close-up.",
             "speaker": "Tony Martinez",
-            "dialogue": "Former player reaction",
+            "dialogue": "Former player insight",
             "delivery": "Passionate",
             "camera": "Close-up right host",
             "graphics": [],
@@ -131,9 +138,9 @@ Generate JSON:
             "order": 5,
             "type": "ai_generated",
             "duration_seconds": 8, 
-            "visual_prompt": "{STUDIO_PROMPT} Wide shot all three hosts at desk, conversation energy.",
+            "visual_prompt": "{STUDIO_PROMPT} Wide shot all three hosts.",
             "speaker": "Marcus Webb",
-            "dialogue": "Transition or follow-up question",
+            "dialogue": "Question or transition",
             "delivery": "Engaged",
             "camera": "Wide shot all hosts",
             "graphics": [],
@@ -145,7 +152,7 @@ Generate JSON:
             "type": "real_clip",
             "duration_seconds": 8,
             "description": "Another key moment",
-            "search_query": "specific search",
+            "search_query": "GENERIC search like: player name touchdown",
             "context": "Relevance"
         }},
         {{
@@ -154,7 +161,7 @@ Generate JSON:
             "duration_seconds": 8,
             "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen, medium shot.",
             "speaker": "Sarah Chen", 
-            "dialogue": "Deeper analysis point",
+            "dialogue": "Analysis point",
             "delivery": "Thoughtful",
             "camera": "Medium shot left host",
             "graphics": [],
@@ -163,9 +170,17 @@ Generate JSON:
         }},
         {{
             "order": 8,
+            "type": "real_clip",
+            "duration_seconds": 8,
+            "description": "Final highlight",
+            "search_query": "GENERIC search like: team celebration",
+            "context": "Closing visual"
+        }},
+        {{
+            "order": 9,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "{STUDIO_PROMPT} Camera slowly pushes in on Marcus Webb center, closing thought.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera slowly pushes in on Marcus Webb center.",
             "speaker": "Marcus Webb",
             "dialogue": "Closing statement",
             "delivery": "Conclusive",
@@ -182,9 +197,9 @@ Generate JSON:
 
 CRITICAL: 
 - Every visual_prompt MUST start with exactly: "{STUDIO_PROMPT}"
-- Only change the camera angle and which host is speaking
+- search_query for real clips MUST be generic and short (2-4 words)
 - Keep dialogue short (fits in 8 seconds when spoken)
-- Make dialogue engaging and specific to the research
+- EXACTLY 6 AI segments, EXACTLY 3 real clips
 
 Return ONLY valid JSON."""
 

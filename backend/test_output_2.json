@@ -1,0 +1,261 @@
+{
+  "title": "Seahawks: Road to XLVIII",
+  "storyline": "seahawks path to superbowl",
+  "studio": {
+    "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+    "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+    "color_scheme": "Black background, dark gray desk, blue accent lighting"
+  },
+  "hosts": [
+    {
+      "name": "Marcus Webb",
+      "role": "Lead Anchor",
+      "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+    },
+    {
+      "name": "Sarah Chen",
+      "role": "Analyst",
+      "appearance": "Asian American female, 30s, cream blazer, seated left"
+    },
+    {
+      "name": "Tony Martinez",
+      "role": "Former Player",
+      "appearance": "Latino male, 30s, navy sport coat, seated right"
+    }
+  ],
+  "segments": [
+    {
+      "order": 1,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Camera on center host Marcus Webb, medium shot, he speaks seriously.",
+      "speaker": "Marcus Webb",
+      "dialogue": "Relive the Seahawks' Super Bowl run!",
+      "delivery": "Serious",
+      "camera": "Medium shot center host",
+      "graphics": [
+        "LOWER THIRD: Seahawks: Road to XLVIII"
+      ],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Camera on Sarah Chen left side, medium shot.",
+      "speaker": "Sarah Chen",
+      "dialogue": "A dominant 13-3 season secured the top seed.",
+      "delivery": "Informative",
+      "camera": "Medium shot left host",
+      "graphics": [],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "type": "real_clip",
+      "duration_seconds": 8,
+      "description": "Key highlight moment",
+      "search_query": "seahawks touchdown highlights",
+      "context": "Why this matters"
+    },
+    {
+      "order": 4,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Camera on Tony Martinez right side, close-up.",
+      "speaker": "Tony Martinez",
+      "dialogue": "The defense was just suffocating opponents!",
+      "delivery": "Passionate",
+      "camera": "Close-up right host",
+      "graphics": [],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Wide shot all three hosts.",
+      "speaker": "Marcus Webb",
+      "dialogue": "How did they handle the playoffs?",
+      "delivery": "Engaged",
+      "camera": "Wide shot all hosts",
+      "graphics": [],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "type": "real_clip",
+      "duration_seconds": 8,
+      "description": "Another key moment",
+      "search_query": "seahawks playoffs",
+      "context": "Relevance"
+    },
+    {
+      "order": 7,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Camera on Sarah Chen, medium shot.",
+      "speaker": "Sarah Chen",
+      "dialogue": "Their resilience was truly tested.",
+      "delivery": "Thoughtful",
+      "camera": "Medium shot left host",
+      "graphics": [],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "type": "real_clip",
+      "duration_seconds": 8,
+      "description": "Final highlight",
+      "search_query": "marshawn lynch catch",
+      "context": "Closing visual"
+    },
+    {
+      "order": 9,
+      "type": "ai_generated",
+      "duration_seconds": 8,
+      "visual_prompt": "Simple dark broadcast studio. Black background with subtle blue accent lighting. \nSingle curved news desk, dark gray surface. Three hosts seated at desk facing camera. \nClean, minimal set with no distracting elements. Soft key lighting on hosts faces. Camera slowly pushes in on Marcus Webb center.",
+      "speaker": "Marcus Webb",
+      "dialogue": "A legendary run to Super Bowl XLVIII.",
+      "delivery": "Conclusive",
+      "camera": "Push in on center host",
+      "graphics": [
+        "LOWER THIRD: Sports Rewind"
+      ],
+      "studio": {
+        "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+        "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+        "color_scheme": "Black background, dark gray desk, blue accent lighting"
+      },
+      "hosts": [
+        {
+          "name": "Marcus Webb",
+          "role": "Lead Anchor",
+          "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+        },
+        {
+          "name": "Sarah Chen",
+          "role": "Analyst",
+          "appearance": "Asian American female, 30s, cream blazer, seated left"
+        },
+        {
+          "name": "Tony Martinez",
+          "role": "Former Player",
+          "appearance": "Latino male, 30s, navy sport coat, seated right"
+        }
+      ]
+    }
+  ],
+  "research_summary": "The Seattle Seahawks' journey to Super Bowl XLVIII was a masterclass in resilience and explosive play. After a dominant regular season culminating in a 13-3 record and the NFC's top seed, the road to MetLife Stadium was paved with challenges. The Seahawks first faced a tough divisional round matchup",
+  "key_facts": [
+    "The Seahawks finished the 2013 regular season with a 13-3 record, securing the NFC's #1 seed.",
+    "Seattle's defense, known as the 'Legion of Boom,' led the NFL in scoring defense, allowing only 14.4 points per game.",
+    "Marshawn Lynch rushed for 1,257 yards and 12 touchdowns during the regular season.",
+    "Russell Wilson threw for 26 touchdowns and 9 interceptions in his second NFL season."
+  ]
+}
