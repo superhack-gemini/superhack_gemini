@@ -1,4 +1,19 @@
-from typing import Annotated, TypedDict, List, Dict, Any
+"""
+LangGraph orchestration for sports narrative generation.
+Multi-agent workflow connecting all the agents in the pipeline.
+
+CURRENT FLOW:
+  Research → Script Generation → [Future: Video/Clip/Audio Agents] → Output
+
+TO ADD A NEW AGENT:
+  1. Create your agent file (e.g., video_agent.py)
+  2. Import it below
+  3. Add state fields for your agent's output
+  4. Create a node function
+  5. Add the node to the graph in build_narrative_graph()
+  6. Connect it with edges
+"""
+from typing import Annotated, TypedDict, List, Dict, Any, Optional
 from langgraph.graph import StateGraph, START, END
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.tools import tool
@@ -194,16 +209,113 @@ def fanout_search_node(state: AgentState):
 
 def research_node(state: AgentState):
     """
-    A single node that acts as the primary researcher.
+    🎞️ CLIP AGENT (TODO: Implement clip search)
+    
+    Purpose: Find real sports clips based on script references
+    Input: script (clip references with search queries)
+    Output: retrieved_clips (found clip URLs/metadata)
+    
+    Example implementation:
+    ```
+    from clip_agent import clip_agent
+    
+    script = state["script"]
+    clip_refs = [s for s in script["segments"] if s["segment_type"] == "real_clip"]
+    
+    retrieved_clips = []
+    for ref in clip_refs:
+        clip = clip_agent.search_clip(
+            query=ref["clip_reference"]["search_query"],
+            duration=ref["clip_reference"]["duration_seconds"]
+        )
+        retrieved_clips.append(clip)
+    
+    return {"retrieved_clips": retrieved_clips, "clip_status": "completed"}
+    ```
     """
-    print("--- RESEARCH NODE STARTING ---")
-    query = state['messages'][-1].content
+    print(f"\n{'='*60}")
+    print("🎞️ CLIP RETRIEVAL NODE - (Not yet implemented)")
+    print(f"{'='*60}")
     
-    # In a real implementation, you'd bind tools to an LLM here.
-    # For this shell, we'll just simulate calling the tools.
-    yt_data = youtube_scraper_tool.invoke({"query": query})
-    sm_data = social_media_researcher_tool.invoke({"platform": "X", "topic": query})
+    # TODO: Implement clip search/retrieval
+    return {
+        "current_phase": "clips_skipped",
+        "messages": [AIMessage(content="Clip retrieval not yet implemented")]
+    }
+
+
+# -----------------------------------------------------------------------------
+# AUDIO GENERATION NODE (TODO)
+# -----------------------------------------------------------------------------
+def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
+    """
+    🎙️ AUDIO AGENT (TODO: Implement voice generation)
     
+    Purpose: Generate voice audio for dialogue
+    Input: script (dialogue lines with delivery notes)
+    Output: audio_tracks (generated audio files)
+    
+    Example implementation:
+    ```
+    from audio_agent import audio_agent
+    
+    script = state["script"]
+    
+    audio_tracks = []
+    for seg in script["segments"]:
+        if seg["ai_segment"]:
+            for line in seg["ai_segment"]["dialogue"]:
+                audio = audio_agent.generate_voice(
+                    text=line["text"],
+                    speaker=line["speaker"],
+                    delivery=line["delivery"]
+                )
+                audio_tracks.append(audio)
+    
+    return {"audio_tracks": audio_tracks, "audio_status": "completed"}
+    ```
+    """
+    print(f"\n{'='*60}")
+    print("🎙️ AUDIO GENERATION NODE - (Not yet implemented)")
+    print(f"{'='*60}")
+    
+    # TODO: Implement voice/audio generation
+    return {
+        "current_phase": "audio_skipped",
+        "messages": [AIMessage(content="Audio generation not yet implemented")]
+    }
+
+
+# -----------------------------------------------------------------------------
+# ASSEMBLY NODE (TODO)
+# -----------------------------------------------------------------------------
+def assembly_node(state: NarrativeState) -> Dict[str, Any]:
+    """
+    🎥 ASSEMBLY AGENT (TODO: Implement final video assembly)
+    
+    Purpose: Combine all pieces into final video
+    Input: video_segments, retrieved_clips, audio_tracks
+    Output: final_video (complete video file)
+    
+    Example implementation:
+    ```
+    from assembly_agent import assembly_agent
+    
+    final_video = assembly_agent.assemble(
+        video_segments=state["video_segments"],
+        clips=state["retrieved_clips"],
+        audio=state["audio_tracks"],
+        script=state["script"]  # For timing/ordering
+    )
+    
+    return {"final_video": final_video, "assembly_status": "completed"}
+    ```
+    """
+    print(f"\n{'='*60}")
+    print("🎥 ASSEMBLY NODE - (Not yet implemented)")
+    print(f"{'='*60}")
+    
+    # TODO: Implement video assembly
     return {
         "messages": [HumanMessage(content=f"Research complete. Found: {yt_data}, {sm_data}")],
         "research_results": {"youtube": yt_data, "social_media": sm_data},
@@ -225,16 +337,85 @@ builder.add_edge("researcher", END)
 # Compile
 graph = builder.compile()
 
-def run_workflow(prompt: str):
+def run_workflow(prompt: str, duration_seconds: int = 150) -> Dict[str, Any]:
     """
-    Executes the LangGraph workflow with the given prompt.
+    Execute the sports narrative generation workflow.
+    
+    Args:
+        prompt: The sports storyline to generate a narrative for
+        duration_seconds: Target duration of the final video (default 2.5 minutes)
+    
+    Returns:
+        Dict containing results from all completed agents
     """
-    initial_state = {
+    print(f"\n{'#'*60}")
+    print(f"🏈 SPORTS NARRATIVE GENERATOR")
+    print(f"{'#'*60}")
+    print(f"Prompt: {prompt}")
+    print(f"Target Duration: {duration_seconds}s")
+    print(f"{'#'*60}\n")
+    
+    initial_state: NarrativeState = {
+        "prompt": prompt,
+        "duration_seconds": duration_seconds,
         "messages": [HumanMessage(content=prompt)],
-        "research_results": {},
-        "current_status": "starting"
+        "research_context": None,
+        "research_status": "pending",
+        "script": None,
+        "script_status": "pending",
+        "current_phase": "starting",
+        "error": None,
+        # TODO: Initialize future agent states
+        # "video_segments": None,
+        # "video_status": "pending",
+        # "retrieved_clips": None,
+        # "clip_status": "pending",
+        # "audio_tracks": None,
+        # "audio_status": "pending",
+        # "final_video": None,
+        # "assembly_status": "pending",
     }
     
-    # Execute synchronously within the process spawned by generation_service
-    final_output = graph.invoke(initial_state)
-    return final_output
+    # Execute the workflow
+    final_state = graph.invoke(initial_state)
+    
+    # Return all results
+    return {
+        "prompt": prompt,
+        "research_context": final_state.get("research_context"),
+        "script": final_state.get("script"),
+        "status": final_state.get("current_phase"),
+        "error": final_state.get("error"),
+        # TODO: Include future agent outputs
+        # "video_segments": final_state.get("video_segments"),
+        # "retrieved_clips": final_state.get("retrieved_clips"),
+        # "audio_tracks": final_state.get("audio_tracks"),
+        # "final_video": final_state.get("final_video"),
+    }
+
+
+# =============================================================================
+# TESTING
+# =============================================================================
+
+if __name__ == "__main__":
+    result = run_workflow("why didn't the 49ers make it to the superbowl")
+    
+    print(f"\n{'='*60}")
+    print("FINAL RESULT")
+    print(f"{'='*60}")
+    
+    if result.get("script"):
+        script = result["script"]
+        print(f"\n📺 {script['title']}")
+        print(f"Duration: {script['total_duration_seconds']}s")
+        print(f"\nSegments:")
+        for seg in script['segments']:
+            if seg['segment_type'] == 'ai_generated':
+                ai_seg = seg['ai_segment']
+                print(f"  {seg['order']}. [AI] {ai_seg['segment_type'].upper()} - {ai_seg['duration_seconds']}s")
+            else:
+                clip = seg['clip_reference']
+                print(f"  {seg['order']}. [CLIP] {clip['description'][:50]}...")
+    else:
+        print(f"Error: {result.get('error', 'Unknown error')}")
