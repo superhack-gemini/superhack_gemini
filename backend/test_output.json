@@ -2,46 +2,44 @@
   "prompt": "Why didn't the 49ers make it to the Super Bowl",
   "research": {
     "original_prompt": "Why didn't the 49ers make it to the Super Bowl",
-    "storyline_summary": "The San Francisco 49ers' Super Bowl dreams were dashed in the NFC Championship game on January 28, 2024, a heart-wrenching 25-34 loss to the Detroit Lions at Levi's Stadium. What began as a nightmare, with the 49ers falling into a 24-7 halftime hole, turned into a second-half resurgence fueled by quarterback Brock Purdy's resilience and a suddenly energized defense. Purdy, despite early struggles and immense pressure, orchestrated a comeback, throwing for 267 yards and a touchdown. Christian McCaffrey added two crucial touchdowns on the ground, and the defense finally found answers for the Lions' potent rushing attack, led by Jahmyr Gibbs and David Montgomery. Ultimately, missed opportunities and questionable defensive lapses proved too costly.\n\nThe Lions, under the guidance of head coach Dan Campbell, showcased a fearless and aggressive game plan. Quarterback Jared Goff delivered a composed performance, exploiting mismatches in the 49ers' secondary and converting critical third downs. The Lions' running game, a force throughout the season, initially dominated the line of scrimmage, putting immense pressure on the 49ers' defense. Despite the 49ers' valiant comeback effort, the Lions' early lead and consistent offensive execution proved to be the deciding factors, sending them to their first Super Bowl appearance and leaving the 49ers to grapple with the bitter taste of defeat.",
+    "storyline_summary": "The San Francisco 49ers' Super Bowl dreams were dashed in a heartbreaking 25-22 overtime loss to the Kansas City Chiefs in Super Bowl LVIII on February 11, 2024. After a dominant regular season, the 49ers navigated a tough playoff bracket, overcoming a slow start against the Green Bay Packers in the divisional round (24-21) and clawing back from a 17-point deficit against the Detroit Lions in the NFC Championship Game (34-31). However, against the Chiefs, despite leading for much of the game and showcasing a strong defensive performance, crucial mistakes and the brilliance of Patrick Mahomes in the final minutes proved to be their undoing. The Niners defense held Mahomes and the Chiefs to just 19 points through regulation, but in overtime, the Chiefs marched down the field, with Mahomes connecting with Mecole Hardman for the game-winning touchdown, leaving the 49ers and their faithful fans in despair.",
     "key_facts": [
-      "The 49ers were down 24-7 at halftime of the NFC Championship game against the Lions.",
-      "Brock Purdy threw for 267 yards and one touchdown in the NFC Championship game.",
-      "Christian McCaffrey scored two rushing touchdowns in the NFC Championship game.",
-      "The Lions outscored the 49ers 24-7 in the first half.",
-      "Jared Goff threw for 273 yards and one touchdown for the Lions.",
-      "The Lions converted 9 of 14 third-down attempts.",
-      "The 49ers had 3 turnovers (2 fumbles, 1 interception) compared to the Lions' 0.",
-      "The 49ers were penalized 7 times for 67 yards, while the Lions had 2 penalties for 15 yards."
+      "The 49ers led the Chiefs for the majority of Super Bowl LVIII, holding a 10-0 lead at one point.",
+      "Patrick Mahomes passed for 333 yards and 2 touchdowns, earning him Super Bowl MVP.",
+      "The game went into overtime, the second Super Bowl to utilize the new overtime rules.",
+      "Rookie kicker Jake Moody set a Super Bowl record with a 55-yard field goal.",
+      "The 49ers defense sacked Patrick Mahomes 6 times, but failed to contain him on crucial late-game scrambles.",
+      "Kyle Shanahan is now 0-2 as a head coach in Super Bowls.",
+      "Christian McCaffrey had 80 rushing yards and a touchdown, but struggled to break free for explosive plays.",
+      "The 49ers committed several costly penalties, including a pass interference in overtime that extended the Chiefs' game-winning drive."
     ],
     "key_figures": [
-      "Brock Purdy - 49ers Quarterback, tasked with leading the offense and overcoming early struggles.",
-      "Christian McCaffrey - 49ers Running Back, a key offensive weapon responsible for scoring and providing a spark.",
-      "Kyle Shanahan - 49ers Head Coach, responsible for game plan and adjustments.",
-      "Jared Goff - Lions Quarterback, played composed and led the Lions offense effectively.",
-      "Dan Campbell - Lions Head Coach, aggressive play calling and leadership."
+      "Kyle Shanahan - 49ers Head Coach. His play-calling in crucial moments is under scrutiny.",
+      "Patrick Mahomes - Chiefs Quarterback. His ability to perform under pressure sealed the victory.",
+      "Brock Purdy - 49ers Quarterback. Played well but didn't deliver the game-winning drive.",
+      "Christian McCaffrey - 49ers Running Back. A key offensive weapon, but contained by the Chiefs' defense."
     ],
     "timeline": [
-      "January 28, 2024: NFC Championship Game - Lions defeat 49ers 34-25.",
-      "Halftime, January 28, 2024: 49ers trail Lions 24-7.",
-      "2nd Half, January 28, 2024: 49ers mount a comeback but fall short.",
-      "Season Prior: 49ers were heavily favored to win the Super Bowl."
+      "January 20, 2024: 49ers defeat the Green Bay Packers 24-21 in the Divisional Round.",
+      "January 28, 2024: 49ers defeat the Detroit Lions 34-31 in the NFC Championship Game after trailing 24-7 at halftime.",
+      "February 11, 2024: Super Bowl LVIII - 49ers lose to the Kansas City Chiefs 25-22 in overtime."
     ],
     "controversy_points": [
-      "Defensive Scheme - Were the 49ers adequately prepared for the Lions' rushing attack?",
-      "Play Calling - Did Kyle Shanahan adjust his play calling effectively enough after the slow start?",
-      "Missed Opportunities - The 49ers had several missed opportunities, including dropped passes and missed tackles, that could have changed the game's outcome."
+      "Kyle Shanahan's late-game play-calling: Some question his conservative approach, particularly in overtime.",
+      "The pass interference penalty in overtime: Was it a legitimate call, or a game-changing mistake by the referees?",
+      "Brock Purdy's performance: Did he do enough to win the Super Bowl, or did his limitations hold the team back?"
     ],
     "emotional_angles": [
-      "Heartbreak - The 49ers' faithful had high expectations and experienced the pain of a Super Bowl appearance slipping away.",
-      "Resilience - Brock Purdy's comeback from a serious injury and his performance in the face of adversity resonated with fans.",
-      "Underdog Story - The Lions' journey to the Super Bowl after years of struggles created a feel-good narrative."
+      "The 49ers' Super Bowl drought continues: The team hasn't won a Super Bowl since 1995.",
+      "The heartbreak for 49ers fans: Seeing their team come so close, only to lose in overtime, is devastating.",
+      "The resilience of the Chiefs: Overcoming adversity and winning their second consecutive Super Bowl is a testament to their team's character."
     ],
     "sources": [
       {
         "query": "Why didn't the 49ers make it to the Super Bowl",
         "source": "ESPN",
-        "title": "ESPN Game Recap: Lions vs. 49ers",
-        "snippet": "Detailed play-by-play account of the NFC Championship game including key stats and turning points.",
+        "title": "ESPN Recap: Chiefs defeat 49ers in Super Bowl LVIII",
+        "snippet": "Detailed game summary, stats, and key moments.",
         "url": null,
         "date": null,
         "relevance_score": 0.9
@@ -49,17 +47,26 @@
       {
         "query": "Why didn't the 49ers make it to the Super Bowl",
         "source": "NFL.com",
-        "title": "NFL.com: 49ers' Super Bowl Hopes Dashed",
-        "snippet": "Analysis of the 49ers' loss, focusing on missed opportunities and defensive struggles.",
+        "title": "NFL.com Game Center: Super Bowl LVIII",
+        "snippet": "Live updates, play-by-play, and official statistics from the game.",
         "url": null,
         "date": null,
         "relevance_score": 0.9
       },
       {
         "query": "Why didn't the 49ers make it to the Super Bowl",
-        "source": "PFF",
-        "title": "Pro Football Focus: Player Grades - NFC Championship",
-        "snippet": "Individual player grades highlighting key performances and areas for improvement.",
+        "source": "San Francisco Chronicle",
+        "title": "San Francisco Chronicle: 49ers' Super Bowl loss",
+        "snippet": "Local coverage and analysis of the game from a 49ers perspective.",
+        "url": null,
+        "date": null,
+        "relevance_score": 0.9
+      },
+      {
+        "query": "Why didn't the 49ers make it to the Super Bowl",
+        "source": "Pro Football Focus",
+        "title": "Pro Football Focus: Super Bowl LVIII Grades",
+        "snippet": "Player grades and analysis of individual performances.",
         "url": null,
         "date": null,
         "relevance_score": 0.9
@@ -67,47 +74,54 @@
     ]
   },
   "script": {
-    "title": "Niners Nightmare: How Super Bowl Dreams Imploded",
+    "title": "49ers Super Bowl Heartbreak: What Went Wrong?",
     "storyline": "Why didn't the 49ers make it to the Super Bowl",
     "total_duration_seconds": 150,
+    "visual_style": {
+      "studio_description": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic.",
+      "lighting_setup": "Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth",
+      "color_palette": "Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray",
+      "camera_style": "Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis",
+      "graphics_style": "Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions",
+      "overall_mood": "Professional primetime sports broadcast with dramatic tension"
+    },
     "studio": {
-      "description": "State-of-the-art sports studio. Dark wood desk with chrome accents. Three leather chairs. Massive curved LED screen behind the hosts displaying dynamic graphics. Glass panels with team logos subtly etched. High-end broadcast cameras visible but unobtrusive.",
-      "lighting": "Low-key, dramatic lighting with pools of warm light focused on the hosts. Cool blue accents highlighting the background screen. Sharp shadows to create depth and tension.",
+      "description": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic.",
+      "lighting": "Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth",
       "background_elements": [
-        "Large LED screen showing relevant footage",
-        "Sports graphics",
+        "Large LED screen",
         "Team logos",
-        "Ticker with updated scores"
+        "Stats ticker",
+        "Sports graphics"
       ],
-      "color_scheme": "Primary: Dark blue, Accent: Gold and Red",
-      "time_of_day": "Primetime (8:00 PM EST)"
+      "color_scheme": "Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray",
+      "time_of_day": "Primetime evening broadcast"
     },
     "hosts": [
       {
-        "name": "Jillian Hayes",
+        "name": "Sarah Miller",
         "role": "Lead Anchor",
-        "appearance": "40s, African American woman, sharp business suit (red). Confident and authoritative demeanor.",
-        "position": "Center desk, facing camera"
+        "appearance": "40s African American woman, burgundy blazer, confident posture, short natural hairstyle",
+        "position": "Center desk"
       },
       {
-        "name": "Rick 'The Stat' Johnson",
-        "role": "NFL Analyst",
-        "appearance": "50s, Caucasian male, slightly disheveled but knowledgeable, wearing a patterned shirt and sports jacket. Always has stats ready.",
-        "position": "Left side of desk"
+        "name": "Tom Evans",
+        "role": "Analyst",
+        "appearance": "50s Caucasian man, gray suit, blue tie, analytical expression, receding hairline",
+        "position": "Left of center"
       },
       {
-        "name": "Antonio 'The Hammer' Ruiz",
-        "role": "Former Player / Expert Analyst",
-        "appearance": "30s, Latino male, athletic build, wearing a stylish but comfortable sports jacket and jeans. Intense and passionate.",
-        "position": "Right side of desk"
+        "name": "Reggie Bush",
+        "role": "Former Player",
+        "appearance": "30s African American man, athletic build, 49ers jersey under a dark jacket, focused gaze",
+        "position": "Right of center"
       }
     ],
-    "premise": "The 49ers, heavily favored, crumbled under pressure against a hungry Lions team. We dissect the key moments and strategic failures that led to their shocking defeat.",
+    "premise": "Examining the key moments and decisions that led to the 49ers' Super Bowl loss.",
     "key_points": [
-      "The disastrous first half performance.",
-      "Brock Purdy's resilience, but ultimate shortcomings.",
-      "Defensive breakdowns against the Lions' rushing attack.",
-      "Kyle Shanahan's questionable play calling."
+      "Missed opportunities on offense",
+      "Defensive lapses in overtime",
+      "Questionable coaching decisions"
     ],
     "segments": [
       {
@@ -116,21 +130,38 @@
         "ai_segment": {
           "segment_id": "intro_1",
           "segment_type": "intro",
-          "duration_seconds": 20,
+          "total_duration_seconds": 12,
           "mood": "dramatic",
-          "visual_description": "Studio shot. Jillian in the center. Rick and Antonio on either side. The LED screen flashes images of Brock Purdy looking dejected, followed by Lions celebrating. Ominous music playing. Camera slowly zooms in on Jillian.",
-          "camera_notes": "Slow zoom in on Jillian. Quick cuts between hosts for reaction shots.",
+          "veo_clips": [
+            {
+              "clip_id": "intro_1a",
+              "duration_seconds": 6,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Wide shot of sports broadcast studio, camera slowly pushes in toward Sarah Miller who begins speaking with serious expression",
+              "dialogue_text": "The 49ers were so close...",
+              "speaker": "Sarah Miller",
+              "camera_angle": "Wide shot, slow push in",
+              "action": "Host speaking to camera, dramatic intro"
+            },
+            {
+              "clip_id": "intro_1b",
+              "duration_seconds": 6,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Now medium shot of Sarah Miller, same lighting and colors, host gesturing with hand",
+              "dialogue_text": "...but victory slipped through their fingers.",
+              "speaker": "Sarah Miller",
+              "camera_angle": "Medium shot",
+              "action": "Host continuing dramatic intro"
+            }
+          ],
           "dialogue": [
             {
-              "speaker": "Jillian Hayes",
-              "text": "They were destined for glory. A Super Bowl berth was all but guaranteed. But on one fateful night, the 49ers' dreams turned into a nightmare. What went wrong?",
-              "delivery": "Serious, measured tone. Building anticipation.",
-              "camera_direction": "Close-up on Jillian"
+              "speaker": "Sarah Miller",
+              "text": "The 49ers were so close...but victory slipped through their fingers. Tonight, we dissect what went wrong.",
+              "delivery": "Dramatic, building tension",
+              "camera_direction": "Push in"
             }
           ],
           "graphics": [
-            "LOWER THIRD: Niners Nightmare",
-            "UPPER RIGHT: NFC Championship Game Score"
+            "LOWER THIRD: 49ers Super Bowl Heartbreak"
           ]
         },
         "clip_reference": null
@@ -141,12 +172,12 @@
         "ai_segment": null,
         "clip_reference": {
           "clip_id": "clip_1",
-          "description": "Footage of the Lions scoring their first touchdown - Jahmyr Gibbs running through the 49ers' defense.",
-          "search_query": "Jahmyr Gibbs touchdown NFC championship 2024",
-          "duration_seconds": 7,
-          "context": "Illustrates the Lions' early dominance and the 49ers' defensive struggles.",
-          "transition_in": "Hard cut from Jillian's intro.",
-          "transition_out": "Fade to black."
+          "description": "Footage of Jake Moody's record-breaking field goal",
+          "search_query": "youtube 49ers Jake Moody 55 yard field goal",
+          "duration_seconds": 8,
+          "context": "Highlighting early success and momentum",
+          "transition_in": "cut",
+          "transition_out": "cut"
         }
       },
       {
@@ -155,33 +186,39 @@
         "ai_segment": {
           "segment_id": "analysis_1",
           "segment_type": "analysis",
-          "duration_seconds": 25,
-          "mood": "somber",
-          "visual_description": "Close up on Rick 'The Stat' Johnson. Graphics appear behind him highlighting key stats from the first half.",
-          "camera_notes": "Focus on Rick. Cut to graphics as he mentions them.",
+          "total_duration_seconds": 10,
+          "mood": "analytical",
+          "veo_clips": [
+            {
+              "clip_id": "analysis_1a",
+              "duration_seconds": 5,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Medium shot of Tom Evans, gesturing at a screen graphic showing offensive stats.",
+              "dialogue_text": "The 49ers offense sputtered at key moments.",
+              "speaker": "Tom Evans",
+              "camera_angle": "Medium shot",
+              "action": "Analyst pointing at screen"
+            },
+            {
+              "clip_id": "analysis_1b",
+              "duration_seconds": 5,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Close up on Tom Evans, nodding slightly, serious expression.",
+              "dialogue_text": "They left points on the field.",
+              "speaker": "Tom Evans",
+              "camera_angle": "Close up",
+              "action": "Analyst nodding"
+            }
+          ],
           "dialogue": [
             {
-              "speaker": "Rick 'The Stat' Johnson",
-              "text": "The numbers don't lie, Jillian. 24-7 at halftime. The 49ers had 3 turnovers. The Lions converted nearly 65% of their third downs. It was an utter collapse.",
-              "delivery": "Analytical, matter-of-fact.",
-              "camera_direction": "Close-up on Rick"
-            },
-            {
-              "speaker": "Jillian Hayes",
-              "text": "Antonio, as a former player, what were you seeing on the field?",
-              "delivery": "Transitioning to Antonio.",
-              "camera_direction": "Medium shot, panning to Antonio"
-            },
-            {
-              "speaker": "Antonio 'The Hammer' Ruiz",
-              "text": "Lack of intensity, Jillian. The Lions wanted it more. They were hitting harder, playing with more passion. The 49ers looked flat-footed.",
-              "delivery": "Passionate, emphasizing the lack of intensity.",
-              "camera_direction": "Close-up on Antonio"
+              "speaker": "Tom Evans",
+              "text": "The 49ers offense sputtered at key moments. They left points on the field, and you can't do that against Mahomes.",
+              "delivery": "Analytical, measured tone",
+              "camera_direction": "Cut between medium and close up"
             }
           ],
           "graphics": [
-            "LOWER THIRD: Rick 'The Stat' Johnson - NFL Analyst",
-            "On-Screen Graphic: First Half Stats Comparison"
+            "LOWER THIRD: Tom Evans - Analyst",
+            "SCREEN GRAPHIC: 49ers Offensive Stats"
           ]
         },
         "clip_reference": null
@@ -192,46 +229,52 @@
         "ai_segment": null,
         "clip_reference": {
           "clip_id": "clip_2",
-          "description": "Brock Purdy throwing an interception in the first half.",
-          "search_query": "Brock Purdy interception NFC Championship 2024",
-          "duration_seconds": 10,
-          "context": "Showcases Purdy's early struggles and the 49ers' offensive woes.",
-          "transition_in": "Hard cut from Antonio.",
-          "transition_out": "Fade to black."
+          "description": "Footage of Mahomes scrambling for a first down in overtime",
+          "search_query": "youtube Mahomes overtime scramble Super Bowl",
+          "duration_seconds": 7,
+          "context": "Demonstrating Mahomes' impact on the game",
+          "transition_in": "cut",
+          "transition_out": "cut"
         }
       },
       {
         "order": 5,
         "segment_type": "ai_generated",
         "ai_segment": {
-          "segment_id": "debate_1",
-          "segment_type": "debate",
-          "duration_seconds": 30,
-          "mood": "controversial",
-          "visual_description": "All three hosts visible. Tension is high. They are gesturing and talking over each other.",
-          "camera_notes": "Quick cuts between the hosts as they speak. Zoom in on faces to emphasize emotion.",
+          "segment_id": "reggie_insight",
+          "segment_type": "analysis",
+          "total_duration_seconds": 9,
+          "mood": "critical",
+          "veo_clips": [
+            {
+              "clip_id": "reggie_insight_a",
+              "duration_seconds": 4,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Medium shot of Reggie Bush, shaking his head.",
+              "dialogue_text": "Mahomes is a different breed.",
+              "speaker": "Reggie Bush",
+              "camera_angle": "Medium shot",
+              "action": "Host shaking head"
+            },
+            {
+              "clip_id": "reggie_insight_b",
+              "duration_seconds": 5,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Close up on Reggie Bush, intense look.",
+              "dialogue_text": "You can't give him those opportunities.",
+              "speaker": "Reggie Bush",
+              "camera_angle": "Close up",
+              "action": "Host with intense look"
+            }
+          ],
           "dialogue": [
             {
-              "speaker": "Antonio 'The Hammer' Ruiz",
-              "text": "Purdy wasn't good enough! He's a system quarterback! He couldn't elevate his game when it mattered most!",
-              "delivery": "Aggressive, dismissive.",
-              "camera_direction": "Close-up on Antonio"
-            },
-            {
-              "speaker": "Rick 'The Stat' Johnson",
-              "text": "Hold on, Antonio! He threw for over 260 yards in the second half! He showed resilience! You can't blame it all on him!",
-              "delivery": "Defensive of Purdy, citing stats.",
-              "camera_direction": "Close-up on Rick"
-            },
-            {
-              "speaker": "Jillian Hayes",
-              "text": "Gentlemen, let's not forget Shanahan's play-calling. Was he too slow to adjust? Did he abandon the run game too early?",
-              "delivery": "Trying to mediate, shifting the blame.",
-              "camera_direction": "Medium shot of all three hosts"
+              "speaker": "Reggie Bush",
+              "text": "Mahomes is a different breed. You can't give him those opportunities in overtime, and the defense couldn't contain him.",
+              "delivery": "Critical, direct tone",
+              "camera_direction": "Focus on Reggie"
             }
           ],
           "graphics": [
-            "On-Screen Graphic: HOT TAKE - Purdy: Overrated or Underrated?"
+            "LOWER THIRD: Reggie Bush - Former NFL Player"
           ]
         },
         "clip_reference": null
@@ -242,63 +285,60 @@
         "ai_segment": null,
         "clip_reference": {
           "clip_id": "clip_3",
-          "description": "Christian McCaffrey scoring a touchdown in the second half.",
-          "search_query": "Christian McCaffrey touchdown NFC Championship 2024",
-          "duration_seconds": 10,
-          "context": "Highlights the 49ers' comeback attempt and McCaffrey's impact.",
-          "transition_in": "Hard cut from Jillian",
-          "transition_out": "Fade to black"
+          "description": "Footage of the game-winning touchdown",
+          "search_query": "youtube Chiefs game winning touchdown Super Bowl",
+          "duration_seconds": 8,
+          "context": "Showing the decisive play of the game",
+          "transition_in": "cut",
+          "transition_out": "cut"
         }
       },
       {
         "order": 7,
         "segment_type": "ai_generated",
         "ai_segment": {
-          "segment_id": "outro_1",
+          "segment_id": "outro",
           "segment_type": "outro",
-          "duration_seconds": 38,
-          "mood": "reflective",
-          "visual_description": "Studio shot. Camera pulls back to show all three hosts. The LED screen displays a montage of 49ers highlights and lowlights from the season.",
-          "camera_notes": "Slow zoom out. Soft lighting.",
+          "total_duration_seconds": 14,
+          "mood": "somber",
+          "veo_clips": [
+            {
+              "clip_id": "outro_a",
+              "duration_seconds": 7,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Wide shot of the studio, hosts looking downcast.",
+              "dialogue_text": "A tough loss for the 49ers.",
+              "speaker": "Sarah Miller",
+              "camera_angle": "Wide shot",
+              "action": "Hosts looking somber"
+            },
+            {
+              "clip_id": "outro_b",
+              "duration_seconds": 7,
+              "visual_prompt": "Modern sports broadcast set with curved anchor desk, 3 hosts seated, large LED screens behind showing sports graphics. Dark wood and brushed metal aesthetic. Dramatic low-key lighting, warm key lights on hosts, cool blue accent lighting on background screens, subtle rim lighting for depth. Primary: Deep navy blue. Accent: Gold and red. Background: Charcoal gray. Smooth cinematic movements, slow push-ins for dramatic moments, steady shots for analysis. Modern ESPN-style lower thirds, clean sans-serif fonts, animated transitions. Professional primetime sports broadcast with dramatic tension. Zoom in on Sarah Miller, slight head shake.",
+              "dialogue_text": "They'll be back.",
+              "speaker": "Sarah Miller",
+              "camera_angle": "Zoom in",
+              "action": "Head shake, somber expression"
+            }
+          ],
           "dialogue": [
             {
-              "speaker": "Jillian Hayes",
-              "text": "The 49ers' Super Bowl dream is over. A season of promise ends in disappointment. They'll have to look inward, address their weaknesses, and come back stronger next year.",
-              "delivery": "Somber, but hopeful.",
-              "camera_direction": "Medium shot of all three hosts"
-            },
-            {
-              "speaker": "Rick 'The Stat' Johnson",
-              "text": "The numbers point to some serious adjustments needing to be made on the defensive side of the ball.",
-              "delivery": "Analytical, offering a final thought.",
-              "camera_direction": "Close-up on Rick"
-            },
-            {
-              "speaker": "Antonio 'The Hammer' Ruiz",
-              "text": "They need to find that killer instinct again. That fire. That championship mentality.",
-              "delivery": "Passionate, urging them to improve.",
-              "camera_direction": "Close-up on Antonio"
-            },
-            {
-              "speaker": "Jillian Hayes",
-              "text": "That's all the time we have for tonight. Thanks for watching.",
-              "delivery": "Professional sign-off.",
-              "camera_direction": "Medium shot of Jillian."
+              "speaker": "Sarah Miller",
+              "text": "A tough loss for the 49ers. But they'll learn from this, and I have no doubt they'll be back.",
+              "delivery": "Somber but hopeful",
+              "camera_direction": "Slow zoom"
             }
           ],
           "graphics": [
-            "LOWER THIRD: Niners Nightmare",
-            "END SCREEN: Show Credits"
+            "LOWER THIRD: Thanks for watching!"
           ]
         },
         "clip_reference": null
       }
     ],
     "research_sources": [
-      "ESPN.com",
-      "NFL.com",
-      "Pro Football Focus",
-      "YouTube game highlights"
+      "ESPN",
+      "NFL.com"
     ]
   }
 }

@@ -73,7 +73,7 @@ def test_full_pipeline(prompt: str, duration: int = 150):
     for seg in script.segments:
         if seg.segment_type == "ai_generated" and seg.ai_segment:
             ai = seg.ai_segment
-            print(f"   {seg.order}. [AI] {ai.segment_type.upper()} - {ai.duration_seconds}s - {ai.mood}")
+            print(f"   {seg.order}. [AI] {ai.segment_type.upper()} - {ai.total_duration_seconds}s ({len(ai.veo_clips)} clips) - {ai.mood}")
         elif seg.segment_type == "real_clip" and seg.clip_reference:
             clip = seg.clip_reference
             print(f"   {seg.order}. [CLIP] {clip.description[:50]}... - {clip.duration_seconds}s")
