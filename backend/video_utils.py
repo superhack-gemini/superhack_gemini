@@ -66,3 +66,31 @@ def combine_videos(video_paths: List[str], output_path: str):
     except Exception as e:
         print(f"General Error during video combination: {e}")
         raise e
+
+def cut_video(input_path: str, output_path: str, start_time: str, end_time: str):
+    """
+    Cuts a video file from start_time to end_time.
+    
+    Args:
+        input_path: Absolute path to the input video.
+        output_path: Absolute path for the output video.
+        start_time: Start time in HH:MM:SS format or seconds.
+        end_time: End time in HH:MM:SS format or seconds.
+    """
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"Input video not found: {input_path}")
+        
+    try:
+        print(f"Cutting video {input_path} from {start_time} to {end_time}...")
+        (
+            ffmpeg
+            .input(input_path, ss=start_time, to=end_time)
+            .output(output_path, c='copy') # copy codec is faster and lossless for cutting
+            .run(overwrite_output=True, quiet=True)
+        )
+        print(f"Successfully created clip: {output_path}")
+    except ffmpeg.Error as e:
+        print(f"FFmpeg Error cutting video:")
+        if e.stderr:
+            print(e.stderr.decode('utf8'))
+        raise e

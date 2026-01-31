@@ -30,11 +30,20 @@ from urllib.parse import quote
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from browser_use_sdk import BrowserUse
-from video_utils import combine_videos
+from video_utils import combine_videos, cut_video
+
+# --- Custom Models for Video Processing ---
+class ClipTimestamps(BaseModel):
+    start_time: str = Field(description="Start time in MM:SS or HH:MM:SS format")
+    end_time: str = Field(description="End time in MM:SS or HH:MM:SS format")
 
 
 # Load environment variables
 load_dotenv()
+
+from google import genai
+from google.genai import types
+
 # 1. Define Shared State
 class NarrativeState(TypedDict):
     """The shared state for the multi-agent workflow."""
@@ -215,14 +224,27 @@ def youtube_scraper_tool(query: str):
     client = BrowserUse(api_key=browser_use_api_key)
     if not browser_use_api_key:
         return "Error: BROWSER_USE_API_KEY not found in environment variables."
-    result = client.skills.execute_skill(
+    retries = 4
+    base_wait = 4
+
+    for attempt in range(retries + 1):
+        try:
+            result = client.skills.execute_skill(
                 skill_id="aa967d12-c544-41b4-9169-da7d44c295c7",
                 parameters={
                     "query": query,
                     "limit": 5
                 }
             )
-    return [video['video_url'] for video in result.result['data']['videos']]
+            return [video['video_url'] for video in result.result['data']['videos']]
+        except Exception as e:
+            if attempt == retries:
+                print(f"YouTube Scraper failed after {retries} retries: {e}")
+                raise e
+            
+            wait_time = base_wait * (2 ** attempt)
+            print(f"YouTube Scraper failed (Attempt {attempt+1}/{retries+1}). Retrying in {wait_time}s... Error: {e}")
+            time.sleep(wait_time)
 
 @tool
 def social_media_researcher_tool(platform: str, topic: str):
@@ -439,10 +461,124 @@ def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
     print("🎙️ AUDIO GENERATION NODE - (Not yet implemented)")
     print(f"{'='*60}")
     
-    # TODO: Implement voice/audio generation
+
+def analyze_and_cut_node(state: NarrativeState):
+    """
+    Analyzes retrieved videos using Gemini to find exact timestamps matching the script,
+    then cuts the video.
+    """
+    print("--- ANALYZE AND CUT NODE STARTING ---")
+    retrieved_clips = state.get('retrieved_clips', [])
+    script = state.get('script')
+    
+    if not retrieved_clips:
+        print("No clips to analyze.")
+        return {"current_phase": "analysis_skipped"}
+        
+    # Initialize Gemini Client for File API
+    api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("Error: No API key found for video analysis.")
+        return {"error": "Missing API Key", "current_phase": "analysis_failed"}
+        
+    client = genai.Client(api_key=api_key)
+    
+    processed_clips = []
+    
+    for clip in retrieved_clips:
+        video_path = clip.get('video_path')
+        query = clip.get('query')
+        
+        # Find the corresponding script segment to get the visual description
+        # We assume one clip per query roughly, or we just use the query as context.
+        # Ideally, we should pass the Segment object or ID with the clip.
+        # For now, we'll search the script for the segment with this query.
+        segment_context = "Find the most exciting moment."
+        target_duration = 5 # default buffer
+        
+        if script:
+            for seg in script.get('segments', []):
+                ref = seg.get('clip_reference')
+                if ref and ref.get('search_query') == query:
+                    segment_context = f"{ref.get('description')} - {ref.get('context')}"
+                    target_duration = seg.get('duration_seconds', 8)
+                    break
+        
+        if not os.path.exists(video_path):
+            print(f"Video file missing: {video_path}")
+            continue
+            
+        try:
+            print(f"Uploading {video_path} to Gemini...")
+            # Upload file
+            video_file = client.files.upload(file=video_path)
+            
+            # Wait for processing
+            import time
+            while video_file.state.name == "PROCESSING":
+                print('.', end='', flush=True)
+                time.sleep(2)
+                video_file = client.files.get(name=video_file.name)
+            
+            if video_file.state.name == "FAILED":
+                print(f"\nVideo processing failed for {video_path}")
+                continue
+                
+            print(f"\nAnalyzing video for context: {segment_context}")
+            
+            # Prompt Gemini
+            prompt = (
+                f"Find the BEST continuous {target_duration}-second segment in this video that matches this description: "
+                f"'{segment_context}'. "
+                "Return the exact start and end timestamps. "
+                "The segment should be clean and visually clear. "
+            )
+            
+            response = client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=[
+                    types.Content(
+                        role="user",
+                        parts=[
+                            types.Part.from_uri(
+                                file_uri=video_file.uri,
+                                mime_type=video_file.mime_type
+                            ),
+                            types.Part.from_text(text=prompt),
+                        ]
+                    )
+                ],
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=ClipTimestamps,
+                    temperature=0.1
+                )
+            )
+            
+            timestamps: ClipTimestamps = response.parsed
+            print(f"Found timestamps: {timestamps.start_time} - {timestamps.end_time}")
+            
+            # Cut the video
+            filename = os.path.basename(video_path)
+            output_filename = f"cut_{filename}"
+            output_path = os.path.join(os.path.dirname(video_path), output_filename)
+            
+            cut_video(video_path, output_path, timestamps.start_time, timestamps.end_time)
+            
+            # Update clip data
+            clip['video_path'] = output_path
+            clip['original_path'] = video_path
+            clip['timestamps'] = timestamps.model_dump()
+            processed_clips.append(clip)
+            
+        except Exception as e:
+            print(f"Error analyzing/cutting {video_path}: {e}")
+            # Keep original if processing fails
+            processed_clips.append(clip)
+            
     return {
-        "current_phase": "audio_skipped",
-        "messages": [AIMessage(content="Audio generation not yet implemented")]
+        "retrieved_clips": processed_clips,
+        "current_phase": "clips_processed"
     }
 
 
@@ -467,8 +603,24 @@ def assembly_node(state: NarrativeState):
         # Note: In a real script, we'd interleave AI segments too. 
         # For this prototype, we're just concatenating the 'real_clip' segments we found.
         sorted_clips = sorted(retrieved_clips, key=lambda x: x.get('segment_order', 0))
-        video_paths = [clip['video_path'] for clip in sorted_clips if os.path.exists(clip['video_path'])]
         
+        # Strict check: Ensure ALL expected video files exist
+        video_paths = []
+        missing_files = []
+        
+        for clip in sorted_clips:
+            path = clip.get('video_path')
+            if path and os.path.exists(path):
+                video_paths.append(path)
+            else:
+                missing_files.append(path or "unknown_path")
+        
+        if missing_files:
+            error_msg = f"Missing video files for assembly: {', '.join(missing_files)}"
+            print(f"❌ {error_msg}")
+            return {"current_phase": "assembly_failed", "error": error_msg}
+            
+        print(f"Video paths: {video_paths}")
         if not video_paths:
             return {"current_phase": "assembly_failed", "error": "No valid video files found"}
             
@@ -502,11 +654,7 @@ builder.add_node("search_fanout", fanout_search_node)
 builder.add_node("researcher", research_node)
 builder.add_node("script_generator", script_generation_node)
 builder.add_node("clip_retriever", clip_retrieval_node)
-
-# Add edges
-builder.add_edge(START, "search_fanout")
-builder.add_edge("search_fanout", "researcher")
-builder.add_edge("researcher", "script_generator")
+builder.add_node("analyze_and_cut", analyze_and_cut_node) # New node
 builder.add_node("assembly", assembly_node)
 
 # Add edges
@@ -514,7 +662,8 @@ builder.add_edge(START, "search_fanout")
 builder.add_edge("search_fanout", "researcher")
 builder.add_edge("researcher", "script_generator")
 builder.add_edge("script_generator", "clip_retriever")
-builder.add_edge("clip_retriever", "assembly")
+builder.add_edge("clip_retriever", "analyze_and_cut") # Connect new node
+builder.add_edge("analyze_and_cut", "assembly")
 builder.add_edge("assembly", END)
 
 # Compile
