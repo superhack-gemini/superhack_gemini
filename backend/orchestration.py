@@ -30,6 +30,7 @@ from urllib.parse import quote
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from browser_use_sdk import BrowserUse
+from video_utils import combine_videos
 
 
 # Load environment variables
@@ -46,6 +47,7 @@ class NarrativeState(TypedDict):
     retrieved_clips: List[Dict[str, Any]]
     current_phase: str
     error: Optional[str]
+    final_video_path: Optional[str]
 
 # --- Script Schema Models ---
 class StudioConfig(BaseModel):
@@ -447,38 +449,49 @@ def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
 # -----------------------------------------------------------------------------
 # ASSEMBLY NODE (TODO)
 # -----------------------------------------------------------------------------
-def assembly_node(state: NarrativeState) -> Dict[str, Any]:
+# -----------------------------------------------------------------------------
+# ASSEMBLY NODE
+# -----------------------------------------------------------------------------
+def assembly_node(state: NarrativeState):
     """
-    🎥 ASSEMBLY AGENT (TODO: Implement final video assembly)
-    
-    Purpose: Combine all pieces into final video
-    Input: video_segments, retrieved_clips, audio_tracks
-    Output: final_video (complete video file)
-    
-    Example implementation:
-    ```
-    from assembly_agent import assembly_agent
-    
-    final_video = assembly_agent.assemble(
-        video_segments=state["video_segments"],
-        clips=state["retrieved_clips"],
-        audio=state["audio_tracks"],
-        script=state["script"]  # For timing/ordering
-    )
-    
-    return {"final_video": final_video, "assembly_status": "completed"}
-    ```
+    Concatenates retrieved clips into a final video.
     """
-    print(f"\n{'='*60}")
-    print("🎥 ASSEMBLY NODE - (Not yet implemented)")
-    print(f"{'='*60}")
+    print("--- ASSEMBLY NODE STARTING ---")
+    retrieved_clips = state.get('retrieved_clips', [])
     
-    # TODO: Implement video assembly
-    return {
-        "messages": [HumanMessage(content=f"Research complete. Found: {yt_data}, {sm_data}")],
-        "research_results": {"youtube": yt_data, "social_media": sm_data},
-        "current_status": "research_completed"
-    }
+    if not retrieved_clips:
+        return {"current_phase": "assembly_failed", "error": "No clips to assemble"}
+        
+    try:
+        # Sort clips by segment order to ensure correct sequence
+        # Note: In a real script, we'd interleave AI segments too. 
+        # For this prototype, we're just concatenating the 'real_clip' segments we found.
+        sorted_clips = sorted(retrieved_clips, key=lambda x: x.get('segment_order', 0))
+        video_paths = [clip['video_path'] for clip in sorted_clips if os.path.exists(clip['video_path'])]
+        
+        if not video_paths:
+            return {"current_phase": "assembly_failed", "error": "No valid video files found"}
+            
+        # Ensure output directory exists
+        final_dir = os.path.join(os.path.dirname(__file__), "videos", "final")
+        os.makedirs(final_dir, exist_ok=True)
+        
+        # Generate output path
+        output_filename = f"{uuid.uuid4()}.mp4"
+        output_path = os.path.join(final_dir, output_filename)
+        
+        print(f"Combining {len(video_paths)} videos into {output_path}...")
+        combine_videos(video_paths, output_path)
+        print(f"✅ Final Video Saved: {output_path}")
+        
+        return {
+            "final_video_path": output_path,
+            "current_phase": "completed"
+        }
+        
+    except Exception as e:
+        print(f"Assembly failed: {e}")
+        return {"current_phase": "assembly_failed", "error": str(e)}
 
 # 4. Build the Graph
 builder = StateGraph(NarrativeState)
@@ -494,8 +507,15 @@ builder.add_node("clip_retriever", clip_retrieval_node)
 builder.add_edge(START, "search_fanout")
 builder.add_edge("search_fanout", "researcher")
 builder.add_edge("researcher", "script_generator")
+builder.add_node("assembly", assembly_node)
+
+# Add edges
+builder.add_edge(START, "search_fanout")
+builder.add_edge("search_fanout", "researcher")
+builder.add_edge("researcher", "script_generator")
 builder.add_edge("script_generator", "clip_retriever")
-builder.add_edge("clip_retriever", END)
+builder.add_edge("clip_retriever", "assembly")
+builder.add_edge("assembly", END)
 
 # Compile
 graph = builder.compile()
@@ -550,6 +570,7 @@ def run_workflow(prompt: str, duration_seconds: int = 150) -> Dict[str, Any]:
         "status": final_state.get("current_phase"),
         "error": final_state.get("error"),
         "retrieved_clips": final_state.get("retrieved_clips"),
+        "final_video_path": final_state.get("final_video_path"),
         # TODO: Include future agent outputs
         # "video_segments": final_state.get("video_segments"),
         # "retrieved_clips": final_state.get("retrieved_clips"),
@@ -583,3 +604,6 @@ if __name__ == "__main__":
                 print(f"  {seg['order']}. [CLIP] {clip['description'][:50]}...")
     else:
         print(f"Error: {result.get('error', 'Unknown error')}")
+
+    if result.get("final_video_path"):
+        print(f"\n🎥 Final Video: {result['final_video_path']}")

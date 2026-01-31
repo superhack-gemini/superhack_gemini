@@ -45,7 +45,7 @@ def _run_generation_task(task_id: str, tasks_dict: Dict, prompt: str, duration_s
             "research_context": workflow_result.get("research_context"),
             "workflow_status": workflow_result.get("status"),
             "error": workflow_result.get("error"),
-            "videoUrl": workflow_result.get("videoUrl", f"http://example.com/video_{task_id}.mp4")
+            "final_video_path": workflow_result.get("final_video_path")
         }
 
         # Update status to completed
@@ -56,6 +56,8 @@ def _run_generation_task(task_id: str, tasks_dict: Dict, prompt: str, duration_s
             tasks_dict[task_id] = task_info
         
         print(f"[{task_id}] ✅ Completed successfully!")
+        if result.get("final_video_path"):
+            print(f"[{task_id}] 🎥 Final Video Path: {result.get('final_video_path')}")
 
     except Exception as e:
         print(f"[{task_id}] ❌ Error: {e}")
