@@ -123,22 +123,7 @@ function App() {
                 </span>
               </div>
             </div>
-            <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.28em] text-white/80 md:inline-flex">
-              <svg
-                className="h-3.5 w-3.5 text-white/70"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z" />
-                <path d="M19 11a7 7 0 0 1-14 0" />
-                <path d="M12 18v3" />
-                <path d="M8 21h8" />
-              </svg>
+            <span className="hidden rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.28em] text-white/80 md:inline-flex">
               Gemini 3 × Super Bowl Week
             </span>
           </header>
