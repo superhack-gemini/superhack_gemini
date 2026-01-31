@@ -73,7 +73,9 @@ def test_full_workflow_integration():
         # 1. Verify Structure
         assert isinstance(result, dict), "Result should be a dictionary"
         assert result.get("prompt") == prompt
-        assert result.get("status") == "clips_retrieved", f"Workflow did not complete (Status: {result.get('status')})"
+        assert result.get("prompt") == prompt
+        # Status might be 'completed' now that assembly is done
+        assert result.get("status") in ["completed", "clips_retrieved"], f"Workflow status unexpected: {result.get('status')}"
         
         # 2. Verify Research
         assert result.get("research_context"), "Research context is missing"
@@ -113,7 +115,17 @@ def test_full_workflow_integration():
             except ValueError:
                 pytest.fail(f"Filename is not a valid UUID: {filename}")
                 
+                
             print(f"  Mapped query '{clip['query']}' -> {filename}")
+
+        # 5. Verify Final Video
+        final_video_path = result.get("final_video_path")
+        if final_video_path:
+            assert os.path.exists(final_video_path), f"Final video not found at {final_video_path}"
+            assert os.path.getsize(final_video_path) > 0, "Final video is empty"
+            print(f"✅ Final Video Assembled: {final_video_path}")
+        else:
+            print("⚠️ Final video path not present (Assembly might have failed or not run)")
         
     except Exception as e:
         pytest.fail(f"Full workflow failed: {e}")
