@@ -3,13 +3,12 @@ from langgraph.graph import StateGraph, START, END
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.tools import tool
 from langchain_google_genai import ChatGoogleGenerativeAI
-from browser_use_sdk import BrowserUse
 import requests
 import time
 import os
 import json
 from dataclasses import dataclass
-import asyncio
+from urllib.parse import quote
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -26,82 +25,77 @@ class Video:
     path: str
     title: str
 
-async def _async_retrieve_video(url: str) -> Video:
-    """
-    Internal async function to use Browser Use SDK skills API to download a video.
-    Uses the YouTube Shorts search skill to find and download videos.
-    """
-    print(f"--- BROWSER-USE SDK RETRIEVING VIDEO: {url} ---")
+def retrieve_video(url: str):
+    print(f"--- RETRIEVING VIDEO: {url} ---")
     
-    # Get API key from environment
-    api_key = os.getenv("BROWSER_USE_API_KEY")
-    if not api_key:
-        raise ValueError("BROWSER_USE_API_KEY not found in environment variables")
+    # Configuration
+    publer_token = os.getenv("PUBLER_TOKEN")
+    if not publer_token:
+        raise ValueError("PUBLER_TOKEN not found in environment variables")
+    publer_url = "https://app.publer.com/tools/media"
     
-    # Initialize Browser Use SDK client
-    client = BrowserUse(api_key=api_key)
+    # 1. POST request to get job_id
+    payload = {
+        "macOS": False,
+        "token": publer_token,
+        "url": url
+    }
     
-    # Define the video directory
+    response = requests.post(publer_url, json=payload)
+    response.raise_for_status()
+    job_id = response.json().get("job_id")
+    
+    if not job_id:
+        raise Exception("Failed to get job_id from Publer")
+        
+    # 2. Poll job status
+    status_url = f"https://app.publer.com/api/v1/job_status/{job_id}"
+    max_retries = 30
+    retry_count = 0
+    job_data = None
+    
+    while retry_count < max_retries:
+        status_resp = requests.get(status_url)
+        status_resp.raise_for_status()
+        job_data = status_resp.json()
+        
+        if job_data.get("status") == "complete":
+            break
+            
+        print(f"Waiting for job {job_id} to complete... (status: {job_data.get('status')})")
+        time.sleep(2)
+        retry_count += 1
+    else:
+        raise Exception(f"Job {job_id} timed out")
+        
+    # 3. Extract path and metadata
+    payload_items = job_data.get("payload", [])
+    if not payload_items:
+        raise Exception("No video data found in Publer response")
+        
+    video_item = payload_items[0]
+    download_url = video_item.get("path")
+    video_name = video_item.get("name", "downloaded_video")
+    
+    # 4. Download video via proxy
+    encoded_url = quote(download_url, safe='')
+    proxy_download_url = f"https://publer-media-downloader.kalemi-code4806.workers.dev/?url={encoded_url}"
+    print(proxy_download_url)
+    # Ensure videos directory exists
     video_dir = os.path.join(os.path.dirname(__file__), "videos")
     os.makedirs(video_dir, exist_ok=True)
     
-    # Extract search query from URL or use URL as query
-    # For YouTube URLs, we could parse the video ID, but for now use a generic approach
-    # If the user provides a direct URL, we'll use it as the search query
-    query = url
+    local_filename = f"{int(time.time())}_{video_name.replace(' ', '_')}.mp4"
+    local_path = os.path.join(video_dir, local_filename)
     
-    # Execute the YouTube Shorts search skill
-    skill_id = "e0d2a054-18a8-4667-a0cc-1f5e250b24fe"
-    
-    result = await client.skills.execute_skill(
-        skill_id=skill_id,
-        parameters={
-            "query": query,
-            "limit": 1  # We only need one video
-        }
-    )
-    
-    print(f"Skill execution result: {result}")
-    
-    # Parse the result to get video information
-    if not result:
-        raise ValueError("Skill returned no results")
-    
-    # Extract video data from result
-    # This structure may need adjustment based on actual skill response
-    video_data = result if isinstance(result, dict) else result[0] if isinstance(result, list) else {}
-    
-    # Get video download URL or file from the skill result
-    download_url = video_data.get("downloadUrl") or video_data.get("url")
-    title = video_data.get("title", "downloaded_video")
-    
-    if not download_url:
-        raise ValueError("No download URL found in skill result")
-    
-    # Download the video file
-    video_response = requests.get(download_url)
-    video_response.raise_for_status()
-    
-    # Generate filename from title
-    safe_filename = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).rstrip()
-    safe_filename = safe_filename[:100]  # Limit length
-    file_name = f"{safe_filename}.mp4"
-    
-    # Save to local directory
-    local_path = os.path.join(video_dir, file_name)
-    with open(local_path, "wb") as f:
-        f.write(video_response.content)
-    
-    print(f"Video downloaded to: {local_path}")
-    
-    return Video(path=local_path, title=title)
-
-
-def retrieve_video(url: str) -> Video:
-    """
-    Synchronous wrapper for the async video retrieval.
-    """
-    return asyncio.run(_async_retrieve_video(url))
+    print(f"Downloading video to {local_path}...")
+    with requests.get(proxy_download_url, stream=True) as r:
+        r.raise_for_status()
+        with open(local_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+                
+    return Video(path=local_path, title=video_name)
 
 
 @tool
@@ -130,8 +124,9 @@ def google_search(query: str):
     return f"Search results for: {query} (STUB: Integration pending API key)"
 
 # 2. Gemini Setup
-# Note: Ensure GOOGLE_API_KEY is in your .env
-llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview")
+# Note: Ensure GEMINI_API_KEY is in your .env
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview", google_api_key=gemini_api_key)
 llm_with_tools = llm.bind_tools([google_search, youtube_scraper_tool, social_media_researcher_tool])
 
 # 3. Define Node(s)
