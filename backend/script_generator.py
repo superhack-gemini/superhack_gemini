@@ -12,7 +12,8 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from models import (
     SportsNarrativeScript, 
     ResearchContext,
@@ -40,8 +41,8 @@ class ScriptGenerator:
                 "Get your API key at: https://aistudio.google.com/app/apikey"
             )
         
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash')
+        self.client = genai.Client(api_key=api_key)
+        self.model_id = "gemini-2.0-flash"
         print("[ScriptGenerator] ✅ Gemini API configured")
     
     def _get_system_prompt(self) -> str:
@@ -190,11 +191,12 @@ Return ONLY the JSON object, no other text or markdown."""
         try:
             prompt = self._get_script_prompt(research, duration_seconds)
             
-            response = self.model.generate_content(
-                [self._get_system_prompt(), prompt],
-                generation_config=genai.GenerationConfig(
+            response = self.client.models.generate_content(
+                model=self.model_id,
+                contents=[self._get_system_prompt(), prompt],
+                config=types.GenerateContentConfig(
                     response_mime_type="application/json",
-                    temperature=0.85,  # Slightly higher for creativity
+                    temperature=0.85,
                 )
             )
             
@@ -247,8 +249,6 @@ Return ONLY the JSON object, no other text or markdown."""
         """
         Async version of script generation.
         """
-        # For now, just call the sync version
-        # TODO: Implement proper async with aiohttp or similar
         return self.generate_script_sync(research, duration_seconds)
 
 

@@ -1,666 +1,304 @@
 {
-  "test_results": [
-    {
-      "prompt": "why didnt the 49ers make it to the superbowl",
-      "script": {
-        "title": "Fallen Favorites: The 49ers' Championship Collapse",
-        "storyline": "why didnt the 49ers make it to the superbowl",
-        "total_duration_seconds": 150,
-        "studio": {
-          "description": "A sleek, modern ESPN-style studio with dark wood accents and brushed metal surfaces. A curved anchor desk sits center frame with three large 4K monitors behind displaying 49ers imagery in muted red and gold. The NFL shield logo illuminates from the floor.",
-          "lighting": "Dramatic low-key lighting with warm amber accents. Key lights create defined shadows on hosts' faces. Background monitors provide cool blue contrast.",
-          "background_elements": [
-            "Three 85-inch curved displays showing 49ers highlights",
-            "Illuminated NFL shield logo on floor",
-            "Scrolling stats ticker at bottom of back wall",
-            "Subtle fog/haze for depth"
-          ],
-          "color_scheme": "Deep burgundy and gold accents against charcoal gray and black. Cool blue backlighting for contrast.",
-          "time_of_day": "Late evening, 10 PM primetime slot"
-        },
-        "hosts": [
-          {
-            "name": "Marcus Webb",
-            "role": "Lead Anchor",
-            "appearance": "African American male, early 40s, wearing a fitted charcoal suit with a burgundy tie. Clean-shaven, confident demeanor, expressive hand gestures.",
-            "position": "Center of curved desk, facing camera"
-          },
-          {
-            "name": "Sarah Chen",
-            "role": "NFL Analyst",
-            "appearance": "Asian American female, mid-30s, wearing a cream blazer over black top. Hair pulled back professionally, intense analytical expression.",
-            "position": "Left side of desk, angled toward center"
-          },
-          {
-            "name": "Tony Romo Jr.",
-            "role": "Former Player Analyst",
-            "appearance": "Caucasian male, late 30s, athletic build visible in navy sport coat. Energetic, uses hands to demonstrate plays.",
-            "position": "Right side of desk, slight lean forward"
-          }
-        ],
-        "premise": "The San Francisco 49ers entered the season as Super Bowl favorites, but a cascade of injuries and crucial mistakes led to a shocking collapse. Tonight, we examine what went wrong and whether this championship window has closed.",
-        "key_points": [
-          "Christian McCaffrey's absence devastated the offense",
-          "Kyle Shanahan's play-calling under scrutiny",
-          "Brock Purdy struggled without weapons",
-          "The championship window may be closing"
-        ],
-        "segments": [
-          {
-            "order": 1,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "intro_1",
-              "segment_type": "intro",
-              "duration_seconds": 25,
-              "mood": "dramatic",
-              "visual_description": "Camera slowly pushes in on Marcus Webb at center desk. Monitors behind show faded 49ers Super Bowl hopes. Lighting is moody, dramatic. Studio has weight of disappointment.",
-              "camera_notes": "Start wide, slow push to medium shot. Cut to two-shot with Sarah on 'championship dreams.'",
-              "dialogue": [
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "They were supposed to be playing for a championship right now. The San Francisco 49ers... favorites by nearly everyone to hoist the Lombardi Trophy.",
-                  "delivery": "Somber, measured pace, slight shake of head",
-                  "camera_direction": "Slow push in to medium close-up"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "Instead, they're watching from home. Tonight... we ask the question the Faithful are dreading.",
-                  "delivery": "Building intensity, lean forward",
-                  "camera_direction": "Hold on medium shot"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "What went wrong with the 49ers?",
-                  "delivery": "Direct, serious, looking into camera",
-                  "camera_direction": "Quick cut to Sarah close-up"
-                }
-              ],
-              "graphics": ["LOWER THIRD: SPECIAL REPORT - FALLEN FAVORITES", "49ERS LOGO WATERMARK"]
-            }
-          },
-          {
-            "order": 2,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_preseason",
-              "description": "Montage of 49ers preseason predictions and Super Bowl hype. Analysts picking SF to win it all. Team celebrating training camp.",
-              "search_query": "49ers 2024 super bowl predictions preseason favorites",
-              "duration_seconds": 8,
-              "context": "Establishes the high expectations before showing the fall",
-              "transition_in": "dramatic fade from studio",
-              "transition_out": "slow dissolve"
-            }
-          },
-          {
-            "order": 3,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "analysis_1",
-              "segment_type": "analysis",
-              "duration_seconds": 30,
-              "mood": "somber",
-              "visual_description": "Three-shot of all hosts. Tony has injury report graphic on tablet. Mood is clinical, examining a tragedy.",
-              "camera_notes": "Start three-shot, cut to Tony close-up when discussing CMC, use over-shoulder shot for tablet graphic.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "Look, I've been there. You build a team around certain guys, and when they go down, everything changes. Christian McCaffrey was the engine of that offense.",
-                  "delivery": "Empathetic, drawing from experience, gesturing with hands",
-                  "camera_direction": "Medium shot, slight push in"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "The numbers are staggering, Tony. Without McCaffrey, the 49ers averaged 4.2 yards per carry compared to 5.8 with him. That's not just a drop - that's a different offense entirely.",
-                  "delivery": "Analytical, referencing notes, precise",
-                  "camera_direction": "Cut to Sarah with stat graphic over shoulder"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "And it wasn't just CMC. Deebo Samuel, Brandon Aiyuk missing time, the offensive line shuffling every week...",
-                  "delivery": "Listing with gravity, counting on fingers",
-                  "camera_direction": "Two-shot Marcus and Sarah"
-                }
-              ],
-              "graphics": ["INJURY GRAPHIC: 15 Players to IR", "STAT: 4.2 vs 5.8 YPC"]
-            }
-          },
-          {
-            "order": 4,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_cmc_injury",
-              "description": "Christian McCaffrey injury footage, trainers helping him off field, sideline shots of his reaction and coaches' concern.",
-              "search_query": "Christian McCaffrey injury 2024 49ers sideline",
-              "duration_seconds": 10,
-              "context": "Visual proof of the devastating loss that changed the season",
-              "transition_in": "cut",
-              "transition_out": "fade to black"
-            }
-          },
-          {
-            "order": 5,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "debate_1",
-              "segment_type": "debate",
-              "duration_seconds": 35,
-              "mood": "controversial",
-              "visual_description": "Energy shifts. Hosts lean in. Split screen graphics ready. This is the hot take segment - lighting shifts slightly warmer, more urgent.",
-              "camera_notes": "Quick cuts between speakers, use split screen for disagreement, dramatic push-ins on strong statements.",
-              "dialogue": [
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "But here's what I can't get past - Kyle Shanahan has now had multiple chances at championships and found ways to let them slip. At what point do we question the coaching?",
-                  "delivery": "Challenging, leaning forward, firm",
-                  "camera_direction": "Push in on Sarah"
-                },
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "Whoa, whoa. Come on, Sarah. The man has been to two Super Bowls, an NFC Championship game. You can't coach your way out of losing your best players!",
-                  "delivery": "Defensive, animated, hands up",
-                  "camera_direction": "Quick cut to Tony, slightly wider to capture gestures"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "Then explain the fourth quarter play-calling, Tony. Explain going conservative with a lead. AGAIN.",
-                  "delivery": "Pointed, emphatic, not backing down",
-                  "camera_direction": "Split screen Sarah/Tony"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "The 49ers blew a double-digit lead in three different games this season. Three. That's not just bad luck.",
-                  "delivery": "Mediating but making a point, referencing stat",
-                  "camera_direction": "Cut to Marcus, graphic appears"
-                }
-              ],
-              "graphics": ["SPLIT SCREEN: SHANAHAN DEFENSE vs CRITICISM", "STAT: 3 Blown Double-Digit Leads"]
-            }
-          },
-          {
-            "order": 6,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_blown_lead",
-              "description": "49ers blowing fourth quarter lead. Opposition scoring, Niners sideline dejection, fans with hands on heads.",
-              "search_query": "49ers blown lead fourth quarter 2024 collapse",
-              "duration_seconds": 12,
-              "context": "Evidence of the recurring problem - inability to close games",
-              "transition_in": "hard cut for impact",
-              "transition_out": "slow fade"
-            }
-          },
-          {
-            "order": 7,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "outro_1",
-              "segment_type": "outro",
-              "duration_seconds": 30,
-              "mood": "reflective",
-              "visual_description": "Mood shifts to reflective. Lighting softens slightly. Hosts settle back, contemplative. 49ers sunset imagery on monitors behind.",
-              "camera_notes": "Start wide three-shot, end on slow push to Marcus for final question.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "Look, the reality is this - championship windows don't stay open forever. The cap hits are coming. Decisions have to be made.",
-                  "delivery": "Sobering, honest, slight sadness",
-                  "camera_direction": "Medium shot Tony"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "The 49ers need to ask themselves hard questions this offseason. Not just about the roster, but about the identity of this team going forward.",
-                  "delivery": "Thoughtful, measured conclusion",
-                  "camera_direction": "Sarah medium shot"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "A team built to win now... watching others play for the ultimate prize. The question for the Faithful tonight: Was this the year that got away, or the beginning of the end?",
-                  "delivery": "Powerful close, direct to camera, letting question hang",
-                  "camera_direction": "Slow push to Marcus close-up, hold"
-                }
-              ],
-              "graphics": ["LOWER THIRD: SPECIAL REPORT - FALLEN FAVORITES", "SHOW LOGO FADE IN"]
-            }
-          }
-        ],
-        "research_sources": [
-          "ESPN 49ers Coverage",
-          "The Athletic - San Francisco",
-          "NFL Network Analysis",
-          "49ers Official Injury Reports"
-        ]
+  "prompt": "Why didn't the 49ers make it to the Super Bowl",
+  "research": {
+    "original_prompt": "Why didn't the 49ers make it to the Super Bowl",
+    "storyline_summary": "The San Francisco 49ers' Super Bowl dreams were dashed in the NFC Championship game on January 28, 2024, a heart-wrenching 25-34 loss to the Detroit Lions at Levi's Stadium. What began as a nightmare, with the 49ers falling into a 24-7 halftime hole, turned into a second-half resurgence fueled by quarterback Brock Purdy's resilience and a suddenly energized defense. Purdy, despite early struggles and immense pressure, orchestrated a comeback, throwing for 267 yards and a touchdown. Christian McCaffrey added two crucial touchdowns on the ground, and the defense finally found answers for the Lions' potent rushing attack, led by Jahmyr Gibbs and David Montgomery. Ultimately, missed opportunities and questionable defensive lapses proved too costly.\n\nThe Lions, under the guidance of head coach Dan Campbell, showcased a fearless and aggressive game plan. Quarterback Jared Goff delivered a composed performance, exploiting mismatches in the 49ers' secondary and converting critical third downs. The Lions' running game, a force throughout the season, initially dominated the line of scrimmage, putting immense pressure on the 49ers' defense. Despite the 49ers' valiant comeback effort, the Lions' early lead and consistent offensive execution proved to be the deciding factors, sending them to their first Super Bowl appearance and leaving the 49ers to grapple with the bitter taste of defeat.",
+    "key_facts": [
+      "The 49ers were down 24-7 at halftime of the NFC Championship game against the Lions.",
+      "Brock Purdy threw for 267 yards and one touchdown in the NFC Championship game.",
+      "Christian McCaffrey scored two rushing touchdowns in the NFC Championship game.",
+      "The Lions outscored the 49ers 24-7 in the first half.",
+      "Jared Goff threw for 273 yards and one touchdown for the Lions.",
+      "The Lions converted 9 of 14 third-down attempts.",
+      "The 49ers had 3 turnovers (2 fumbles, 1 interception) compared to the Lions' 0.",
+      "The 49ers were penalized 7 times for 67 yards, while the Lions had 2 penalties for 15 yards."
+    ],
+    "key_figures": [
+      "Brock Purdy - 49ers Quarterback, tasked with leading the offense and overcoming early struggles.",
+      "Christian McCaffrey - 49ers Running Back, a key offensive weapon responsible for scoring and providing a spark.",
+      "Kyle Shanahan - 49ers Head Coach, responsible for game plan and adjustments.",
+      "Jared Goff - Lions Quarterback, played composed and led the Lions offense effectively.",
+      "Dan Campbell - Lions Head Coach, aggressive play calling and leadership."
+    ],
+    "timeline": [
+      "January 28, 2024: NFC Championship Game - Lions defeat 49ers 34-25.",
+      "Halftime, January 28, 2024: 49ers trail Lions 24-7.",
+      "2nd Half, January 28, 2024: 49ers mount a comeback but fall short.",
+      "Season Prior: 49ers were heavily favored to win the Super Bowl."
+    ],
+    "controversy_points": [
+      "Defensive Scheme - Were the 49ers adequately prepared for the Lions' rushing attack?",
+      "Play Calling - Did Kyle Shanahan adjust his play calling effectively enough after the slow start?",
+      "Missed Opportunities - The 49ers had several missed opportunities, including dropped passes and missed tackles, that could have changed the game's outcome."
+    ],
+    "emotional_angles": [
+      "Heartbreak - The 49ers' faithful had high expectations and experienced the pain of a Super Bowl appearance slipping away.",
+      "Resilience - Brock Purdy's comeback from a serious injury and his performance in the face of adversity resonated with fans.",
+      "Underdog Story - The Lions' journey to the Super Bowl after years of struggles created a feel-good narrative."
+    ],
+    "sources": [
+      {
+        "query": "Why didn't the 49ers make it to the Super Bowl",
+        "source": "ESPN",
+        "title": "ESPN Game Recap: Lions vs. 49ers",
+        "snippet": "Detailed play-by-play account of the NFC Championship game including key stats and turning points.",
+        "url": null,
+        "date": null,
+        "relevance_score": 0.9
+      },
+      {
+        "query": "Why didn't the 49ers make it to the Super Bowl",
+        "source": "NFL.com",
+        "title": "NFL.com: 49ers' Super Bowl Hopes Dashed",
+        "snippet": "Analysis of the 49ers' loss, focusing on missed opportunities and defensive struggles.",
+        "url": null,
+        "date": null,
+        "relevance_score": 0.9
+      },
+      {
+        "query": "Why didn't the 49ers make it to the Super Bowl",
+        "source": "PFF",
+        "title": "Pro Football Focus: Player Grades - NFC Championship",
+        "snippet": "Individual player grades highlighting key performances and areas for improvement.",
+        "url": null,
+        "date": null,
+        "relevance_score": 0.9
       }
+    ]
+  },
+  "script": {
+    "title": "Niners Nightmare: How Super Bowl Dreams Imploded",
+    "storyline": "Why didn't the 49ers make it to the Super Bowl",
+    "total_duration_seconds": 150,
+    "studio": {
+      "description": "State-of-the-art sports studio. Dark wood desk with chrome accents. Three leather chairs. Massive curved LED screen behind the hosts displaying dynamic graphics. Glass panels with team logos subtly etched. High-end broadcast cameras visible but unobtrusive.",
+      "lighting": "Low-key, dramatic lighting with pools of warm light focused on the hosts. Cool blue accents highlighting the background screen. Sharp shadows to create depth and tension.",
+      "background_elements": [
+        "Large LED screen showing relevant footage",
+        "Sports graphics",
+        "Team logos",
+        "Ticker with updated scores"
+      ],
+      "color_scheme": "Primary: Dark blue, Accent: Gold and Red",
+      "time_of_day": "Primetime (8:00 PM EST)"
     },
-    {
-      "prompt": "seahawks path to the superbowl",
-      "script": {
-        "title": "The Emerald Ascent: Seattle's Unlikely Championship Run",
-        "storyline": "seahawks path to the superbowl",
-        "total_duration_seconds": 150,
-        "studio": {
-          "description": "A modern broadcast studio with Seattle-inspired design. Cool blue and green LED accents frame large displays showing Seahawks highlights. Space Needle silhouette visible in background graphics. Clean, energetic aesthetic.",
-          "lighting": "Bright, optimistic lighting with green accent LEDs. Clean key lighting on hosts with dynamic background colors.",
-          "background_elements": [
-            "Massive LED wall with Seahawks action shots",
-            "Seattle skyline silhouette graphics",
-            "Real-time social media feed display",
-            "Playoff bracket graphic"
-          ],
-          "color_scheme": "Seattle Seahawks navy blue and action green against silver and white. Energetic, vibrant palette.",
-          "time_of_day": "Prime time, electric atmosphere"
-        },
-        "hosts": [
-          {
-            "name": "Marcus Webb",
-            "role": "Lead Anchor",
-            "appearance": "African American male, early 40s, wearing a tailored navy suit with subtle green pocket square. Energetic, smiling.",
-            "position": "Center desk"
-          },
-          {
-            "name": "Sarah Chen",
-            "role": "NFL Analyst",
-            "appearance": "Asian American female, mid-30s, wearing an emerald green blazer. Animated, excited expression.",
-            "position": "Left of center"
-          },
-          {
-            "name": "Tony Romo Jr.",
-            "role": "Former Player Analyst",
-            "appearance": "Caucasian male, late 30s, navy sport coat, excited energy, ready to break down plays.",
-            "position": "Right of center"
-          }
-        ],
-        "premise": "Nobody gave them a chance. The Seattle Seahawks were supposed to be rebuilding. Instead, they're on the doorstep of the Super Bowl. This is the story of an incredible run and the doubters who got it wrong.",
-        "key_points": [
-          "Geno Smith's redemption arc",
-          "Mike Macdonald's defensive transformation",
-          "Young core exceeding expectations",
-          "Silencing the doubters"
-        ],
-        "segments": [
-          {
-            "order": 1,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "intro_1",
-              "segment_type": "intro",
-              "duration_seconds": 25,
-              "mood": "exciting",
-              "visual_description": "Studio buzzing with energy. Green LED accents pulsing. Monitors showing Seahawks celebration footage. Hosts visibly excited.",
-              "camera_notes": "Dynamic opening, quick cuts, energy building.",
-              "dialogue": [
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "They said Seattle was done. They said Geno Smith was a placeholder. They said this team was two years away from competing.",
-                  "delivery": "Building energy, counting off criticisms, smile growing",
-                  "camera_direction": "Medium shot, slight movement"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "Well, someone forgot to tell the Seahawks!",
-                  "delivery": "Excited, almost laughing",
-                  "camera_direction": "Quick cut to Sarah"
-                },
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "This team is for REAL, and tonight we break down how Seattle shocked the NFL world!",
-                  "delivery": "Maximum energy, gesturing emphatically",
-                  "camera_direction": "Wide shot capturing enthusiasm"
-                }
-              ],
-              "graphics": ["LOWER THIRD: THE EMERALD ASCENT", "SEAHAWKS PLAYOFF GRAPHIC"]
-            }
-          },
-          {
-            "order": 2,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_doubters",
-              "description": "Compilation of preseason analysts predicting Seahawks to finish last in NFC West, mock drafts, low power rankings.",
-              "search_query": "Seahawks 2024 preseason predictions last place NFC West",
-              "duration_seconds": 8,
-              "context": "Sets up the narrative by showing how wrong everyone was",
-              "transition_in": "dramatic cut",
-              "transition_out": "whoosh transition"
-            }
-          },
-          {
-            "order": 3,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "analysis_1",
-              "segment_type": "analysis",
-              "duration_seconds": 30,
-              "mood": "celebratory",
-              "visual_description": "Geno Smith highlights playing on background monitors. Hosts breaking down his transformation.",
-              "camera_notes": "Cut to plays on monitor, back to Tony for analysis.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "Okay, let me tell you what Geno Smith is doing that nobody is talking about. Watch this throw - that's NFL MVP level anticipation right there!",
-                  "delivery": "Animated, pointing at screen, impressed",
-                  "camera_direction": "Over shoulder shot to monitor"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "His completion percentage in the clutch is absurd. 73% on third and fourth down in the playoffs. He's not just managing games - he's winning them.",
-                  "delivery": "Impressed, emphasizing stats",
-                  "camera_direction": "Sarah with stat graphic"
-                }
-              ],
-              "graphics": ["STAT: 73% Clutch Completion Rate", "MVP CALIBER PLAYS"]
-            }
-          },
-          {
-            "order": 4,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_geno_td",
-              "description": "Geno Smith playoff touchdown pass to DK Metcalf, crowd eruption, celebration.",
-              "search_query": "Geno Smith DK Metcalf touchdown playoffs 2024 Seahawks",
-              "duration_seconds": 10,
-              "context": "Showcase the clutch performance that defines this run",
-              "transition_in": "cut",
-              "transition_out": "celebration freeze"
-            }
-          },
-          {
-            "order": 5,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "analysis_2",
-              "segment_type": "analysis",
-              "duration_seconds": 25,
-              "mood": "tense",
-              "visual_description": "Defensive highlights playing. Mood shifts to respect for the defensive transformation.",
-              "camera_notes": "Serious analysis mode, leaning in.",
-              "dialogue": [
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "But this isn't just about Geno. Mike Macdonald has completely transformed this defense in year one.",
-                  "delivery": "Transitioning to serious analysis",
-                  "camera_direction": "Medium shot Marcus"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "They went from bottom 10 in points allowed to top 5. That doesn't happen by accident. That's scheme, that's coaching, that's buy-in.",
-                  "delivery": "Emphatic, making the case",
-                  "camera_direction": "Sarah with defensive stats graphic"
-                }
-              ],
-              "graphics": ["DEFENSIVE TRANSFORMATION GRAPHIC"]
-            }
-          },
-          {
-            "order": 6,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_defense",
-              "description": "Seahawks defense making big plays - interception, sack, goal line stand. Crowd going wild.",
-              "search_query": "Seahawks defense highlights playoffs 2024 interception sack",
-              "duration_seconds": 10,
-              "context": "Prove the defensive dominance visually",
-              "transition_in": "impact cut",
-              "transition_out": "fade"
-            }
-          },
-          {
-            "order": 7,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "outro_1",
-              "segment_type": "outro",
-              "duration_seconds": 25,
-              "mood": "exciting",
-              "visual_description": "Energy peak. Super Bowl graphic appearing. Hosts unified in excitement.",
-              "camera_notes": "Building to crescendo, end on powerful shot.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "I'll say it right now - this Seahawks team can beat ANYONE. They have no fear!",
-                  "delivery": "Confident prediction, emphatic",
-                  "camera_direction": "Tony close-up"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "From doubted to dominant. From written off to writing history. Seattle's path to the Super Bowl is one for the ages. The 12th Man... is LOUD again!",
-                  "delivery": "Building to powerful close, arms spread on final line",
-                  "camera_direction": "Slow push to Marcus, hold on final beat"
-                }
-              ],
-              "graphics": ["SUPER BOWL BOUND?", "12TH MAN RISING"]
-            }
-          }
-        ],
-        "research_sources": [
-          "ESPN Seahawks Coverage",
-          "The Athletic Seattle",
-          "NFL Network",
-          "Seattle Times Sports"
-        ]
+    "hosts": [
+      {
+        "name": "Jillian Hayes",
+        "role": "Lead Anchor",
+        "appearance": "40s, African American woman, sharp business suit (red). Confident and authoritative demeanor.",
+        "position": "Center desk, facing camera"
+      },
+      {
+        "name": "Rick 'The Stat' Johnson",
+        "role": "NFL Analyst",
+        "appearance": "50s, Caucasian male, slightly disheveled but knowledgeable, wearing a patterned shirt and sports jacket. Always has stats ready.",
+        "position": "Left side of desk"
+      },
+      {
+        "name": "Antonio 'The Hammer' Ruiz",
+        "role": "Former Player / Expert Analyst",
+        "appearance": "30s, Latino male, athletic build, wearing a stylish but comfortable sports jacket and jeans. Intense and passionate.",
+        "position": "Right side of desk"
       }
-    },
-    {
-      "prompt": "bill belichick getting snubbed from hall of fame",
-      "script": {
-        "title": "Six Rings, No Entry: The Belichick Hall of Fame Controversy",
-        "storyline": "bill belichick getting snubbed from hall of fame",
-        "total_duration_seconds": 150,
-        "studio": {
-          "description": "A dramatic, serious studio setup. Dark tones with gold accents reminiscent of Hall of Fame aesthetics. Large screens show Belichick's championship moments in black and white, creating gravitas.",
-          "lighting": "Dramatic, moody lighting. Strong shadows, almost noir-style. Gold accent lights for Hall of Fame imagery.",
-          "background_elements": [
-            "Hall of Fame gold jacket imagery",
-            "Six Super Bowl trophies silhouette",
-            "Patriots dynasty timeline",
-            "Voting controversy graphics"
+    ],
+    "premise": "The 49ers, heavily favored, crumbled under pressure against a hungry Lions team. We dissect the key moments and strategic failures that led to their shocking defeat.",
+    "key_points": [
+      "The disastrous first half performance.",
+      "Brock Purdy's resilience, but ultimate shortcomings.",
+      "Defensive breakdowns against the Lions' rushing attack.",
+      "Kyle Shanahan's questionable play calling."
+    ],
+    "segments": [
+      {
+        "order": 1,
+        "segment_type": "ai_generated",
+        "ai_segment": {
+          "segment_id": "intro_1",
+          "segment_type": "intro",
+          "duration_seconds": 20,
+          "mood": "dramatic",
+          "visual_description": "Studio shot. Jillian in the center. Rick and Antonio on either side. The LED screen flashes images of Brock Purdy looking dejected, followed by Lions celebrating. Ominous music playing. Camera slowly zooms in on Jillian.",
+          "camera_notes": "Slow zoom in on Jillian. Quick cuts between hosts for reaction shots.",
+          "dialogue": [
+            {
+              "speaker": "Jillian Hayes",
+              "text": "They were destined for glory. A Super Bowl berth was all but guaranteed. But on one fateful night, the 49ers' dreams turned into a nightmare. What went wrong?",
+              "delivery": "Serious, measured tone. Building anticipation.",
+              "camera_direction": "Close-up on Jillian"
+            }
           ],
-          "color_scheme": "Black, gold, and navy. Serious, prestigious atmosphere with hints of controversy red.",
-          "time_of_day": "Late night, serious discussion time"
+          "graphics": [
+            "LOWER THIRD: Niners Nightmare",
+            "UPPER RIGHT: NFC Championship Game Score"
+          ]
         },
-        "hosts": [
-          {
-            "name": "Marcus Webb",
-            "role": "Lead Anchor",
-            "appearance": "African American male, early 40s, black suit with gold tie. Gravitas appropriate for serious topic.",
-            "position": "Center desk"
-          },
-          {
-            "name": "Sarah Chen",
-            "role": "NFL Analyst",
-            "appearance": "Asian American female, mid-30s, burgundy blazer, serious expression. Ready for heated debate.",
-            "position": "Left side"
-          },
-          {
-            "name": "Tony Romo Jr.",
-            "role": "Former Player Analyst",
-            "appearance": "Caucasian male, late 30s, visibly frustrated about topic. Black sport coat, animated.",
-            "position": "Right side"
-          }
-        ],
-        "premise": "Six Super Bowl championships. The greatest dynasty in NFL history. And yet, Bill Belichick finds himself on the outside of the Pro Football Hall of Fame looking in. Tonight, we examine the most controversial Hall of Fame snub in football history.",
-        "key_points": [
-          "Six Super Bowl championships as head coach",
-          "The politics behind the voting process",
-          "Player support for Belichick",
-          "What this means for the Hall's credibility"
-        ],
-        "segments": [
-          {
-            "order": 1,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "intro_1",
-              "segment_type": "intro",
-              "duration_seconds": 25,
-              "mood": "controversial",
-              "visual_description": "Dark, dramatic open. Six Lombardi trophies appear one by one on screen behind Marcus. Weight of the injustice palpable.",
-              "camera_notes": "Slow, deliberate camera moves. Building tension.",
-              "dialogue": [
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "One. Two. Three. Four. Five. Six.",
-                  "delivery": "Counting slowly as trophies appear, each number heavy with meaning",
-                  "camera_direction": "Cut to trophy appearing with each number"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "Six Super Bowl championships. More than any head coach in NFL history. And somehow... Bill Belichick is not in the Hall of Fame.",
-                  "delivery": "Disbelief, letting the absurdity land",
-                  "camera_direction": "Push in to Marcus"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "This isn't about football anymore, Marcus. This is about something else entirely.",
-                  "delivery": "Serious, implying deeper issues",
-                  "camera_direction": "Cut to Sarah, knowing look"
-                }
-              ],
-              "graphics": ["SIX CHAMPIONSHIPS", "ZERO HALL OF FAME VOTES"]
+        "clip_reference": null
+      },
+      {
+        "order": 2,
+        "segment_type": "real_clip",
+        "ai_segment": null,
+        "clip_reference": {
+          "clip_id": "clip_1",
+          "description": "Footage of the Lions scoring their first touchdown - Jahmyr Gibbs running through the 49ers' defense.",
+          "search_query": "Jahmyr Gibbs touchdown NFC championship 2024",
+          "duration_seconds": 7,
+          "context": "Illustrates the Lions' early dominance and the 49ers' defensive struggles.",
+          "transition_in": "Hard cut from Jillian's intro.",
+          "transition_out": "Fade to black."
+        }
+      },
+      {
+        "order": 3,
+        "segment_type": "ai_generated",
+        "ai_segment": {
+          "segment_id": "analysis_1",
+          "segment_type": "analysis",
+          "duration_seconds": 25,
+          "mood": "somber",
+          "visual_description": "Close up on Rick 'The Stat' Johnson. Graphics appear behind him highlighting key stats from the first half.",
+          "camera_notes": "Focus on Rick. Cut to graphics as he mentions them.",
+          "dialogue": [
+            {
+              "speaker": "Rick 'The Stat' Johnson",
+              "text": "The numbers don't lie, Jillian. 24-7 at halftime. The 49ers had 3 turnovers. The Lions converted nearly 65% of their third downs. It was an utter collapse.",
+              "delivery": "Analytical, matter-of-fact.",
+              "camera_direction": "Close-up on Rick"
+            },
+            {
+              "speaker": "Jillian Hayes",
+              "text": "Antonio, as a former player, what were you seeing on the field?",
+              "delivery": "Transitioning to Antonio.",
+              "camera_direction": "Medium shot, panning to Antonio"
+            },
+            {
+              "speaker": "Antonio 'The Hammer' Ruiz",
+              "text": "Lack of intensity, Jillian. The Lions wanted it more. They were hitting harder, playing with more passion. The 49ers looked flat-footed.",
+              "delivery": "Passionate, emphasizing the lack of intensity.",
+              "camera_direction": "Close-up on Antonio"
             }
-          },
-          {
-            "order": 2,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_dynasty",
-              "description": "Patriots dynasty montage - Super Bowl wins, Gatorade baths, Belichick hoisting trophies, confetti falling.",
-              "search_query": "Patriots dynasty Super Bowl wins Belichick trophy celebration montage",
-              "duration_seconds": 12,
-              "context": "Establish the undeniable greatness before discussing the snub",
-              "transition_in": "dramatic fade",
-              "transition_out": "slow motion freeze"
+          ],
+          "graphics": [
+            "LOWER THIRD: Rick 'The Stat' Johnson - NFL Analyst",
+            "On-Screen Graphic: First Half Stats Comparison"
+          ]
+        },
+        "clip_reference": null
+      },
+      {
+        "order": 4,
+        "segment_type": "real_clip",
+        "ai_segment": null,
+        "clip_reference": {
+          "clip_id": "clip_2",
+          "description": "Brock Purdy throwing an interception in the first half.",
+          "search_query": "Brock Purdy interception NFC Championship 2024",
+          "duration_seconds": 10,
+          "context": "Showcases Purdy's early struggles and the 49ers' offensive woes.",
+          "transition_in": "Hard cut from Antonio.",
+          "transition_out": "Fade to black."
+        }
+      },
+      {
+        "order": 5,
+        "segment_type": "ai_generated",
+        "ai_segment": {
+          "segment_id": "debate_1",
+          "segment_type": "debate",
+          "duration_seconds": 30,
+          "mood": "controversial",
+          "visual_description": "All three hosts visible. Tension is high. They are gesturing and talking over each other.",
+          "camera_notes": "Quick cuts between the hosts as they speak. Zoom in on faces to emphasize emotion.",
+          "dialogue": [
+            {
+              "speaker": "Antonio 'The Hammer' Ruiz",
+              "text": "Purdy wasn't good enough! He's a system quarterback! He couldn't elevate his game when it mattered most!",
+              "delivery": "Aggressive, dismissive.",
+              "camera_direction": "Close-up on Antonio"
+            },
+            {
+              "speaker": "Rick 'The Stat' Johnson",
+              "text": "Hold on, Antonio! He threw for over 260 yards in the second half! He showed resilience! You can't blame it all on him!",
+              "delivery": "Defensive of Purdy, citing stats.",
+              "camera_direction": "Close-up on Rick"
+            },
+            {
+              "speaker": "Jillian Hayes",
+              "text": "Gentlemen, let's not forget Shanahan's play-calling. Was he too slow to adjust? Did he abandon the run game too early?",
+              "delivery": "Trying to mediate, shifting the blame.",
+              "camera_direction": "Medium shot of all three hosts"
             }
-          },
-          {
-            "order": 3,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "debate_1",
-              "segment_type": "debate",
-              "duration_seconds": 35,
-              "mood": "controversial",
-              "visual_description": "Tony visibly upset. Energy in studio is charged. This is the hot take segment.",
-              "camera_notes": "Quick cuts, capture emotion, split screens for disagreement.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "This is an absolute JOKE. I'm sorry, but what are we doing here? The man won SIX Super Bowls! You put him in on DAY ONE!",
-                  "delivery": "Heated, genuinely frustrated, hands gesturing wildly",
-                  "camera_direction": "Medium shot capturing emotion"
-                },
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "Tony, I agree with you on the merits. But let's talk about what's really happening here. Belichick burned bridges. He wasn't media-friendly. The voters hold grudges.",
-                  "delivery": "Analytical but critical of the process",
-                  "camera_direction": "Cut to Sarah"
-                },
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "So we're punishing the greatest coach in NFL history because he didn't smile enough at press conferences? That's what the Hall of Fame is now?",
-                  "delivery": "Incredulous, sarcastic",
-                  "camera_direction": "Split screen with Sarah"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "The question becomes - what does this say about the institution itself? If Bill Belichick doesn't get in, what is the Hall of Fame really honoring?",
-                  "delivery": "Philosophical, raising larger point",
-                  "camera_direction": "Cut to Marcus, holding shot"
-                }
-              ],
-              "graphics": ["HALL OF FAME POLITICS", "BELICHICK'S RESUME"]
+          ],
+          "graphics": [
+            "On-Screen Graphic: HOT TAKE - Purdy: Overrated or Underrated?"
+          ]
+        },
+        "clip_reference": null
+      },
+      {
+        "order": 6,
+        "segment_type": "real_clip",
+        "ai_segment": null,
+        "clip_reference": {
+          "clip_id": "clip_3",
+          "description": "Christian McCaffrey scoring a touchdown in the second half.",
+          "search_query": "Christian McCaffrey touchdown NFC Championship 2024",
+          "duration_seconds": 10,
+          "context": "Highlights the 49ers' comeback attempt and McCaffrey's impact.",
+          "transition_in": "Hard cut from Jillian",
+          "transition_out": "Fade to black"
+        }
+      },
+      {
+        "order": 7,
+        "segment_type": "ai_generated",
+        "ai_segment": {
+          "segment_id": "outro_1",
+          "segment_type": "outro",
+          "duration_seconds": 38,
+          "mood": "reflective",
+          "visual_description": "Studio shot. Camera pulls back to show all three hosts. The LED screen displays a montage of 49ers highlights and lowlights from the season.",
+          "camera_notes": "Slow zoom out. Soft lighting.",
+          "dialogue": [
+            {
+              "speaker": "Jillian Hayes",
+              "text": "The 49ers' Super Bowl dream is over. A season of promise ends in disappointment. They'll have to look inward, address their weaknesses, and come back stronger next year.",
+              "delivery": "Somber, but hopeful.",
+              "camera_direction": "Medium shot of all three hosts"
+            },
+            {
+              "speaker": "Rick 'The Stat' Johnson",
+              "text": "The numbers point to some serious adjustments needing to be made on the defensive side of the ball.",
+              "delivery": "Analytical, offering a final thought.",
+              "camera_direction": "Close-up on Rick"
+            },
+            {
+              "speaker": "Antonio 'The Hammer' Ruiz",
+              "text": "They need to find that killer instinct again. That fire. That championship mentality.",
+              "delivery": "Passionate, urging them to improve.",
+              "camera_direction": "Close-up on Antonio"
+            },
+            {
+              "speaker": "Jillian Hayes",
+              "text": "That's all the time we have for tonight. Thanks for watching.",
+              "delivery": "Professional sign-off.",
+              "camera_direction": "Medium shot of Jillian."
             }
-          },
-          {
-            "order": 4,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_brady_support",
-              "description": "Tom Brady and former Patriots players speaking in support of Belichick's Hall of Fame candidacy.",
-              "search_query": "Tom Brady Belichick Hall of Fame support former Patriots players",
-              "duration_seconds": 10,
-              "context": "Show the player support rallying behind the coach",
-              "transition_in": "cut",
-              "transition_out": "fade"
-            }
-          },
-          {
-            "order": 5,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "analysis_1",
-              "segment_type": "analysis",
-              "duration_seconds": 25,
-              "mood": "reflective",
-              "visual_description": "Mood shifts to more reflective. Comparing to other HOF coaches.",
-              "camera_notes": "Steady shots, graphics comparing records.",
-              "dialogue": [
-                {
-                  "speaker": "Sarah Chen",
-                  "text": "Let's look at the numbers objectively. 302 career wins, six championships, three Coach of the Year awards. Compare that to any coach in Canton.",
-                  "delivery": "Laying out the undeniable case",
-                  "camera_direction": "Sarah with comparison graphic"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "Don Shula, Chuck Noll, Bill Walsh - all first-ballot Hall of Famers. Belichick's resume exceeds all of them in championships.",
-                  "delivery": "Making the point unavoidable",
-                  "camera_direction": "Marcus, graphic showing comparisons"
-                }
-              ],
-              "graphics": ["COACHING COMPARISON CHART", "CHAMPIONSHIPS WON"]
-            }
-          },
-          {
-            "order": 6,
-            "segment_type": "real_clip",
-            "clip_reference": {
-              "clip_id": "clip_reactions",
-              "description": "Social media reactions, fan protests, former players speaking out about the snub.",
-              "search_query": "Belichick Hall of Fame snub reactions fans players outrage",
-              "duration_seconds": 8,
-              "context": "Show the widespread outrage at the decision",
-              "transition_in": "cut",
-              "transition_out": "fade to studio"
-            }
-          },
-          {
-            "order": 7,
-            "segment_type": "ai_generated",
-            "ai_segment": {
-              "segment_id": "outro_1",
-              "segment_type": "outro",
-              "duration_seconds": 25,
-              "mood": "dramatic",
-              "visual_description": "Final somber moment. Belichick silhouette with six trophies. Letting the injustice speak for itself.",
-              "camera_notes": "Slow push to Marcus for final statement, hold on powerful image.",
-              "dialogue": [
-                {
-                  "speaker": "Tony Romo Jr.",
-                  "text": "When they finally put him in - and they will - this snub will be remembered as one of the most embarrassing moments in Hall of Fame history.",
-                  "delivery": "Definitive, no room for argument",
-                  "camera_direction": "Tony medium shot"
-                },
-                {
-                  "speaker": "Marcus Webb",
-                  "text": "Six rings. A dynasty for the ages. And a Hall of Fame that, tonight, has more questions to answer than Bill Belichick ever will. The greatest coach in NFL history... still waiting.",
-                  "delivery": "Powerful, letting words resonate, slight pause before 'still waiting'",
-                  "camera_direction": "Slow push to close-up, final beat on Belichick silhouette"
-                }
-              ],
-              "graphics": ["STILL WAITING", "SIX RINGS"]
-            }
-          }
-        ],
-        "research_sources": [
-          "Pro Football Hall of Fame",
-          "ESPN NFL Coverage",
-          "The Athletic",
-          "Sports Illustrated"
-        ]
+          ],
+          "graphics": [
+            "LOWER THIRD: Niners Nightmare",
+            "END SCREEN: Show Credits"
+          ]
+        },
+        "clip_reference": null
       }
-    }
-  ],
-  "generated_at": "2026-01-31",
-  "note": "These scripts were generated using the Sports Narrative Generator. When GOOGLE_API_KEY is set, Gemini will generate unique scripts dynamically based on real-time web search."
+    ],
+    "research_sources": [
+      "ESPN.com",
+      "NFL.com",
+      "Pro Football Focus",
+      "YouTube game highlights"
+    ]
+  }
 }

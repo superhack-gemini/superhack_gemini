@@ -1,205 +1,223 @@
 """
-Research agent for gathering sports information using Gemini with Google Search grounding.
-Uses Gemini's built-in search capabilities to gather real-time sports context.
-
-NO HARDCODED DATA - All research comes from Gemini + Google Search.
+Research agent for sports information.
+Fast mode uses Gemini directly. Browser mode uses Browser Use for web scraping.
 """
 import os
 import json
 from typing import List, Optional
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from models import ResearchResult, ResearchContext
 
 
-class SportsResearchAgent:
-    """
-    Agent that researches sports storylines using Gemini with Google Search grounding.
-    All research is dynamic - no hardcoded fallbacks.
-    """
+class FastResearchAgent:
+    """Super fast research using just Gemini (no browser scraping)."""
     
     def __init__(self):
         api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise ValueError(
-                "No API key found! Set GOOGLE_API_KEY or GEMINI_API_KEY environment variable.\n"
-                "Get your API key at: https://aistudio.google.com/app/apikey"
-            )
+            raise ValueError("No GOOGLE_API_KEY found!")
         
-            genai.configure(api_key=api_key)
+        self.client = genai.Client(api_key=api_key)
+        print("[Research] ✅ Fast mode - Gemini 2.0 Flash")
+
+    def research_storyline_sync(self, prompt: str) -> ResearchContext:
+        """Fast research using Gemini's knowledge."""
+        print(f"\n[Research] 🔍 Researching: {prompt}")
         
-            # Use Gemini 2.0 Flash with Google Search tool for grounding
-            self.model = genai.GenerativeModel(
-                'gemini-2.0-flash',
-                tools="google_search"
-            )
-        print("[Research] ✅ Gemini API configured with Google Search grounding")
-    
-    def _get_research_prompt(self, query: str) -> str:
-        """Create a comprehensive prompt for sports research."""
-        return f"""You are a sports researcher gathering information for a primetime broadcast script.
+        response = self.client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=f"""You are a sports researcher creating content for a broadcast script.
 
-Research this sports storyline thoroughly using Google Search: "{query}"
+TOPIC: {prompt}
 
-Your task:
-1. Search for the most recent news, articles, and developments about this topic
-2. Find specific statistics, scores, and data points
-3. Identify all key people involved (players, coaches, executives, analysts)
-4. Build a timeline of relevant events
-5. Find controversial or debatable aspects that would make good TV discussion
-6. Identify emotional/human interest angles
-
-Be thorough and cite real sources. This research will be used to create a broadcast script.
-
-Return your findings as JSON with this EXACT structure:
+Research this thoroughly and return JSON with this EXACT structure:
 {{
-    "storyline_summary": "A comprehensive 2-3 paragraph summary of the storyline with specific details, dates, and context",
+    "storyline_summary": "A detailed 2-3 paragraph summary covering the key narrative. Include specific dates, scores, player names, and context. Make it dramatic and engaging.",
     "key_facts": [
-        "Specific fact with numbers/dates",
-        "Another specific fact",
-        "Include at least 5-8 key facts"
+        "Specific fact 1 with numbers/dates",
+        "Specific fact 2",
+        "Include 5-8 compelling facts"
     ],
     "key_figures": [
-        "Person/Team 1 - their role in the story",
-        "Person/Team 2 - their role",
-        "Include all relevant people and teams"
+        "Name - their role in the story",
+        "Name - why they matter"
     ],
     "timeline": [
-        "Date/Time: Event description",
-        "Date/Time: Another event",
-        "Build chronological narrative"
+        "Date: Event description",
+        "Date: Another key event"
     ],
     "controversy_points": [
-        "Debatable aspect 1 - why it's controversial",
-        "Debatable aspect 2 - different viewpoints",
-        "What fans/analysts disagree about"
+        "Debatable aspect - why fans disagree",
+        "Hot take material"
     ],
     "emotional_angles": [
-        "Human interest element 1",
-        "Underdog story / redemption arc / tragedy",
-        "What makes this story compelling"
+        "Human interest element",
+        "What makes fans care"
     ],
     "sources": [
-        {{"title": "Article title", "snippet": "Key quote or information from this source", "source": "Publication name", "url": "URL if available"}},
-        {{"title": "Another article", "snippet": "Important info", "source": "ESPN/etc"}}
+        {{"title": "Article/Source", "snippet": "Key information", "source": "ESPN/NFL/etc"}}
     ]
 }}
 
-IMPORTANT: 
-- Use REAL, CURRENT information from your Google Search
-- Include specific numbers, dates, names, and quotes
-- The more specific and factual, the better the script will be
-- Return ONLY the JSON, no other text"""
-
-    def research_storyline_sync(self, prompt: str) -> ResearchContext:
-        """
-        Research a sports storyline using Gemini with Google Search grounding.
-        Returns structured research context for script generation.
-        """
-        print(f"\n[Research] 🔍 Researching: {prompt}")
-        print("[Research] Using Gemini 2.0 Flash with Google Search grounding...")
-        
-        try:
-            # Use Gemini with Google Search grounding
-            response = self.model.generate_content(
-                self._get_research_prompt(prompt),
-                generation_config=genai.GenerationConfig(
-                    temperature=0.7,
-                )
+Provide accurate, detailed sports information. Return ONLY the JSON.""",
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                temperature=0.7,
             )
-            
-            # Extract the response text
-            response_text = response.text
-            print(f"[Research] Got response ({len(response_text)} chars)")
-            
-            # Parse the JSON response
-            data = self._parse_json_response(response_text)
-                
-                # Convert sources to ResearchResult objects
-                sources = []
-                for src in data.get("sources", []):
-                    sources.append(ResearchResult(
-                        query=prompt,
-                        source=src.get("source", "web"),
-                        title=src.get("title", ""),
-                        snippet=src.get("snippet", ""),
-                        url=src.get("url"),
-                    relevance_score=0.9
-                    ))
-                
-            research_context = ResearchContext(
-                    original_prompt=prompt,
-                    storyline_summary=data.get("storyline_summary", ""),
-                    key_facts=data.get("key_facts", []),
-                    key_figures=data.get("key_figures", []),
-                    timeline=data.get("timeline", []),
-                    controversy_points=data.get("controversy_points", []),
-                    emotional_angles=data.get("emotional_angles", []),
-                    sources=sources
-                )
-                
-            print(f"[Research] ✅ Research complete!")
-            print(f"   - Summary: {len(research_context.storyline_summary)} chars")
-            print(f"   - {len(research_context.key_facts)} key facts")
-            print(f"   - {len(research_context.key_figures)} key figures")
-            print(f"   - {len(research_context.timeline)} timeline events")
-            print(f"   - {len(research_context.sources)} sources")
-            
-            return research_context
-                
-        except Exception as e:
-            print(f"[Research] ❌ Error during research: {e}")
-            import traceback
-            traceback.print_exc()
-            raise RuntimeError(f"Research failed: {e}")
-    
-    def _parse_json_response(self, response_text: str) -> dict:
-        """Parse JSON from Gemini response, handling markdown code blocks."""
-        text = response_text.strip()
-        
-        # Remove markdown code blocks if present
-        if "```json" in text:
-            json_start = text.find("```json") + 7
-            json_end = text.find("```", json_start)
-            text = text[json_start:json_end]
-        elif "```" in text:
-            json_start = text.find("```") + 3
-            json_end = text.find("```", json_start)
-            text = text[json_start:json_end]
+        )
         
         try:
-            return json.loads(text.strip())
-        except json.JSONDecodeError as e:
-            print(f"[Research] JSON parsing failed: {e}")
-            print(f"[Research] Raw response:\n{response_text[:500]}...")
-            
-            # Try to extract what we can from the text
-            return self._extract_from_text(response_text)
+            data = json.loads(response.text)
+        except json.JSONDecodeError:
+            print("[Research] JSON parse failed, extracting from response...")
+            data = {
+                "storyline_summary": response.text[:1000],
+                "key_facts": [],
+                "key_figures": [],
+                "timeline": [],
+                "controversy_points": [],
+                "emotional_angles": [],
+                "sources": []
+            }
+        
+        sources = []
+        for s in data.get("sources", []):
+            sources.append(ResearchResult(
+                query=prompt,
+                source=s.get("source", ""),
+                title=s.get("title", ""),
+                snippet=s.get("snippet", ""),
+                relevance_score=0.9
+            ))
+        
+        context = ResearchContext(
+            original_prompt=prompt,
+            storyline_summary=data.get("storyline_summary", ""),
+            key_facts=data.get("key_facts", []),
+            key_figures=data.get("key_figures", []),
+            timeline=data.get("timeline", []),
+            controversy_points=data.get("controversy_points", []),
+            emotional_angles=data.get("emotional_angles", []),
+            sources=sources
+        )
+        
+        print(f"[Research] ✅ Complete!")
+        print(f"   - {len(context.key_facts)} facts")
+        print(f"   - {len(context.key_figures)} key figures")
+        return context
+
+
+class BrowserResearchAgent:
+    """Research agent using Browser Use for real-time web scraping."""
     
-    def _extract_from_text(self, text: str) -> dict:
-        """
-        Last resort: extract research context from non-JSON response.
-        Still uses the actual response, not hardcoded data.
-        """
-        print("[Research] Attempting to extract data from unstructured response...")
+    def __init__(self):
+        api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+        browser_api = os.getenv("BROWSER_USE_API_KEY")
         
-        # Split into sentences for facts
-        sentences = [s.strip() for s in text.replace('\n', ' ').split('.') if len(s.strip()) > 20]
+        if not api_key:
+            raise ValueError("No GOOGLE_API_KEY found!")
         
-        return {
-            "storyline_summary": text[:1000] if len(text) > 1000 else text,
-            "key_facts": sentences[:8],
-            "key_figures": [],  # Hard to extract without structure
-            "timeline": [],
-            "controversy_points": [s for s in sentences if any(w in s.lower() for w in ['controversy', 'debate', 'criticism', 'question', 'disagree'])],
-            "emotional_angles": [s for s in sentences if any(w in s.lower() for w in ['fan', 'heart', 'emotion', 'legacy', 'dream', 'hope'])],
-            "sources": []
-        }
+        self.client = genai.Client(api_key=api_key)
+        self.browser_api = browser_api
+        print("[Research] ✅ Browser Use mode configured")
+    
+    def research_storyline_sync(self, prompt: str) -> ResearchContext:
+        """Research using Browser Use for web scraping."""
+        import asyncio
+        return asyncio.run(self._research_async(prompt))
+    
+    async def _research_async(self, prompt: str) -> ResearchContext:
+        """Async research with browser scraping."""
+        from browser_use import Agent, Browser
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        
+        print(f"\n[Research] 🌐 Browser scraping: {prompt}")
+        
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-2.0-flash",
+            google_api_key=os.getenv("GOOGLE_API_KEY")
+        )
+        
+        browser = Browser(headless=True)
+        
+        agent = Agent(
+            task=f"""Search for sports news about: "{prompt}"
+            
+            1. Go to google.com and search for this topic
+            2. Click on 2-3 top news results (ESPN, NFL.com, etc)
+            3. Extract: dates, scores, player names, key events
+            4. Return a summary of what you found""",
+            llm=llm,
+            browser=browser,
+            max_actions_per_step=3,
+        )
+        
+        try:
+            result = await agent.run(max_steps=8)
+            scraped = result.final_result() if result.final_result() else ""
+            await browser.close()
+        except Exception as e:
+            print(f"[Research] Browser error: {e}")
+            scraped = ""
+            try:
+                await browser.close()
+            except:
+                pass
+        
+        # Structure with Gemini
+        return self._structure_data(prompt, scraped)
+    
+    def _structure_data(self, prompt: str, scraped: str) -> ResearchContext:
+        """Structure scraped data with Gemini."""
+        response = self.client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=f"""Structure this sports research into JSON.
+
+TOPIC: {prompt}
+SCRAPED DATA: {scraped if scraped else "Use your knowledge about this topic."}
+
+Return JSON:
+{{
+    "storyline_summary": "2-3 paragraph summary",
+    "key_facts": ["fact1", "fact2"],
+    "key_figures": ["person - role"],
+    "timeline": ["event1", "event2"],
+    "controversy_points": ["debate point"],
+    "emotional_angles": ["human interest"],
+    "sources": [{{"title": "Source", "snippet": "Info", "source": "Site"}}]
+}}""",
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                temperature=0.7,
+            )
+        )
+        
+        try:
+            data = json.loads(response.text)
+        except:
+            data = {"storyline_summary": scraped or prompt, "key_facts": [], "key_figures": [],
+                    "timeline": [], "controversy_points": [], "emotional_angles": [], "sources": []}
+        
+        sources = [ResearchResult(query=prompt, source=s.get("source", ""), title=s.get("title", ""),
+                                   snippet=s.get("snippet", ""), relevance_score=0.9)
+                   for s in data.get("sources", [])]
+        
+        return ResearchContext(
+            original_prompt=prompt,
+            storyline_summary=data.get("storyline_summary", ""),
+            key_facts=data.get("key_facts", []),
+            key_figures=data.get("key_figures", []),
+            timeline=data.get("timeline", []),
+            controversy_points=data.get("controversy_points", []),
+            emotional_angles=data.get("emotional_angles", []),
+            sources=sources
+        )
 
 
-# Create singleton instance - will raise error if no API key
-research_agent = SportsResearchAgent()
+# Default to fast mode
+research_agent = FastResearchAgent()
