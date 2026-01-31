@@ -29,5 +29,5 @@ async def get_video_status(task_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    # Workers must be 1 because we are managing our own multiprocessing pool/manager within the app process
+    # Workers must be 1 because we are managing our own multiprocessing manager
     uvicorn.run(app, host="0.0.0.0", port=8000)
