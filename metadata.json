@@ -1,0 +1,8 @@
+{
+  "name": "SportsCast AI Narrator Agent",
+  "description": "An agent that transforms sports broadcaster scripts into consistent, professional video segments for narrating larger sports documentaries.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
