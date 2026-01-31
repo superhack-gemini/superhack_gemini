@@ -1,7 +1,6 @@
 """
 Script generation for Veo video pipeline.
-Output format: ai_order_1, ai_order_2, real_clip, ai_order_3, ai_order_4...
-Each AI segment includes hosts + studio for visual consistency.
+STRICT visual consistency - same simple studio for ALL AI clips.
 """
 import os
 import json
@@ -13,167 +12,184 @@ from google import genai
 from google.genai import types
 from models import VeoScript, ResearchContext
 
+# STRICT STUDIO TEMPLATE - Same for ALL AI clips
+STUDIO_PROMPT = """Simple dark broadcast studio. Black background with subtle blue accent lighting. 
+Single curved news desk, dark gray surface. Three hosts seated at desk facing camera. 
+Clean, minimal set with no distracting elements. Soft key lighting on hosts faces."""
+
+STUDIO = {
+    "description": "Simple dark broadcast studio with black background, subtle blue accent lighting, single curved dark gray news desk, three hosts seated facing camera, minimal clean set",
+    "lighting": "Soft key lighting on hosts, subtle blue accent glow from behind, dark background",
+    "color_scheme": "Black background, dark gray desk, blue accent lighting"
+}
+
+HOSTS = [
+    {
+        "name": "Marcus Webb",
+        "role": "Lead Anchor",
+        "appearance": "African American male, 40s, charcoal suit, burgundy tie, seated center"
+    },
+    {
+        "name": "Sarah Chen", 
+        "role": "Analyst",
+        "appearance": "Asian American female, 30s, cream blazer, seated left"
+    },
+    {
+        "name": "Tony Martinez",
+        "role": "Former Player",
+        "appearance": "Latino male, 30s, navy sport coat, seated right"
+    }
+]
+
 
 class ScriptGenerator:
-    """
-    Generates Veo-ready scripts.
-    - Each AI segment is MAX 8 seconds
-    - Each AI segment includes full hosts + studio description
-    - Formula: ai, ai, clip, ai, ai, clip...
-    """
-    
     def __init__(self):
         api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise ValueError("No GOOGLE_API_KEY found!")
+            raise ValueError("No GOOGLE_API_KEY found! Set GOOGLE_API_KEY environment variable.")
         
         self.client = genai.Client(api_key=api_key)
-        print("[ScriptGenerator] ✅ Ready for Veo (8-sec max, hosts in each segment)")
+        print("[ScriptGenerator] ✅ Ready")
 
     def _get_prompt(self, research: ResearchContext, duration: int = 120) -> str:
-        return f"""Generate a sports broadcast script for Veo AI video generation.
+        return f"""Generate a sports broadcast script for Veo AI video.
 
-RULES:
-1. Each AI segment is MAX 8 SECONDS
-2. Each AI segment must include FULL studio and hosts description (for visual consistency)
-3. Follow this pattern: ai_order_1, ai_order_2, real_clip_1, ai_order_3, ai_order_4, real_clip_2...
-4. Real clips are also max 8 seconds
+STRICT RULES:
+1. Each AI segment MAX 8 SECONDS
+2. ALL AI segments use this EXACT same studio prompt:
+   "{STUDIO_PROMPT}"
+3. Pattern: ai, ai, real_clip, ai, ai, real_clip, ai, ai
 
 STORYLINE: {research.original_prompt}
+SUMMARY: {research.storyline_summary[:500]}
+FACTS: {json.dumps(research.key_facts[:4])}
 
-RESEARCH:
-{research.storyline_summary}
-
-KEY FACTS: {json.dumps(research.key_facts[:5])}
-KEY FIGURES: {json.dumps(research.key_figures[:4])}
-
-Generate this EXACT JSON structure:
+Generate JSON:
 
 {{
-    "title": "Compelling title",
+    "title": "Short compelling title",
     "storyline": "{research.original_prompt}",
     "total_duration_seconds": {duration},
     
     "studio": {{
-        "description": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with chrome accents. Three leather chairs. Massive 85-inch curved LED screen behind hosts showing dynamic sports graphics. NFL shield logo illuminated on floor. Sleek, professional atmosphere.",
-        "lighting": "Dramatic low-key lighting. Warm key lights on hosts faces. Cool blue LED accents on background screens. Subtle rim lighting for depth separation.",
-        "color_scheme": "Primary: Deep navy blue. Accent: Gold and crimson red. Background: Charcoal gray."
+        "description": "{STUDIO['description']}",
+        "lighting": "{STUDIO['lighting']}",
+        "color_scheme": "{STUDIO['color_scheme']}"
     }},
     
-    "hosts": [
-        {{
-            "name": "Marcus Webb",
-            "role": "Lead Anchor",
-            "appearance": "African American male, early 40s. Wearing fitted charcoal suit with burgundy tie. Clean-shaven, confident posture, seated center at anchor desk."
-        }},
-        {{
-            "name": "Sarah Chen",
-            "role": "NFL Analyst",
-            "appearance": "Asian American female, mid-30s. Wearing cream blazer over black top. Hair pulled back professionally. Seated left side of desk."
-        }},
-        {{
-            "name": "Tony Martinez",
-            "role": "Former Player Analyst",
-            "appearance": "Latino male, late 30s, athletic build. Navy sport coat over open collar shirt. Energetic demeanor. Seated right side of desk."
-        }}
-    ],
+    "hosts": {json.dumps(HOSTS)},
     
     "segments": [
         {{
             "order": 1,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "Modern ESPN-style sports broadcast studio. Curved dark wood anchor desk with three hosts seated. Massive LED screen behind showing [RELEVANT IMAGERY]. Dramatic low-key lighting with warm key lights on hosts. Deep navy blue and gold color scheme. Camera slowly pushes in on center host Marcus Webb who speaks with serious expression.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on center host Marcus Webb, medium shot, he speaks seriously.",
             "speaker": "Marcus Webb",
-            "dialogue": "Opening line - dramatic hook about the storyline",
-            "delivery": "Serious, measured, building tension",
-            "camera": "Wide shot, slow push in to medium",
-            "graphics": ["LOWER THIRD: Show Title"],
-            "studio": {{
-                "description": "Modern ESPN-style sports broadcast studio...",
-                "lighting": "Dramatic low-key lighting...",
-                "color_scheme": "Deep navy blue, gold, crimson"
-            }},
-            "hosts": [
-                {{"name": "Marcus Webb", "role": "Lead Anchor", "appearance": "African American male, early 40s, charcoal suit..."}},
-                {{"name": "Sarah Chen", "role": "Analyst", "appearance": "Asian American female, mid-30s, cream blazer..."}},
-                {{"name": "Tony Martinez", "role": "Former Player", "appearance": "Latino male, late 30s, navy sport coat..."}}
-            ]
+            "dialogue": "Opening hook line about the story",
+            "delivery": "Serious",
+            "camera": "Medium shot center host",
+            "graphics": ["LOWER THIRD: Title"],
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
         }},
         {{
             "order": 2,
             "type": "ai_generated",
             "duration_seconds": 8,
-            "visual_prompt": "Same studio setting. Medium shot of Sarah Chen. Same lighting and colors. She gestures while making analytical point.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen left side, medium shot, she gestures while speaking.",
             "speaker": "Sarah Chen",
-            "dialogue": "Analytical point about key facts",
-            "delivery": "Analytical, citing stats",
-            "camera": "Medium shot on Sarah",
-            "graphics": ["STAT GRAPHIC: Key statistic"],
-            "studio": {{ ... same studio ... }},
-            "hosts": [ ... same hosts ... ]
+            "dialogue": "Analysis with key stat",
+            "delivery": "Analytical",
+            "camera": "Medium shot left host",
+            "graphics": ["STAT: Key number"],
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
         }},
         {{
             "order": 3,
             "type": "real_clip",
             "duration_seconds": 8,
-            "description": "What the real sports footage shows",
-            "search_query": "Specific YouTube search query to find this clip",
-            "context": "Why this clip is relevant here"
+            "description": "Key sports moment",
+            "search_query": "specific youtube search",
+            "context": "Why this matters"
         }},
         {{
             "order": 4,
-            "type": "ai_generated",
+            "type": "ai_generated", 
             "duration_seconds": 8,
-            "visual_prompt": "Same studio. Close-up on Tony Martinez. Same lighting. He speaks passionately with hand gestures.",
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Tony Martinez right side, close-up, passionate expression.",
             "speaker": "Tony Martinez",
-            "dialogue": "Former player perspective",
-            "delivery": "Passionate, emphatic",
-            "camera": "Close-up on Tony",
+            "dialogue": "Former player reaction",
+            "delivery": "Passionate",
+            "camera": "Close-up right host",
             "graphics": [],
-            "studio": {{ ... same studio ... }},
-            "hosts": [ ... same hosts ... ]
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
         }},
         {{
             "order": 5,
             "type": "ai_generated",
-            "duration_seconds": 8,
-            "visual_prompt": "Same studio. Three-shot of all hosts. Debate energy. Quick cuts between speakers.",
+            "duration_seconds": 8, 
+            "visual_prompt": "{STUDIO_PROMPT} Wide shot all three hosts at desk, conversation energy.",
             "speaker": "Marcus Webb",
-            "dialogue": "Debate or transition point",
-            "delivery": "Mediating discussion",
-            "camera": "Three-shot, dynamic cuts",
-            "graphics": ["DEBATE GRAPHIC"],
-            "studio": {{ ... same studio ... }},
-            "hosts": [ ... same hosts ... ]
+            "dialogue": "Transition or follow-up question",
+            "delivery": "Engaged",
+            "camera": "Wide shot all hosts",
+            "graphics": [],
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
         }},
         {{
             "order": 6,
             "type": "real_clip",
             "duration_seconds": 8,
-            "description": "Another key sports moment",
-            "search_query": "Search query for clip",
+            "description": "Another key moment",
+            "search_query": "specific search",
             "context": "Relevance"
+        }},
+        {{
+            "order": 7,
+            "type": "ai_generated",
+            "duration_seconds": 8,
+            "visual_prompt": "{STUDIO_PROMPT} Camera on Sarah Chen, medium shot.",
+            "speaker": "Sarah Chen", 
+            "dialogue": "Deeper analysis point",
+            "delivery": "Thoughtful",
+            "camera": "Medium shot left host",
+            "graphics": [],
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
+        }},
+        {{
+            "order": 8,
+            "type": "ai_generated",
+            "duration_seconds": 8,
+            "visual_prompt": "{STUDIO_PROMPT} Camera slowly pushes in on Marcus Webb center, closing thought.",
+            "speaker": "Marcus Webb",
+            "dialogue": "Closing statement",
+            "delivery": "Conclusive",
+            "camera": "Push in on center host",
+            "graphics": ["LOWER THIRD: Show title"],
+            "studio": {json.dumps(STUDIO)},
+            "hosts": {json.dumps(HOSTS)}
         }}
     ],
     
-    "research_summary": "{research.storyline_summary[:500]}",
-    "key_facts": {json.dumps(research.key_facts[:5])}
+    "research_summary": "{research.storyline_summary[:300]}",
+    "key_facts": {json.dumps(research.key_facts[:4])}
 }}
 
-IMPORTANT:
-- Create 8-10 segments following pattern: ai, ai, clip, ai, ai, clip, ai, ai
-- Each AI segment MUST include full studio and hosts objects (copy the same values)
-- Each AI segment is EXACTLY 8 seconds or less
-- visual_prompt must describe the SAME studio for every AI segment
-- Make dialogue natural but concise (fits in 8 seconds)
-- Real clip search queries should find actual YouTube sports footage
+CRITICAL: 
+- Every visual_prompt MUST start with exactly: "{STUDIO_PROMPT}"
+- Only change the camera angle and which host is speaking
+- Keep dialogue short (fits in 8 seconds when spoken)
+- Make dialogue engaging and specific to the research
 
 Return ONLY valid JSON."""
 
     def generate_script_sync(self, research: ResearchContext, duration: int = 120) -> VeoScript:
-        """Generate Veo-ready script."""
-        print(f"\n[ScriptGenerator] 📝 Generating {duration}s Veo script...")
+        print(f"\n[ScriptGenerator] 📝 Generating script...")
         
         try:
             response = self.client.models.generate_content(
@@ -181,7 +197,7 @@ Return ONLY valid JSON."""
                 contents=self._get_prompt(research, duration),
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
-                    temperature=0.8,
+                    temperature=0.7,
                 )
             )
             
@@ -191,11 +207,7 @@ Return ONLY valid JSON."""
             ai_count = sum(1 for s in script.segments if s.get("type") == "ai_generated")
             clip_count = sum(1 for s in script.segments if s.get("type") == "real_clip")
             
-            print(f"[ScriptGenerator] ✅ Generated!")
-            print(f"   - Title: {script.title}")
-            print(f"   - {ai_count} AI segments (8-sec each)")
-            print(f"   - {clip_count} real clips")
-            print(f"   - Total: {len(script.segments)} segments")
+            print(f"[ScriptGenerator] ✅ Done! {ai_count} AI clips, {clip_count} real clips")
             
             return script
             
