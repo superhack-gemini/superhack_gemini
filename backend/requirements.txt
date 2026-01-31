@@ -3,3 +3,9 @@ uvicorn
 pydantic
 langgraph
 langchain-core
+requests
+python-dotenv
+pytest
+langchain-google-genai
+browser_use_sdk
+playwright
