@@ -5,13 +5,13 @@ import { generateNarrative, type VideoResult } from './services/narrativeService
 type AppState = 'idle' | 'generating' | 'complete'
 
 const steps = [
-  'Collecting game footage...',
-  'Generating commentary...',
-  'Stitching final narrative...',
+  'Footage Ingest',
+  'Commentary Assembly',
+  'Final Replay Cut',
 ]
 
 const progressValues = [0.25, 0.6, 0.9]
-const phaseDurations = [1400, 1400, 1400]
+const phaseDurations = [2000, 2200, 2200]
 
 function App() {
   const [prompt, setPrompt] = useState('')
@@ -50,7 +50,7 @@ function App() {
   const handleGenerate = async () => {
     const trimmed = prompt.trim()
     if (!trimmed) {
-      setError('Please enter a prompt to generate a narrative.')
+      setError('Enter a directive to begin the broadcast.')
       return
     }
 
@@ -84,22 +84,27 @@ function App() {
   const isComplete = state === 'complete'
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="relative min-h-screen overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-[160px]" />
-          <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-emerald-400/10 blur-[160px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.4),_transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 aurora-bg">
+          <div className="absolute -top-64 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[200px]" />
+          <div className="absolute -bottom-40 left-[-140px] h-[520px] w-[520px] rounded-full bg-indigo-500/10 blur-[190px]" />
+          <div className="absolute right-[-80px] top-1/4 h-[520px] w-[520px] rounded-full bg-violet-500/10 blur-[210px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.7),_transparent_62%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_10%_10%,_rgba(56,189,248,0.12),_transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_90%_0%,_rgba(129,140,248,0.12),_transparent_60%)]" />
         </div>
+        <div className="pointer-events-none absolute inset-0 stadium-bloom" />
+        <div className="pointer-events-none absolute inset-0 grain-overlay" />
 
         <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-12">
           <header className="flex items-center justify-between text-sm text-slate-300">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-sm font-semibold tracking-[0.12em] text-white/90">
                 GS
               </span>
               <div className="flex flex-col">
-                <span className="text-xs uppercase tracking-[0.3em] text-emerald-300/80">
+                <span className="text-xs uppercase tracking-[0.32em] text-sky-200/80">
                   Gemini Sports
                 </span>
                 <span className="text-base font-semibold text-white">
@@ -107,49 +112,65 @@ function App() {
                 </span>
               </div>
             </div>
-            <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/80 md:inline-flex">
-              Premium mock experience
+            <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.28em] text-white/80 md:inline-flex">
+              Gemini 3 × Super Bowl Week
             </span>
           </header>
 
           <section className="flex flex-1 flex-col justify-center gap-10">
             {!isComplete && (
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
+              <div className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl transition">
                 <div className="space-y-3">
-                  <p className="text-xs uppercase tracking-[0.3em] text-emerald-300/80">
-                    Prompt
+                  <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                    Broadcast Command
                   </p>
-                  <h1 className="text-3xl font-semibold text-white md:text-4xl">
-                    Generate a cinematic sports narrative in seconds.
+                  <h1 className="text-3xl font-semibold text-white md:text-5xl">
+                    Direct a Super Bowl narrative with Gemini 3.
                   </h1>
                   <p className="max-w-2xl text-sm text-slate-300 md:text-base">
-                    Ask for a highlight story, tactical breakdown, or legendary
-                    comeback. We will simulate sourcing footage, voiceover, and
-                    the final edit.
+                    Request a highlight sequence, tactical analysis, or legacy
+                    recap. We will simulate footage sourcing, commentary, and
+                    final edit.
                   </p>
                 </div>
 
                 <div className="mt-6 space-y-4">
-                  <textarea
-                    className="min-h-[140px] w-full resize-none rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-lg text-white placeholder:text-slate-500 focus:border-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-emerald-300/20"
-                    placeholder="Ask for a Super Bowl story…"
-                    value={prompt}
-                    onChange={(event) => setPrompt(event.target.value)}
-                    disabled={isGenerating}
-                  />
+                  <div className="console-input">
+                    <textarea
+                      className="console-textarea min-h-[160px] w-full resize-none rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-lg text-white placeholder:text-slate-500 shadow-[0_0_40px_rgba(15,23,42,0.6)] transition focus:border-sky-200/70 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
+                      placeholder="Describe the Super Bowl narrative you want."
+                      value={prompt}
+                      onChange={(event) => setPrompt(event.target.value)}
+                      disabled={isGenerating}
+                    />
+                  </div>
                   {error && (
                     <p className="text-sm text-rose-300">{error}</p>
                   )}
                   <div className="flex flex-wrap items-center gap-4">
                     <button
-                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-400 via-indigo-300 to-violet-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-60"
                       onClick={handleGenerate}
                       disabled={isGenerating}
                     >
-                      {isGenerating ? 'Generating…' : 'Generate'}
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6.5h16" />
+                        <path d="M4 12h10" />
+                        <path d="M4 17.5h16" />
+                      </svg>
+                      {isGenerating ? 'Broadcasting…' : 'Begin Broadcast'}
                     </button>
                     <p className="text-xs text-slate-400">
-                      Full-screen cinematic output • 16:9 hero card
+                      Broadcast-ready output • 16:9 replay frame
                     </p>
                   </div>
                 </div>
@@ -160,44 +181,62 @@ function App() {
               {isGenerating && (
                 <motion.div
                   key="progress"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-2xl"
                 >
                   <div className="flex flex-col gap-6">
                     <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-[0.3em] text-emerald-300/80">
-                        Generation
+                      <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                        Live Broadcast
                       </p>
-                      <h2 className="text-2xl font-semibold text-white">
-                        {steps[activeStep]}
-                      </h2>
+                      <div className="flex items-center gap-3">
+                        <svg
+                          className="h-5 w-5 text-sky-200/80"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 8.5c2.4 0 4.4-2 4.4-4.4" />
+                          <path d="M4 15.5c4.2 0 7.6-3.4 7.6-7.6" />
+                          <path d="M4 22c6 0 10.9-4.9 10.9-10.9" />
+                          <circle cx="18" cy="6" r="2.5" />
+                        </svg>
+                        <h2 className="text-2xl font-semibold text-white">
+                          {steps[activeStep]}
+                        </h2>
+                      </div>
                     </div>
                     <div className="space-y-4">
                       <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                         <motion.div
-                          className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-300"
+                          className="h-full rounded-full bg-gradient-to-r from-sky-400 via-indigo-300 to-violet-300"
                           animate={{ width: `${Math.round(progress * 100)}%` }}
-                          transition={{ duration: 0.4 }}
+                          transition={{ duration: 0.8, ease: 'easeInOut' }}
                         />
                       </div>
                       <div className="grid gap-3 md:grid-cols-3">
                         {steps.map((step, index) => (
                           <div
                             key={step}
-                            className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-xs font-medium ${
+                            className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] ${
                               index === activeStep
-                                ? 'border-emerald-300/40 bg-emerald-300/10 text-emerald-100'
+                                ? 'border-sky-200/50 bg-sky-300/10 text-sky-100'
                                 : index < activeStep
-                                  ? 'border-emerald-300/20 bg-white/5 text-white/70'
+                                  ? 'border-sky-200/20 bg-white/5 text-white/70'
                                   : 'border-white/10 bg-white/5 text-white/50'
                             }`}
                           >
                             <span
                               className={`h-2 w-2 rounded-full ${
                                 index <= activeStep
-                                  ? 'bg-emerald-300'
+                                  ? 'bg-sky-300'
                                   : 'bg-white/30'
                               }`}
                             />
@@ -215,25 +254,25 @@ function App() {
               {isComplete && result && (
                 <motion.div
                   key="result"
-                  initial={{ opacity: 0, scale: 0.98, y: 12 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.98, y: -12 }}
-                  transition={{ duration: 0.4 }}
-                  className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.55, ease: 'easeInOut' }}
+                  className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl"
                 >
                   <div className="flex flex-col gap-6">
-                    <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-[0.3em] text-emerald-300/80">
-                        Final Narrative
+                    <div className="lower-third space-y-2">
+                      <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                        Featured Replay
                       </p>
-                      <h2 className="text-3xl font-semibold text-white md:text-4xl">
+                      <h2 className="text-3xl font-semibold text-white md:text-5xl">
                         {result.title}
                       </h2>
                       <p className="max-w-3xl text-sm text-slate-300 md:text-base">
                         {result.description}
                       </p>
                     </div>
-                    <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60">
+                    <div className="replay-frame overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(5,10,25,0.75)]">
                       <video
                         className="aspect-video w-full"
                         controls
@@ -243,13 +282,28 @@ function App() {
                     </div>
                     <div className="flex flex-wrap items-center gap-4">
                       <button
-                        className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/40"
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/5"
                         onClick={handleReset}
                       >
-                        Generate another
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 12a8 8 0 0 1 13.66-5.66" />
+                          <path d="M20 12a8 8 0 0 1-13.66 5.66" />
+                          <path d="M14 5h3.5V1.5" />
+                          <path d="M10 19H6.5v3.5" />
+                        </svg>
+                        Run another
                       </button>
                       <span className="text-xs text-slate-400">
-                        Ready for API swap • Mocked locally
+                        Demo-ready output • Mocked locally
                       </span>
                     </div>
                   </div>
