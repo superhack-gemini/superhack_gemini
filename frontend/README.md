@@ -26,3 +26,19 @@ Replace the mocked implementation in `src/services/narrativeService.ts`:
 - Return the real `VideoResult` from your API
 
 The UI depends only on this service and does not know that it is mocked.
+
+## Deploying to Vercel
+
+From the project root (`frontend/`):
+
+```bash
+vercel
+```
+
+Production deploy:
+
+```bash
+vercel --prod
+```
+
+After changes, redeploy by re-running `vercel --prod` from the same directory.
