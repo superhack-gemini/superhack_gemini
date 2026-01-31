@@ -44,7 +44,8 @@ def _run_generation_task(task_id: str, tasks_dict: Dict, prompt: str, duration_s
             "script": workflow_result.get("script"),
             "research_context": workflow_result.get("research_context"),
             "workflow_status": workflow_result.get("status"),
-            "error": workflow_result.get("error")
+            "error": workflow_result.get("error"),
+            "videoUrl": workflow_result.get("videoUrl", f"http://example.com/video_{task_id}.mp4")
         }
 
         # Update status to completed

@@ -70,6 +70,7 @@ class ScriptResponse(BaseModel):
     prompt: Optional[str] = None
     script: Optional[dict] = None
     research_context: Optional[dict] = None
+    videoUrl: Optional[str] = None
     error: Optional[str] = None
 
 
@@ -138,6 +139,7 @@ async def get_video_status(task_id: str):
         result = status["result"]
         response.script = result.get("script")
         response.research_context = result.get("research_context")
+        response.videoUrl = result.get("videoUrl")
     
     return response
 
