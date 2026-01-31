@@ -121,9 +121,6 @@ function App() {
             {!isComplete && (
               <div className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl transition">
                 <div className="space-y-3">
-                  <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
-                    Broadcast Command
-                  </p>
                   <h1 className="text-3xl font-semibold text-white md:text-5xl">
                     Direct a Super Bowl narrative with Gemini 3.
                   </h1>
