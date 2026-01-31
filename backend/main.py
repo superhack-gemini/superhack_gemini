@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional
 import json
+import base64
 
 from generation_service import service
 from models import SportsNarrativeScript
@@ -142,6 +143,41 @@ async def get_video_status(task_id: str):
         response.videoUrl = result.get("videoUrl")
     
     return response
+
+
+    return response
+
+
+@app.get("/getvideo/{task_id}/content")
+async def get_video_content(task_id: str):
+    """
+    Get the final generated video file as a Base64 encoded string.
+    """
+    status = service.get_task_status(task_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Task not found")
+        
+    if status.get("status") != "completed":
+        raise HTTPException(status_code=400, detail="Task not completed yet")
+        
+    result = status.get("result", {})
+    video_path = result.get("final_video_path")
+    
+    if not video_path or not os.path.exists(video_path):
+        raise HTTPException(status_code=404, detail="Video file not found")
+        
+    try:
+        with open(video_path, "rb") as video_file:
+            encoded_string = base64.b64encode(video_file.read()).decode('utf-8')
+            
+        return {
+            "task_id": task_id,
+            "status": "completed",
+            "video_base64": encoded_string,
+            "format": "mp4"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read video file: {str(e)}")
 
 
 @app.get("/script/{task_id}")

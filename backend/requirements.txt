@@ -9,3 +9,4 @@ pytest
 langchain-google-genai
 browser-use
 browser-use-sdk
+ffmpeg-python
