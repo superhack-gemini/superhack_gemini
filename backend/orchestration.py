@@ -7,9 +7,14 @@ import requests
 import time
 import os
 import json
+import asyncio
+from typing import Annotated, TypedDict, List, Dict, Any
 from dataclasses import dataclass
 from urllib.parse import quote
 from dotenv import load_dotenv
+from pydantic import BaseModel, Field
+from browser_use_sdk import BrowserUse
+
 
 # Load environment variables
 load_dotenv()
@@ -24,6 +29,24 @@ class AgentState(TypedDict):
 class Video:
     path: str
     title: str
+
+class YouTubeShort(BaseModel):
+    video_id: str
+    title: str
+    video_url: str
+    channel_name: str
+    channel_url: str
+    view_count: str
+    upload_date: str
+    duration: str
+    thumbnail_url: str = Field(None)
+    description: str = Field(None)
+    type: str = "short"
+
+class YouTubeSearchOutput(BaseModel):
+    query: str
+    videos: List[YouTubeShort]
+    count: int
 
 def retrieve_video(url: str):
     print(f"--- RETRIEVING VIDEO: {url} ---")
@@ -101,10 +124,22 @@ def retrieve_video(url: str):
 @tool
 def youtube_scraper_tool(query: str):
     """
-    Search and scrape YouTube for videos related to the query.
+    Search and scrape YouTube for videos related to the query. 
+    Limits results to 5 per query.
     """
-    # Shell code: To be implemented with actual scraping logic
-    return f"YouTube scrape results for: {query} (STUB)"
+    print(f"--- EXECUTING YOUTUBE SCRAPER: {query} ---")
+    browser_use_api_key = os.getenv("BROWSER_USE_API_KEY")
+    client = BrowserUse(api_key=browser_use_api_key)
+    if not browser_use_api_key:
+        return "Error: BROWSER_USE_API_KEY not found in environment variables."
+    result = client.skills.execute_skill(
+                skill_id="aa967d12-c544-41b4-9169-da7d44c295c7",
+                parameters={
+                    "query": query,
+                    "limit": 5
+                }
+            )
+    return [video['video_url'] for video in result.result['data']['videos']]
 
 @tool
 def social_media_researcher_tool(platform: str, topic: str):
