@@ -16,7 +16,8 @@ import json
 import base64
 
 from generation_service import service
-from models import SportsNarrativeScript
+from models import VeoScript
+from veo_agent import get_veo_agent, VeoAgent
 
 app = FastAPI(
     title="Sports Narrative Generator",
@@ -233,6 +234,120 @@ async def generate_narrative_sync(request: GenerateRequest):
         "research_context": result.get("research_context"),
         "error": result.get("error")
     }
+
+
+# ============================================================================
+# VEO VIDEO GENERATION ENDPOINTS
+# ============================================================================
+
+class VeoSegmentRequest(BaseModel):
+    """Request to generate a single Veo video segment."""
+    order: int = Field(default=1, description="Segment order in the script")
+    duration_seconds: int = Field(default=8, ge=1, le=8, description="Duration (max 8s for Veo)")
+    visual_prompt: str = Field(..., description="Visual description for the scene")
+    speaker: str = Field(default="Marcus Webb", description="Speaker name")
+    dialogue: str = Field(..., description="Dialogue for the speaker")
+    delivery: str = Field(default="professional", description="Delivery style")
+    camera: str = Field(default="Medium shot", description="Camera direction")
+    mood: str = Field(default="professional", description="Scene mood")
+
+
+class VeoGenerateResponse(BaseModel):
+    """Response from Veo video generation."""
+    status: str
+    video_uri: Optional[str] = None
+    segment_order: int
+    duration_seconds: int
+    error: Optional[str] = None
+
+
+@app.post("/veo/generate", response_model=VeoGenerateResponse)
+async def generate_veo_video(request: VeoSegmentRequest):
+    """
+    Generate a single Veo AI video for a broadcast segment.
+    
+    This uses Veo 3.1 to create a realistic broadcast video with:
+    - Locked talent profiles (Marcus Webb, Sarah Chen)
+    - Consistent studio setting
+    - Professional broadcast aesthetics
+    
+    Note: Takes 45-60 seconds per segment.
+    """
+    import asyncio
+    
+    try:
+        veo_agent = get_veo_agent()
+        
+        segment = {
+            "order": request.order,
+            "type": "ai_generated",
+            "duration_seconds": request.duration_seconds,
+            "visual_prompt": request.visual_prompt,
+            "speaker": request.speaker,
+            "dialogue": request.dialogue,
+            "delivery": request.delivery,
+            "camera": request.camera,
+            "mood": request.mood
+        }
+        
+        print(f"\n🎥 Generating Veo video for segment {request.order}")
+        print(f"   Speaker: {request.speaker}")
+        print(f"   Dialogue: {request.dialogue[:50]}...")
+        
+        result = await veo_agent.generate_video(
+            segment,
+            on_progress=lambda msg: print(f"   Status: {msg}")
+        )
+        
+        return VeoGenerateResponse(
+            status="completed",
+            video_uri=result.get("video_uri"),
+            segment_order=result.get("segment_order", request.order),
+            duration_seconds=result.get("duration_seconds", request.duration_seconds)
+        )
+        
+    except Exception as e:
+        print(f"❌ Veo generation failed: {e}")
+        return VeoGenerateResponse(
+            status="error",
+            segment_order=request.order,
+            duration_seconds=request.duration_seconds,
+            error=str(e)
+        )
+
+
+@app.post("/veo/refine-prompt")
+async def refine_veo_prompt(request: VeoSegmentRequest):
+    """
+    Refine a segment into an optimized Veo prompt without generating video.
+    
+    Useful for previewing/editing prompts before generation.
+    """
+    try:
+        veo_agent = get_veo_agent()
+        
+        segment = {
+            "order": request.order,
+            "duration_seconds": request.duration_seconds,
+            "visual_prompt": request.visual_prompt,
+            "speaker": request.speaker,
+            "dialogue": request.dialogue,
+            "delivery": request.delivery,
+            "camera": request.camera,
+            "mood": request.mood
+        }
+        
+        refined_prompt = await veo_agent.refine_prompt(segment)
+        
+        return {
+            "status": "success",
+            "original_segment": segment,
+            "refined_prompt": refined_prompt,
+            "full_prompt_with_talent": f"{VeoAgent.TALENT_PROFILES}\n\nSCENE ACTION: {refined_prompt}"
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ============================================================================

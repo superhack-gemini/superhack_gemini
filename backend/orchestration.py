@@ -31,6 +31,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from browser_use_sdk import BrowserUse
 from video_utils import combine_videos
+from veo_agent import get_veo_agent
 
 
 # Load environment variables
@@ -45,6 +46,8 @@ class NarrativeState(TypedDict):
     research_context: Optional[str]
     script: Optional[Dict[str, Any]]
     retrieved_clips: List[Dict[str, Any]]
+    veo_generated_videos: List[Dict[str, Any]]  # Veo AI-generated videos
+    veo_failed_videos: List[Dict[str, Any]]     # Failed Veo generations
     current_phase: str
     error: Optional[str]
     final_video_path: Optional[str]
@@ -405,6 +408,98 @@ def clip_retrieval_node(state: NarrativeState):
 
 
 # -----------------------------------------------------------------------------
+# VEO VIDEO GENERATION NODE
+# -----------------------------------------------------------------------------
+def veo_generation_node(state: NarrativeState) -> Dict[str, Any]:
+    """
+    🎥 VEO VIDEO GENERATION NODE
+    
+    Generates AI broadcast videos using Google Veo 3.1 for all AI segments.
+    Uses locked talent profiles for visual consistency.
+    """
+    print(f"\n{'='*60}")
+    print("🎥 VEO VIDEO GENERATION NODE STARTING")
+    print(f"{'='*60}")
+    
+    script = state.get('script')
+    if not script:
+        return {"error": "No script found for video generation", "current_phase": "veo_failed"}
+    
+    segments = script.get('segments', [])
+    ai_segments = [s for s in segments if s.get('type') == 'ai_generated']
+    
+    if not ai_segments:
+        print("No AI segments found in script")
+        return {"current_phase": "veo_skipped"}
+    
+    print(f"Found {len(ai_segments)} AI segments to generate videos for")
+    
+    # Run async video generation
+    import asyncio
+    
+    async def generate_all_videos():
+        veo_agent = get_veo_agent()
+        
+        video_dir = os.path.join(os.path.dirname(__file__), "videos", "veo_generated")
+        os.makedirs(video_dir, exist_ok=True)
+        
+        results = []
+        
+        for i, segment in enumerate(ai_segments):
+            print(f"\n--- Generating Veo video {i + 1}/{len(ai_segments)} ---")
+            print(f"Speaker: {segment.get('speaker', 'Unknown')}")
+            print(f"Dialogue: {segment.get('dialogue', '')[:80]}...")
+            
+            try:
+                result = await veo_agent.generate_video(
+                    segment,
+                    on_progress=lambda msg: print(f"  Status: {msg}")
+                )
+                
+                # Download the video
+                video_path = os.path.join(video_dir, f"veo_segment_{segment.get('order', i)}.mp4")
+                await veo_agent.download_video(result['video_uri'], video_path)
+                
+                result['local_path'] = video_path
+                results.append(result)
+                print(f"✅ Video saved: {video_path}")
+                
+            except Exception as e:
+                print(f"❌ Failed to generate video for segment {i + 1}: {e}")
+                results.append({
+                    "error": str(e),
+                    "segment_order": segment.get('order', i)
+                })
+        
+        return results
+    
+    # Run the async function
+    try:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        veo_results = loop.run_until_complete(generate_all_videos())
+        loop.close()
+        
+        # Store results
+        generated_videos = [r for r in veo_results if 'local_path' in r]
+        failed_videos = [r for r in veo_results if 'error' in r]
+        
+        print(f"\n✅ Generated {len(generated_videos)} videos")
+        if failed_videos:
+            print(f"⚠️ Failed to generate {len(failed_videos)} videos")
+        
+        return {
+            "veo_generated_videos": generated_videos,
+            "veo_failed_videos": failed_videos,
+            "current_phase": "veo_completed"
+        }
+        
+    except Exception as e:
+        print(f"❌ Veo generation failed: {e}")
+        return {"error": str(e), "current_phase": "veo_failed"}
+
+
+# -----------------------------------------------------------------------------
 # AUDIO GENERATION NODE (TODO)
 # -----------------------------------------------------------------------------
 def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
@@ -441,8 +536,7 @@ def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
     
     # TODO: Implement voice/audio generation
     return {
-        "current_phase": "audio_skipped",
-        "messages": [AIMessage(content="Audio generation not yet implemented")]
+        "current_phase": "audio_skipped"
     }
 
 
@@ -497,23 +591,20 @@ def assembly_node(state: NarrativeState):
 builder = StateGraph(NarrativeState)
 
 # Add nodes
-# Add nodes
 builder.add_node("search_fanout", fanout_search_node)
 builder.add_node("researcher", research_node)
 builder.add_node("script_generator", script_generation_node)
+builder.add_node("veo_generator", veo_generation_node)  # NEW: Veo AI video generation
 builder.add_node("clip_retriever", clip_retrieval_node)
-
-# Add edges
-builder.add_edge(START, "search_fanout")
-builder.add_edge("search_fanout", "researcher")
-builder.add_edge("researcher", "script_generator")
 builder.add_node("assembly", assembly_node)
 
-# Add edges
+# Add edges - Full pipeline:
+# Research → Script → Veo (AI videos) → Clip Retrieval (real clips) → Assembly
 builder.add_edge(START, "search_fanout")
 builder.add_edge("search_fanout", "researcher")
 builder.add_edge("researcher", "script_generator")
-builder.add_edge("script_generator", "clip_retriever")
+builder.add_edge("script_generator", "veo_generator")
+builder.add_edge("veo_generator", "clip_retriever")
 builder.add_edge("clip_retriever", "assembly")
 builder.add_edge("assembly", END)
 
@@ -542,21 +633,15 @@ def run_workflow(prompt: str, duration_seconds: int = 150) -> Dict[str, Any]:
         "prompt": prompt,
         "duration_seconds": duration_seconds,
         "messages": [HumanMessage(content=prompt)],
+        "research_results": {},
         "research_context": None,
-        "research_status": "pending",
         "script": None,
-        "script_status": "pending",
+        "retrieved_clips": [],
+        "veo_generated_videos": [],
+        "veo_failed_videos": [],
         "current_phase": "starting",
         "error": None,
-        # TODO: Initialize future agent states
-        # "video_segments": None,
-        # "video_status": "pending",
-        # "retrieved_clips": None,
-        # "clip_status": "pending",
-        # "audio_tracks": None,
-        # "audio_status": "pending",
-        # "final_video": None,
-        # "assembly_status": "pending",
+        "final_video_path": None,
     }
     
     # Execute the workflow
@@ -570,12 +655,9 @@ def run_workflow(prompt: str, duration_seconds: int = 150) -> Dict[str, Any]:
         "status": final_state.get("current_phase"),
         "error": final_state.get("error"),
         "retrieved_clips": final_state.get("retrieved_clips"),
+        "veo_generated_videos": final_state.get("veo_generated_videos"),
+        "veo_failed_videos": final_state.get("veo_failed_videos"),
         "final_video_path": final_state.get("final_video_path"),
-        # TODO: Include future agent outputs
-        # "video_segments": final_state.get("video_segments"),
-        # "retrieved_clips": final_state.get("retrieved_clips"),
-        # "audio_tracks": final_state.get("audio_tracks"),
-        # "final_video": final_state.get("final_video"),
     }
 
 
