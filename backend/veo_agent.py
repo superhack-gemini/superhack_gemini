@@ -33,12 +33,35 @@ Realistic sports broadcast studio. Soft-focus background monitors showing highli
 Documentary-grade lighting. Clean, modern aesthetic.
 """
     
-    def __init__(self, api_key: Optional[str] = None):
-        self.api_key = os.getenv("VEO_API_KEY")
-        if not self.api_key:
-            raise ValueError("VEO_API_KEY not found. Set it in environment or pass it directly.")
+    def __init__(self, api_keys: Optional[list] = None):
+        import itertools
         
-        self.client = genai.Client(api_key=self.api_key)
+        # Load keys from env
+        keys = [
+            os.getenv("VEO_API_KEY"),
+            os.getenv("VEO_API_KEY2"),
+            os.getenv("VEO_API_KEY3")
+        ]
+        
+        # Filter valid keys (or passed ones)
+        self.api_keys = [k for k in keys if k]
+        
+        if api_keys:
+             self.api_keys = api_keys
+             
+        if not self.api_keys:
+            raise ValueError("No VEO_API_KEYs found. Set VEO_API_KEY, VEO_API_KEY2, or VEO_API_KEY3.")
+        
+        print(f"DEBUG: Initialized VeoAgent with {len(self.api_keys)} keys")
+        
+        # Create client pool
+        self.clients = [genai.Client(api_key=k) for k in self.api_keys]
+        self.client_pool = list(zip(self.clients, self.api_keys))
+        self._pool_cycle = itertools.cycle(self.client_pool)
+        
+    def _get_client_and_key(self):
+        """Get the next (client, key) tuple in the rotation."""
+        return next(self._pool_cycle)
     
     async def _with_retry(self, fn: Callable, max_retries: int = 3) -> Any:
         """
@@ -102,8 +125,9 @@ Return a single descriptive paragraph focused on natural performances and facial
 The scene should feel like real broadcast television."""
 
         async def _call():
+            client, _ = self._get_client_and_key()
             response = await asyncio.to_thread(
-                self.client.models.generate_content,
+                client.models.generate_content,
                 model='gemini-2.5-flash',
                 contents=prompt
             )
@@ -137,27 +161,29 @@ The scene should feel like real broadcast television."""
         
         if on_progress:
             on_progress("Connecting to Veo cinematic engine...")
+            
+        client, api_key = self._get_client_and_key()
         
         # Generate video with retry
         async def _generate():
-            operation = self.client.models.generate_videos(
+            operation = client.models.generate_videos(
                 model='veo-3.1-fast-generate-preview',
                 prompt=full_prompt,
                 config=types.GenerateVideosConfig(
                     number_of_videos=1,
-                    resolution='1080p',
+                    resolution='720p',
                     aspect_ratio='16:9'
                 )
             )
             return operation
         
-        operation = await self._with_retry(_generate)
-                
+        operation = await self._with_retry(_generate)             
+        
         # Poll for completion
         while not operation.done:
             await asyncio.sleep(8)
             if on_progress:
-                on_progress("Capturing organic talent performance... (45-60s)")            
+                on_progress("Capturing organic talent performance... (45-60s)")
         
         # Extract video URI
         if not operation.response:
@@ -179,24 +205,30 @@ The scene should feel like real broadcast television."""
         
         return {
             "video_uri": video_uri,
+            "api_key": api_key, # Return the key used (needed for download)
             "segment_order": segment.get('order', 0),
-            "duration_seconds": segment.get('duration_seconds', 8),
+            "duration_seconds": segment.get('duration_seconds', 5),
             "speaker": segment.get('speaker'),
             "dialogue": segment.get('dialogue')
         }
     
-    async def download_video(self, video_uri: str, output_path: str) -> str:
+    async def download_video(self, video_uri: str, output_path: str, api_key: str = None) -> str:
         """
         Download a generated video from Veo.
         
         Args:
             video_uri: The URI returned from Veo
             output_path: Local path to save the video
+            api_key: The API key used to generate the video (required for permission)
             
         Returns:
             Path to the downloaded video
         """
-        download_url = f"{video_uri}&key={self.api_key}"
+        key_to_use = api_key or (self.api_keys[0] if self.api_keys else None)
+        if not key_to_use:
+             raise ValueError("API key required for download")
+             
+        download_url = f"{video_uri}&key={key_to_use}"
         
         async with aiohttp.ClientSession() as session:
             async with session.get(download_url) as response:

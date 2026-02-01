@@ -465,7 +465,7 @@ async def process_veo_segments(script: Dict[str, Any]) -> Dict[str, List[Any]]:
             
             # Download
             video_path = os.path.join(video_dir, f"veo_segment_{seg.get('order')}.mp4")
-            await veo_agent.download_video(result['video_uri'], video_path)
+            await veo_agent.download_video(result['video_uri'], video_path, api_key=result.get("api_key"))
             
             result['local_path'] = video_path
             return {"status": "success", "data": result}
@@ -474,7 +474,7 @@ async def process_veo_segments(script: Dict[str, Any]) -> Dict[str, List[Any]]:
             return {"status": "error", "error": str(e), "segment_order": seg.get('order')}
 
     # Run all tasks concurrently with stagger
-    tasks = [process_single_segment(s, i * 6) for i, s in enumerate(ai_segments)]
+    tasks = [process_single_segment(s, i * 45) for i, s in enumerate(ai_segments)]
     results = await asyncio.gather(*tasks)
     
     generated = [r['data'] for r in results if r['status'] == 'success']
