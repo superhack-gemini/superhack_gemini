@@ -60,7 +60,7 @@ export function HeroCinematicBackground() {
           playsInline
           preload="auto"
         >
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          <source src="/videos/hero-bg-2.mp4" type="video/mp4" />
         </video>
       </div>
 
