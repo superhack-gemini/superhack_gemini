@@ -194,7 +194,10 @@ def retrieve_video(url: str):
     video_name = video_item.get("name", "downloaded_video")
     
     # 4. Download video via proxy
-    encoded_url = quote(download_url, safe='')
+    if not download_url:
+        raise Exception("Download URL missing from Publer response")
+        
+    encoded_url = quote(str(download_url), safe='')
     proxy_download_url = f"https://publer-media-downloader.kalemi-code4806.workers.dev/?url={encoded_url}"
     print(proxy_download_url)
     
@@ -431,216 +434,147 @@ def clip_retrieval_node(state: NarrativeState):
 
 
 # -----------------------------------------------------------------------------
-# VEO VIDEO GENERATION NODE
+# PARALLEL MEDIA MANUFACTURING
 # -----------------------------------------------------------------------------
-def veo_generation_node(state: NarrativeState) -> Dict[str, Any]:
+
+async def process_veo_segments(script: Dict[str, Any]) -> Dict[str, List[Any]]:
     """
-    🎥 VEO VIDEO GENERATION NODE
-    
-    Generates AI broadcast videos using Google Veo 3.1 for all AI segments.
-    Uses locked talent profiles for visual consistency.
+    Async helper to generate all Veo videos in parallel.
     """
-    print(f"\n{'='*60}")
-    print("🎥 VEO VIDEO GENERATION NODE STARTING")
-    print(f"{'='*60}")
-    
-    script = state.get('script')
-    if not script:
-        return {"error": "No script found for video generation", "current_phase": "veo_failed"}
-    
     segments = script.get('segments', [])
     ai_segments = [s for s in segments if s.get('type') == 'ai_generated']
     
     if not ai_segments:
-        print("No AI segments found in script")
-        return {"current_phase": "veo_skipped"}
-    
-    print(f"Found {len(ai_segments)} AI segments to generate videos for")
-    
-    # Run async video generation
-    import asyncio
-    
-    async def generate_all_videos():
-        veo_agent = get_veo_agent()
+        return {"generated": [], "failed": []}
         
-        video_dir = os.path.join(os.path.dirname(__file__), "videos", "veo_generated")
-        os.makedirs(video_dir, exist_ok=True)
-        
-        results = []
-        
-        for i, segment in enumerate(ai_segments):
-            print(f"\n--- Generating Veo video {i + 1}/{len(ai_segments)} ---")
-            print(f"Speaker: {segment.get('speaker', 'Unknown')}")
-            print(f"Dialogue: {segment.get('dialogue', '')[:80]}...")
-            
-            try:
-                result = await veo_agent.generate_video(
-                    segment,
-                    on_progress=lambda msg: print(f"  Status: {msg}")
-                )
-                
-                # Download the video
-                video_path = os.path.join(video_dir, f"veo_segment_{segment.get('order', i)}.mp4")
-                await veo_agent.download_video(result['video_uri'], video_path)
-                
-                result['local_path'] = video_path
-                results.append(result)
-                print(f"✅ Video saved: {video_path}")
-                
-            except Exception as e:
-                print(f"❌ Failed to generate video for segment {i + 1}: {e}")
-                results.append({
-                    "error": str(e),
-                    "segment_order": segment.get('order', i)
-                })
-        
-        return results
+    print(f"🎥 Starting parallel generation for {len(ai_segments)} Veo segments...")
+    veo_agent = get_veo_agent()
+    video_dir = os.path.join(os.path.dirname(__file__), "videos", "veo_generated")
+    os.makedirs(video_dir, exist_ok=True)
     
-    # Run the async function
-    try:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        veo_results = loop.run_until_complete(generate_all_videos())
-        loop.close()
-        
-        # Store results
-        generated_videos = [r for r in veo_results if 'local_path' in r]
-        failed_videos = [r for r in veo_results if 'error' in r]
-        
-        print(f"\n✅ Generated {len(generated_videos)} videos")
-        if failed_videos:
-            print(f"⚠️ Failed to generate {len(failed_videos)} videos")
-        
-        return {
-            "veo_generated_videos": generated_videos,
-            "veo_failed_videos": failed_videos,
-            "current_phase": "veo_completed"
-        }
-        
-    except Exception as e:
-        print(f"❌ Veo generation failed: {e}")
-        return {"error": str(e), "current_phase": "veo_failed"}
-
-
-# -----------------------------------------------------------------------------
-# AUDIO GENERATION NODE (TODO)
-# -----------------------------------------------------------------------------
-def audio_generation_node(state: NarrativeState) -> Dict[str, Any]:
-    """
-    🎙️ AUDIO AGENT (TODO: Implement voice generation)
-    
-    Purpose: Generate voice audio for dialogue
-    Input: script (dialogue lines with delivery notes)
-    Output: audio_tracks (generated audio files)
-    
-    Example implementation:
-    ```
-    from audio_agent import audio_agent
-    
-    script = state["script"]
-    
-    audio_tracks = []
-    for seg in script["segments"]:
-        if seg["ai_segment"]:
-            for line in seg["ai_segment"]["dialogue"]:
-                audio = audio_agent.generate_voice(
-                    text=line["text"],
-                    speaker=line["speaker"],
-                    delivery=line["delivery"]
-                )
-                audio_tracks.append(audio)
-    
-    return {"audio_tracks": audio_tracks, "audio_status": "completed"}
-    ```
-    """
-    print(f"\n{'='*60}")
-    print("🎙️ AUDIO GENERATION NODE - (Not yet implemented)")
-    print(f"{'='*60}")
-    
-
-def analyze_and_cut_node(state: NarrativeState):
-    """
-    Analyzes retrieved videos using Gemini to find exact timestamps matching the script,
-    then cuts the video.
-    """
-    print("--- ANALYZE AND CUT NODE STARTING ---")
-    retrieved_clips = state.get('retrieved_clips', [])
-    script = state.get('script')
-    
-    if not retrieved_clips:
-        print("No clips to analyze.")
-        return {"current_phase": "analysis_skipped"}
-        
-    # Initialize Gemini Client for File API
-    api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        print("Error: No API key found for video analysis.")
-        return {"error": "Missing API Key", "current_phase": "analysis_failed"}
-        
-    client = genai.Client(api_key=api_key)
-    
-    processed_clips = []
-    
-    for clip in retrieved_clips:
-        video_path = clip.get('video_path')
-        query = clip.get('query')
-        
-        # Find the corresponding script segment to get the visual description
-        # We assume one clip per query roughly, or we just use the query as context.
-        # Ideally, we should pass the Segment object or ID with the clip.
-        # For now, we'll search the script for the segment with this query.
-        segment_context = "Find the most exciting moment."
-        target_duration = 5 # default buffer
-        
-        if script:
-            for seg in script.get('segments', []):
-                ref = seg.get('clip_reference')
-                if ref and ref.get('search_query') == query:
-                    segment_context = f"{ref.get('description')} - {ref.get('context')}"
-                    target_duration = seg.get('duration_seconds', 8)
-                    break
-        
-        if not os.path.exists(video_path):
-            print(f"Video file missing: {video_path}")
-            continue
+    # Define single task function
+    async def process_single_segment(seg, delay):
+        if delay > 0:
+            # Stagger requests to avoid rate limits
+            await asyncio.sleep(delay)
             
         try:
-            print(f"Uploading {video_path} to Gemini...")
-            # Upload file
-            video_file = client.files.upload(file=video_path)
+            # We add a small stagger or just run them all. BrowserUse/VeoAgent handles rate limits.
+            print(f"  > Triggering Veo for Segment {seg.get('order')} (after {delay}s delay)")
+            result = await veo_agent.generate_video(seg)
+            
+            # Download
+            video_path = os.path.join(video_dir, f"veo_segment_{seg.get('order')}.mp4")
+            await veo_agent.download_video(result['video_uri'], video_path)
+            
+            result['local_path'] = video_path
+            return {"status": "success", "data": result}
+        except Exception as e:
+            print(f"  ❌ Veo Segment {seg.get('order')} failed: {e}")
+            return {"status": "error", "error": str(e), "segment_order": seg.get('order')}
+
+    # Run all tasks concurrently with stagger
+    tasks = [process_single_segment(s, i * 6) for i, s in enumerate(ai_segments)]
+    results = await asyncio.gather(*tasks)
+    
+    generated = [r['data'] for r in results if r['status'] == 'success']
+    failed = [r for r in results if r['status'] == 'error']
+    
+    return {"generated": generated, "failed": failed}
+
+
+async def process_clip_workflow(script: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Async helper to run the Retrieval -> Analysis -> Cut pipeline for real clips.
+    """
+    segments = script.get('segments', [])
+    clip_segments = [s for s in segments if s.get('type') == 'real_clip']
+    
+    if not clip_segments:
+        return []
+        
+    print(f"🎬 Starting parallel clip retrieval for {len(clip_segments)} segments...")
+    
+    # We can also parallelize the retrieval part if we want, but let's 
+    # keep the logic clear: Loop safely or use gather.
+    # Given the requested change, let's try to parallelize the *search & retrieval* 
+    # but maybe keep analysis sequential or parallel too. 
+    # Let's go full parallel for speed.
+    
+    videos_dir = os.path.join(os.path.dirname(__file__), "videos")
+    
+    async def process_single_clip(seg):
+        ref_data = seg.get('clip_reference') or seg
+        query = ref_data.get('search_query')
+        description = ref_data.get('description', 'Unknown clip')
+        order = seg.get('order')
+        
+        result_clip = {
+            "segment_order": order,
+            "query": query,
+            "error": None
+        }
+        
+        if not query:
+            return None
+            
+        try:
+            print(f"  > Searching for: {query} (Seg {order})")
+            # 1. Search (Sync tool wrapper via thread)
+            candidates = await asyncio.to_thread(youtube_scraper_tool.invoke, {"query": query})
+            
+            if not candidates:
+                print(f"  ⚠️ No videos found for: {query}")
+                return None
+                
+            best_url = candidates[0]
+            
+            # 2. Retrieve (Sync function via thread)
+            print(f"  > Retrieving: {best_url}")
+            video_obj = await asyncio.to_thread(retrieve_video, best_url)
+            
+            # 3. Analyze & Cut (Sync function via thread)
+            # We need to port the logic from analyze_and_cut_node or wrap it.
+            # Let's wrap the specific analysis logic here for self-containment 
+            # or ideally call a helper. To save space, I'll inline a simplified version
+            # or call the sync function logic. 
+            
+            # For robustness, let's do the analysis here.
+            # Initialize Gemini locally for this thread
+            api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+            client = genai.Client(api_key=api_key)
+            
+            video_path = video_obj.path
+            
+            # Upload
+            print(f"  > Uploading for analysis: {video_path}")
+            video_file = await asyncio.to_thread(client.files.upload, file=video_path)
             
             # Wait for processing
-            import time
             while video_file.state.name == "PROCESSING":
-                print('.', end='', flush=True)
-                time.sleep(2)
-                video_file = client.files.get(name=video_file.name)
-            
-            if video_file.state.name == "FAILED":
-                print(f"\nVideo processing failed for {video_path}")
-                continue
+                await asyncio.sleep(2)
+                video_file = await asyncio.to_thread(client.files.get, name=video_file.name)
                 
-            print(f"\nAnalyzing video for context: {segment_context}")
-            
-            # Prompt Gemini
-            prompt = (
-                f"Find the BEST continuous {target_duration}-second segment in this video that matches this description: "
-                f"'{segment_context}'. "
-                "Return the exact start and end timestamps. "
-                "The segment should be clean and visually clear. "
+            if video_file.state.name == "FAILED":
+                raise Exception("Gemini video processing failed")
+                
+            # Prompt
+            target_duration = seg.get('duration_seconds', 8)
+            prompt_text = (
+                f"Find the BEST continuous {target_duration}-second segment in this video that matches: "
+                f"'{description}'. Return start and end timestamps."
             )
             
-            response = client.models.generate_content(
+            print(f"  > Analyzing content: {query}")
+            response = await asyncio.to_thread(
+                client.models.generate_content,
                 model="gemini-2.0-flash",
                 contents=[
                     types.Content(
                         role="user",
                         parts=[
-                            types.Part.from_uri(
-                                file_uri=video_file.uri,
-                                mime_type=video_file.mime_type
-                            ),
-                            types.Part.from_text(text=prompt),
+                            types.Part.from_uri(file_uri=video_file.uri, mime_type=video_file.mime_type),
+                            types.Part.from_text(text=prompt_text),
                         ]
                     )
                 ],
@@ -652,74 +586,141 @@ def analyze_and_cut_node(state: NarrativeState):
             )
             
             timestamps: ClipTimestamps = response.parsed
-            print(f"Found timestamps: {timestamps.start_time} - {timestamps.end_time}")
             
-            # Cut the video
-            filename = os.path.basename(video_path)
-            output_filename = f"cut_{filename}"
-            output_path = os.path.join(os.path.dirname(video_path), output_filename)
+            # Cut
+            output_filename = f"cut_{uuid.uuid4()}.mp4"
+            output_path = os.path.join(videos_dir, output_filename)
             
-            cut_video(video_path, output_path, timestamps.start_time, timestamps.end_time)
+            await asyncio.to_thread(
+                cut_video, 
+                video_path, 
+                output_path, 
+                timestamps.start_time, 
+                timestamps.end_time
+            )
             
-            # Update clip data
-            clip['video_path'] = output_path
-            clip['original_path'] = video_path
-            clip['timestamps'] = timestamps.model_dump()
-            processed_clips.append(clip)
+            result_clip.update({
+                "video_path": output_path,
+                "original_path": video_path,
+                "timestamps": timestamps.model_dump(),
+                "original_url": best_url
+            })
+            print(f"  ✅ Clip ready: {output_path} (Seg {order})")
+            return result_clip
             
         except Exception as e:
-            print(f"Error analyzing/cutting {video_path}: {e}")
-            # Keep original if processing fails
-            processed_clips.append(clip)
-            
+            print(f"  ❌ Clip processing failed for '{query}': {e}")
+            result_clip["error"] = str(e)
+            return result_clip # Return basic info or failure
+
+    tasks = [process_single_clip(s) for s in clip_segments]
+    results = await asyncio.gather(*tasks)
+    
+    return [r for r in results if r is not None and r.get('video_path')]
+
+
+async def media_production_logic(state: NarrativeState) -> Dict[str, Any]:
+    """
+    Async logic for MASTER NODE: Runs Veo Generation and Clip Retrieval in parallel.
+    """
+    print(f"\n{'='*60}")
+    print("🏭 MEDIA PRODUCTION NODE (PARALLEL)")
+    print(f"{'='*60}")
+    
+    script = state.get('script')
+    if not script:
+        return {"error": "No script found"}
+    
+    # Launch both workflows concurrently
+    veo_task = process_veo_segments(script)
+    clip_task = process_clip_workflow(script)
+    
+    # Wait for both to finish
+    veo_results, clip_results = await asyncio.gather(veo_task, clip_task)
+    
     return {
-        "retrieved_clips": processed_clips,
-        "current_phase": "clips_processed"
+        "veo_generated_videos": veo_results["generated"],
+        "veo_failed_videos": veo_results["failed"],
+        "retrieved_clips": clip_results,
+        "current_phase": "media_produced"
     }
 
+def media_production_node(state: NarrativeState) -> Dict[str, Any]:
+    """
+    Synchronous wrapper for parallel media production.
+    """
+    try:
+        # Check if there's already a running loop (e.g. in some test envs)
+        loop = asyncio.get_running_loop()
+        # If we are here, we are already in a loop, so we shouldn't use run().
+        # But graph.invoke is sync, so it blocks. This is tricky.
+        # Ideally we use graph.ainvoke if we are in async context.
+        # For now, assuming typical sync usage:
+        return loop.run_until_complete(media_production_logic(state))
+    except RuntimeError:
+        # No running loop, safe to create one
+        return asyncio.run(media_production_logic(state))
 
-# -----------------------------------------------------------------------------
-# ASSEMBLY NODE (TODO)
-# -----------------------------------------------------------------------------
+
 # -----------------------------------------------------------------------------
 # ASSEMBLY NODE
 # -----------------------------------------------------------------------------
 def assembly_node(state: NarrativeState):
     """
-    Concatenates retrieved clips into a final video.
+    Concatenates retrieved clips and Veo videos into a final video.
     """
     print("--- ASSEMBLY NODE STARTING ---")
     retrieved_clips = state.get('retrieved_clips', [])
+    veo_videos = state.get('veo_generated_videos', [])
     
-    if not retrieved_clips:
-        return {"current_phase": "assembly_failed", "error": "No clips to assemble"}
+    all_clips = []
+    
+    # Normalize clip structures for sorting
+    for clip in retrieved_clips:
+        all_clips.append({
+            "order": clip.get('segment_order', 0),
+            "path": clip.get('video_path'),
+            "type": "real_clip"
+        })
         
+    for video in veo_videos:
+        # Veo agent returns 'local_path'
+        all_clips.append({
+            "order": video.get('segment_order', 0),
+            "path": video.get('local_path'),
+            "type": "ai_generated"
+        })
+    
+    if not all_clips:
+         return {"current_phase": "assembly_failed", "error": "No clips (Veo or Real) to assemble"}
+
     try:
-        # Sort clips by segment order to ensure correct sequence
-        # Note: In a real script, we'd interleave AI segments too. 
-        # For this prototype, we're just concatenating the 'real_clip' segments we found.
-        sorted_clips = sorted(retrieved_clips, key=lambda x: x.get('segment_order', 0))
+        # Sort by segment order
+        sorted_clips = sorted(all_clips, key=lambda x: x['order'])
         
         # Strict check: Ensure ALL expected video files exist
         video_paths = []
         missing_files = []
         
         for clip in sorted_clips:
-            path = clip.get('video_path')
+            path = clip.get('path')
             if path and os.path.exists(path):
                 video_paths.append(path)
             else:
-                missing_files.append(path or "unknown_path")
+                missing_files.append(path or f"unknown_path_seg_{clip['order']}")
         
         if missing_files:
             error_msg = f"Missing video files for assembly: {', '.join(missing_files)}"
             print(f"❌ {error_msg}")
             return {"current_phase": "assembly_failed", "error": error_msg}
             
-        print(f"Video paths: {video_paths}")
+        print(f"Video paths ({len(video_paths)}):")
+        for p in video_paths:
+            print(f" - {p}")
+
         if not video_paths:
-            return {"current_phase": "assembly_failed", "error": "No valid video files found"}
-            
+             return {"current_phase": "assembly_failed", "error": "No valid video files found"}
+
         # Ensure output directory exists
         final_dir = os.path.join(os.path.dirname(__file__), "videos", "final")
         os.makedirs(final_dir, exist_ok=True)
@@ -748,20 +749,16 @@ builder = StateGraph(NarrativeState)
 builder.add_node("search_fanout", fanout_search_node)
 builder.add_node("researcher", research_node)
 builder.add_node("script_generator", script_generation_node)
-builder.add_node("veo_generator", veo_generation_node)  # NEW: Veo AI video generation
-builder.add_node("clip_retriever", clip_retrieval_node)
-builder.add_node("analyze_and_cut", analyze_and_cut_node) # New node
+builder.add_node("media_production", media_production_node) # PARALLEL NODE
 builder.add_node("assembly", assembly_node)
 
 # Add edges - Full pipeline:
-# Research → Script → Veo (AI videos) → Clip Retrieval (real clips) → Assembly
+# Research → Script → Media Production (Veo + Clips) → Assembly
 builder.add_edge(START, "search_fanout")
 builder.add_edge("search_fanout", "researcher")
 builder.add_edge("researcher", "script_generator")
-builder.add_edge("script_generator", "veo_generator")
-builder.add_edge("veo_generator", "clip_retriever")
-builder.add_edge("clip_retriever", "analyze_and_cut") # Connect new node
-builder.add_edge("analyze_and_cut", "assembly")
+builder.add_edge("script_generator", "media_production")
+builder.add_edge("media_production", "assembly")
 builder.add_edge("assembly", END)
 
 # Compile

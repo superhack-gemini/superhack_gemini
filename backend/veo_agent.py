@@ -34,9 +34,9 @@ Documentary-grade lighting. Clean, modern aesthetic.
 """
     
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+        self.api_key = os.getenv("VEO_API_KEY")
         if not self.api_key:
-            raise ValueError("GEMINI_API_KEY not found. Set it in environment or pass it directly.")
+            raise ValueError("VEO_API_KEY not found. Set it in environment or pass it directly.")
         
         self.client = genai.Client(api_key=self.api_key)
     
@@ -104,7 +104,7 @@ The scene should feel like real broadcast television."""
         async def _call():
             response = await asyncio.to_thread(
                 self.client.models.generate_content,
-                model='gemini-2.5-flash-preview-05-20',
+                model='gemini-2.5-flash',
                 contents=prompt
             )
             return response.text
@@ -152,23 +152,23 @@ The scene should feel like real broadcast television."""
             return operation
         
         operation = await self._with_retry(_generate)
-        
+                
         # Poll for completion
         while not operation.done:
             await asyncio.sleep(8)
             if on_progress:
-                on_progress("Capturing organic talent performance... (45-60s)")
-            
-            async def _poll():
-                return self.client.operations.get(name=operation.name)
-            
-            operation = await self._with_retry(_poll)
+                on_progress("Capturing organic talent performance... (45-60s)")            
         
         # Extract video URI
-        if not operation.response or not operation.response.generated_videos:
-            raise Exception("No video generated. Model may be under extreme load.")
-        
-        video = operation.response.generated_videos[0]
+        if not operation.response:
+            raise Exception(f"Operation completed but response is missing. State: {operation.state}")
+            
+        # Safe access to generated_videos
+        generated_videos = getattr(operation.response, 'generated_videos', [])
+        if not generated_videos:
+             raise Exception("No generated_videos found in operation response.")
+
+        video = generated_videos[0]
         video_uri = video.video.uri if video.video else None
         
         if not video_uri:
