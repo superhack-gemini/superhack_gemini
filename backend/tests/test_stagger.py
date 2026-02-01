@@ -44,10 +44,9 @@ async def test_process_veo_segments_stagger():
         with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
             await process_veo_segments(script)
             
-            # Verify sleep calls: 0, 6, 12
-            assert mock_sleep.call_count == 2 # 0 might be skipped if logic `if delay > 0`
+            # Expect 2 calls of 5s each (index 1, 2)
+            assert mock_sleep.call_count == 2
             
             # Check arguments
-            args_list = [call.args[0] for call in mock_sleep.call_args_list]
-            assert 6 in args_list
-            assert 12 in args_list
+            for call in mock_sleep.call_args_list:
+                assert call.args[0] == 5

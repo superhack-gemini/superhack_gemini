@@ -357,12 +357,21 @@ def script_generation_node(state: NarrativeState):
         "and real clip segments (footage descriptions with search queries). "
         f"Target total duration: {duration} seconds.\n\n"
         "GUIDELINES:\n"
-        "1. Create 3 HOSTS: Lead Anchor, Analyst, Former Player.\n"
+        "1. USE THESE EXACT HOSTS (locked for visual consistency):\n"
+        "   - Marcus Webb (Lead Anchor): Distinguished man, late 40s, charcoal suit.\n"
+        "   - Sarah Chen (Analyst): Professional woman, early 30s, emerald green blazer.\n"
         "2. SEGMENTS:\n"
-        "   - 'ai_generated': Studio shots, dialogue, graphics.\n"
-        "   - 'real_clip': finding footage to illustrate the point. Provide a specific 'search_query' for YouTube.\n"
-        "3. LOGIC: Intro -> Context (Clip) -> Analysis (AI) -> Key Moment (Clip) -> Debate (AI) -> Outro.\n"
-        "4. Research: Use the provided keys facts accurately."
+        "   - 'ai_generated': Studio shots with dialogue. Set 'speaker' to 'Marcus Webb' or 'Sarah Chen'.\n"
+        "   - 'real_clip': Archival footage. Provide a specific 'search_query' for YouTube.\n"
+        "3. AI SEGMENT FIELDS (all required for 'ai_generated'):\n"
+        "   - visual_prompt: Describe the studio shot (e.g., 'Wide shot of both anchors at desk').\n"
+        "   - speaker: 'Marcus Webb' or 'Sarah Chen'.\n"
+        "   - dialogue: What the host says.\n"
+        "   - delivery: How they deliver (e.g., 'Authoritative', 'Inquisitive', 'Somber').\n"
+        "   - camera: Camera movement/framing (e.g., 'Medium shot', 'Close-up').\n"
+        "   - graphics: List of any on-screen graphics/titles.\n"
+        "4. FLOW: Intro (AI) -> Context (Clip) -> Analysis (AI) -> Key Moment (Clip) -> Outro (AI).\n"
+        "5. Research: Use the provided key facts accurately."
     )
     
     human_msg = f"Storyline: {prompt}\n\nResearch Context:\n{research_context}"
@@ -467,37 +476,46 @@ async def process_veo_segments(script: Dict[str, Any]) -> Dict[str, List[Any]]:
     video_dir = os.path.join(os.path.dirname(__file__), "videos", "veo_generated")
     os.makedirs(video_dir, exist_ok=True)
     
+    results = []
     completed_count = 0
     
-    # Define single task function
-    async def process_single_segment(seg, delay):
-        nonlocal completed_count
-        if delay > 0:
-            # Stagger requests to avoid rate limits
-            await asyncio.sleep(delay)
-            
+    # Run sequentially (one after another)
+    for i, seg in enumerate(ai_segments):
         try:
             order = seg.get('order')
             speaker = seg.get('speaker', 'Host')
+            
+            # Rate limit mitigation for sequential calls (safety gap)
+            if i > 0:
+                 _log(f"  ⏳ Waiting 5s before next segment...")
+                 await asyncio.sleep(5)
+            
             _log(f"  🎬 Veo Seg {order}: Starting generation ({speaker})...")
+            
+            # Generate
             result = await veo_agent.generate_video(seg)
             
             # Download
             video_path = os.path.join(video_dir, f"veo_segment_{order}.mp4")
             _log(f"  📥 Veo Seg {order}: Downloading video...")
-            await veo_agent.download_video(result['video_uri'], video_path)
+            await veo_agent.download_video(result['video_obj'], video_path)
+            # Cleanup object from result to avoid pickling issues if any (though not pickling here)
+            del result['video_obj']
             
             result['local_path'] = video_path
             completed_count += 1
             _log(f"  ✓ Veo Seg {order}: Complete ({completed_count}/{len(ai_segments)})")
-            return {"status": "success", "data": result}
+            
+            results.append({"status": "success", "data": result})
+            
         except Exception as e:
             _log(f"  ❌ Veo Seg {seg.get('order')}: Failed - {str(e)[:50]}", "error")
-            return {"status": "error", "error": str(e), "segment_order": seg.get('order')}
+            results.append({"status": "error", "error": str(e), "segment_order": seg.get('order')})
 
-    # Run all tasks concurrently with stagger
-    tasks = [process_single_segment(s, i * 45) for i, s in enumerate(ai_segments)]
-    results = await asyncio.gather(*tasks)
+    generated = [r['data'] for r in results if r['status'] == 'success']
+    failed = [r for r in results if r['status'] == 'error']
+    
+    return {"generated": generated, "failed": failed}
     
     generated = [r['data'] for r in results if r['status'] == 'success']
     failed = [r for r in results if r['status'] == 'error']

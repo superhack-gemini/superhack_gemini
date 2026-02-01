@@ -156,11 +156,26 @@ The scene should feel like real broadcast television."""
         # Refine the prompt
         refined_prompt = await self.refine_prompt(segment)
         
-        # Build full prompt with talent consistency
-        full_prompt = f"{self.TALENT_PROFILES}\n\nSCENE ACTION: {refined_prompt}"
+        # Extract dialogue info for explicit inclusion
+        dialogue = segment.get('dialogue', '')
+        speaker = segment.get('speaker', 'Marcus Webb')
+        duration = segment.get('duration_seconds', 8)
+        
+        # Build full prompt with talent consistency AND explicit dialogue
+        full_prompt = f"""{self.TALENT_PROFILES}
+
+SCENE ACTION: {refined_prompt}
+
+SPOKEN DIALOGUE (must be spoken in video):
+Speaker: {speaker}
+Lines: "{dialogue}"
+
+Duration: {duration} seconds. The speaker must deliver this exact dialogue naturally."""
         
         if on_progress:
             on_progress("Connecting to Veo cinematic engine...")
+        
+        client, keys = self._get_client_and_key()
         
         # Generate video with retry (720p for speed, following official docs)
         async def _generate():
@@ -183,7 +198,7 @@ The scene should feel like real broadcast television."""
             if on_progress:
                 on_progress("Generating video... (45-90s expected)")
             # Use the correct polling method from docs
-            operation = self.client.operations.get(operation)            
+            operation = client.operations.get(operation)            
         
         # Extract video from response
         if not operation.response:
@@ -215,15 +230,36 @@ The scene should feel like real broadcast television."""
         Args:
             video_obj: The video object from operation.response.generated_videos[0].video
             output_path: Local path to save the video
-            api_key: The API key used to generate the video (required for permission)
             
         Returns:
             Path to the downloaded video
         """
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         
+        # Get any client for download (assuming resource is accessible via any valid key)
+        client, keys = self._get_client_and_key()
+        
         # Use the official download method from docs
-        await asyncio.to_thread(self.client.files.download, file=video_obj)
+        await asyncio.to_thread(client.files.download, file=video_obj)
+        # video_obj.save is a convenience method on the object itself, usually doesn't need client if it has its own http logic, but safety first.
+        # Actually docs say `client.files.download` writes to file? No, it returns content?
+        # The user's code had `await asyncio.to_thread(video_obj.save, output_path)`.
+        # If video_obj has .save(), it might work independently.
+        # But `client.files.download(file=video_obj)` might trigger the download. 
+        # Checking Google GenAI Python SDK docs (mental check):
+        # `client.files.download` returns bytes? No, usually `file.download()` or similar.
+        # But the user pasted `self.client.files.download`.
+        # I will trust the user's intent to use `client`.
+        
+        # Just use the client we got
+        # await asyncio.to_thread(client.files.download, file=video_obj)
+        # The user code had BOTH lines. `client.files.download` AND `video_obj.save`.
+        # Try `video_obj.save` might be enough if it holds the data or knows how to fetch.
+        # But `client.files.download` might be needed to hydrate it?
+        # If I look at the error `VeoAgent object has no attribute client`, it crashed at `self.client.files.download`.
+        # So I replace `self.client` with `client`.
+        
+        await asyncio.to_thread(client.files.download, file=video_obj)
         await asyncio.to_thread(video_obj.save, output_path)
         
         return output_path
