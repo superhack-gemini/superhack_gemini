@@ -4,11 +4,38 @@ Uses multiprocessing to handle long-running LangGraph workflows.
 """
 import multiprocessing
 import uuid
-from typing import Dict, Any, Optional
+import sys
+from typing import Dict, Any, Optional, List
+from datetime import datetime
+
+# Use 'fork' on macOS/Linux to avoid spawn issues
+if sys.platform != 'win32':
+    try:
+        multiprocessing.set_start_method('fork', force=True)
+    except RuntimeError:
+        pass  # Already set
 
 # Global manager to handle shared state across processes
 _manager = None
 _tasks: Dict[str, Any] = {}
+
+
+def add_log(tasks_dict: Dict, task_id: str, message: str, level: str = "info"):
+    """
+    Add a log message to a task's log history.
+    Thread-safe for multiprocessing.
+    """
+    task_info = tasks_dict.get(task_id)
+    if task_info:
+        logs = list(task_info.get('logs', []))
+        logs.append({
+            "timestamp": datetime.now().isoformat(),
+            "message": message,
+            "level": level
+        })
+        task_info['logs'] = logs
+        tasks_dict[task_id] = task_info
+        print(f"[{task_id[:8]}] {message}")
 
 
 def _init_manager():
@@ -30,15 +57,19 @@ def _run_generation_task(task_id: str, tasks_dict: Dict, prompt: str, duration_s
             task_info['status'] = 'processing'
             tasks_dict[task_id] = task_info
 
+        # Create a logger function bound to this task
+        def log(message: str, level: str = "info"):
+            add_log(tasks_dict, task_id, message, level)
+
         # Import here to avoid issues with multiprocessing
         from orchestration import run_workflow
         
-        print(f"[{task_id}] Starting LangGraph workflow...")
-        print(f"[{task_id}] Prompt: {prompt}")
-        print(f"[{task_id}] Duration: {duration_seconds}s")
+        log("🚀 Starting narrative generation pipeline...")
+        log(f"📝 Prompt: {prompt}")
+        log(f"⏱️ Target duration: {duration_seconds}s")
         
-        # Execute the multi-agent workflow
-        workflow_result = run_workflow(prompt, duration_seconds)
+        # Execute the multi-agent workflow with logging
+        workflow_result = run_workflow(prompt, duration_seconds, log_fn=log)
         
         result = {
             "script": workflow_result.get("script"),
@@ -55,14 +86,14 @@ def _run_generation_task(task_id: str, tasks_dict: Dict, prompt: str, duration_s
             task_info['result'] = result
             tasks_dict[task_id] = task_info
         
-        print(f"[{task_id}] ✅ Completed successfully!")
+        log("✅ Pipeline completed successfully!", "success")
         if result.get("final_video_path"):
-            print(f"[{task_id}] 🎥 Final Video Path: {result.get('final_video_path')}")
+            log(f"🎥 Final video ready: {result.get('final_video_path')}", "success")
 
     except Exception as e:
-        print(f"[{task_id}] ❌ Error: {e}")
         import traceback
         traceback.print_exc()
+        add_log(tasks_dict, task_id, f"❌ Pipeline failed: {str(e)}", "error")
         
         task_info = tasks_dict.get(task_id)
         if task_info:
@@ -97,7 +128,8 @@ class GenerationService:
             'prompt': prompt,
             'duration_seconds': duration_seconds,
             'result': None,
-            'error': None
+            'error': None,
+            'logs': []
         }
 
         # Start the background process
@@ -136,4 +168,12 @@ class GenerationService:
 
 
 # Singleton instance to be used by the API
-service = GenerationService()
+# Only initialize in the main process, not in forked children
+service = None
+
+def get_service():
+    """Get or create the generation service singleton."""
+    global service
+    if service is None:
+        service = GenerationService()
+    return service

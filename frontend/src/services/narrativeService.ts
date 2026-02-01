@@ -57,7 +57,10 @@ interface TaskStatusResponse {
   error: string | null
 }
 
-export const generateNarrative = async (prompt: string): Promise<VideoResult> => {
+export const generateNarrative = async (
+  prompt: string,
+  onTaskStarted?: (taskId: string) => void
+): Promise<VideoResult> => {
   // Step 1: Start generation task
   const generateResponse = await fetch(`${API_BASE_URL}/generate`, {
     method: 'POST',
@@ -77,6 +80,11 @@ export const generateNarrative = async (prompt: string): Promise<VideoResult> =>
 
   const { task_id }: GenerateResponse = await generateResponse.json()
   console.log(`🎬 Started generation task: ${task_id}`)
+  
+  // Notify caller of task_id so they can start polling logs
+  if (onTaskStarted) {
+    onTaskStarted(task_id)
+  }
 
   // Step 2: Poll for completion
   let attempts = 0
@@ -141,4 +149,38 @@ export const getScript = async (taskId: string): Promise<unknown> => {
 
   const data = await response.json()
   return data.script
+}
+
+
+/**
+ * Log entry from the backend
+ */
+export interface LogEntry {
+  timestamp: string
+  message: string
+  level: 'info' | 'warning' | 'error' | 'success'
+}
+
+/**
+ * Response from the logs endpoint
+ */
+export interface LogsResponse {
+  task_id: string
+  status: string
+  logs: LogEntry[]
+  total_count: number
+  next_index: number
+}
+
+/**
+ * Get logs for a task (supports incremental fetching)
+ */
+export const getTaskLogs = async (taskId: string, since: number = 0): Promise<LogsResponse> => {
+  const response = await fetch(`${API_BASE_URL}/logs/${taskId}?since=${since}`)
+  
+  if (!response.ok) {
+    throw new Error(`Failed to get logs: ${response.statusText}`)
+  }
+
+  return response.json()
 }
