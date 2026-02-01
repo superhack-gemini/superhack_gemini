@@ -161,84 +161,70 @@ The scene should feel like real broadcast television."""
         
         if on_progress:
             on_progress("Connecting to Veo cinematic engine...")
-            
-        client, api_key = self._get_client_and_key()
         
-        # Generate video with retry
+        # Generate video with retry (720p for speed, following official docs)
         async def _generate():
             operation = client.models.generate_videos(
                 model='veo-3.1-fast-generate-preview',
                 prompt=full_prompt,
                 config=types.GenerateVideosConfig(
                     number_of_videos=1,
-                    resolution='720p',
+                    resolution='720p',  # 720p is fastest/cheapest
                     aspect_ratio='16:9'
                 )
             )
             return operation
         
-        operation = await self._with_retry(_generate)             
-        
-        # Poll for completion
+        operation = await self._with_retry(_generate)
+                
+        # Poll for completion using correct method from docs
         while not operation.done:
-            await asyncio.sleep(8)
+            await asyncio.sleep(10)
             if on_progress:
-                on_progress("Capturing organic talent performance... (45-60s)")
+                on_progress("Generating video... (45-90s expected)")
+            # Use the correct polling method from docs
+            operation = self.client.operations.get(operation)            
         
-        # Extract video URI
+        # Extract video from response
         if not operation.response:
-            raise Exception(f"Operation completed but response is missing. State: {operation.state}")
+            raise Exception(f"Operation completed but response is missing.")
             
-        # Safe access to generated_videos
-        generated_videos = getattr(operation.response, 'generated_videos', [])
+        generated_videos = operation.response.generated_videos
         if not generated_videos:
              raise Exception("No generated_videos found in operation response.")
 
         video = generated_videos[0]
-        video_uri = video.video.uri if video.video else None
-        
-        if not video_uri:
-            raise Exception("No video URI returned from Veo.")
+        if not video.video:
+            raise Exception("No video object in response.")
         
         if on_progress:
             on_progress("Video generated successfully!")
         
         return {
-            "video_uri": video_uri,
-            "api_key": api_key, # Return the key used (needed for download)
+            "video_obj": video.video,  # Return video object for download
             "segment_order": segment.get('order', 0),
             "duration_seconds": segment.get('duration_seconds', 5),
             "speaker": segment.get('speaker'),
             "dialogue": segment.get('dialogue')
         }
     
-    async def download_video(self, video_uri: str, output_path: str, api_key: str = None) -> str:
+    async def download_video(self, video_obj, output_path: str) -> str:
         """
-        Download a generated video from Veo.
+        Download a generated video from Veo using the official method.
         
         Args:
-            video_uri: The URI returned from Veo
+            video_obj: The video object from operation.response.generated_videos[0].video
             output_path: Local path to save the video
             api_key: The API key used to generate the video (required for permission)
             
         Returns:
             Path to the downloaded video
         """
-        key_to_use = api_key or (self.api_keys[0] if self.api_keys else None)
-        if not key_to_use:
-             raise ValueError("API key required for download")
-             
-        download_url = f"{video_uri}&key={key_to_use}"
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         
-        async with aiohttp.ClientSession() as session:
-            async with session.get(download_url) as response:
-                response.raise_for_status()
-                
-                os.makedirs(os.path.dirname(output_path), exist_ok=True)
-                
-                with open(output_path, 'wb') as f:
-                    async for chunk in response.content.iter_chunked(8192):
-                        f.write(chunk)
+        # Use the official download method from docs
+        await asyncio.to_thread(self.client.files.download, file=video_obj)
+        await asyncio.to_thread(video_obj.save, output_path)
         
         return output_path
     
@@ -281,11 +267,12 @@ The scene should feel like real broadcast television."""
                     on_progress=lambda msg: on_progress(msg, i + 1, total) if on_progress else None
                 )
                 
-                # Download video
+                # Download video using the video object
                 video_path = os.path.join(output_dir, f"segment_{segment.get('order', i)}.mp4")
-                await self.download_video(result['video_uri'], video_path)
+                await self.download_video(result['video_obj'], video_path)
                 
                 result['local_path'] = video_path
+                del result['video_obj']  # Don't include video object in final result
                 results.append(result)
                 
             except Exception as e:
