@@ -4,8 +4,16 @@ Uses multiprocessing to handle long-running LangGraph workflows.
 """
 import multiprocessing
 import uuid
+import sys
 from typing import Dict, Any, Optional, List
 from datetime import datetime
+
+# Use 'fork' on macOS/Linux to avoid spawn issues
+if sys.platform != 'win32':
+    try:
+        multiprocessing.set_start_method('fork', force=True)
+    except RuntimeError:
+        pass  # Already set
 
 # Global manager to handle shared state across processes
 _manager = None
@@ -160,4 +168,12 @@ class GenerationService:
 
 
 # Singleton instance to be used by the API
-service = GenerationService()
+# Only initialize in the main process, not in forked children
+service = None
+
+def get_service():
+    """Get or create the generation service singleton."""
+    global service
+    if service is None:
+        service = GenerationService()
+    return service

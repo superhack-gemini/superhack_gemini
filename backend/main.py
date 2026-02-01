@@ -17,7 +17,7 @@ from typing import Optional
 import json
 import base64
 
-from generation_service import service
+from generation_service import get_service
 from models import VeoScript
 from veo_agent import get_veo_agent, VeoAgent
 
@@ -118,7 +118,7 @@ async def generate_narrative(request: GenerateRequest):
     print(f"\n🏈 New generation request: {request.prompt}")
     print(f"   Duration: {request.duration_seconds}s")
     
-    task_id = service.start_generation(request.prompt, request.duration_seconds)
+    task_id = get_service().start_generation(request.prompt, request.duration_seconds)
     
     return TaskResponse(
         task_id=task_id,
@@ -134,7 +134,7 @@ async def get_video_status(task_id: str):
     
     Poll this endpoint to check when generation is complete.
     """
-    status = service.get_task_status(task_id)
+    status = get_service().get_task_status(task_id)
     
     if not status:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -170,7 +170,7 @@ async def get_video_content(task_id: str):
     """
     Get the final generated video file as a Base64 encoded string.
     """
-    status = service.get_task_status(task_id)
+    status = get_service().get_task_status(task_id)
     if not status:
         raise HTTPException(status_code=404, detail="Task not found")
         
@@ -204,7 +204,7 @@ async def get_script(task_id: str):
     
     Useful for frontends that only need the script data.
     """
-    status = service.get_task_status(task_id)
+    status = get_service().get_task_status(task_id)
     
     if not status:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -241,7 +241,7 @@ async def get_task_logs(task_id: str, since: int = 0):
     Returns:
         List of log entries with timestamps
     """
-    status = service.get_task_status(task_id)
+    status = get_service().get_task_status(task_id)
     
     if not status:
         raise HTTPException(status_code=404, detail="Task not found")
