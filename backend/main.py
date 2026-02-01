@@ -428,4 +428,4 @@ async def get_script_format():
 if __name__ == "__main__":
     import uvicorn
     # Workers must be 1 because we are managing our own multiprocessing manager
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
