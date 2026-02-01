@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HeroCinematicBackground } from './components/HeroCinematicBackground'
-import { generateNarrative, type VideoResult } from './services/narrativeService'
+import { generateNarrative, getTaskLogs, type VideoResult, type LogEntry } from './services/narrativeService'
 
 type AppState = 'idle' | 'generating' | 'complete'
 
@@ -13,9 +13,6 @@ const steps = [
   'Final Assembly',
 ]
 
-const progressValues = [0.15, 0.35, 0.65, 0.9]
-const phaseDurations = [3000, 5000, 8000, 4000]
-
 function App() {
   const navigate = useNavigate()
   const [prompt, setPrompt] = useState('')
@@ -23,32 +20,56 @@ function App() {
   const [activeStep, setActiveStep] = useState(0)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
-  const timeoutRef = useRef<number[]>([])
+  const [logs, setLogs] = useState<LogEntry[]>([])
+  const [currentTaskId, setCurrentTaskId] = useState<string | null>(null)
+  const logsEndRef = useRef<HTMLDivElement>(null)
+  const logIndexRef = useRef(0)
+  const pollingRef = useRef<number | null>(null)
 
-  const clearTimers = () => {
-    timeoutRef.current.forEach((timeoutId) => clearTimeout(timeoutId))
-    timeoutRef.current = []
-  }
-
+  // Auto-scroll logs to bottom
   useEffect(() => {
-    return () => clearTimers()
-  }, [])
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [logs])
 
-  const startProgressSimulation = () => {
-    clearTimers()
-    setActiveStep(0)
-    setProgress(progressValues[0])
+  // Poll for logs when generating
+  useEffect(() => {
+    if (!currentTaskId || state !== 'generating') {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current)
+        pollingRef.current = null
+      }
+      return
+    }
 
-    let elapsed = 0
-    phaseDurations.slice(0, steps.length - 1).forEach((duration, index) => {
-      elapsed += duration
-      const timeoutId = window.setTimeout(() => {
-        setActiveStep(index + 1)
-        setProgress(progressValues[index + 1] ?? 0.9)
-      }, elapsed)
-      timeoutRef.current.push(timeoutId)
-    })
-  }
+    const pollLogs = async () => {
+      try {
+        const response = await getTaskLogs(currentTaskId, logIndexRef.current)
+        if (response.logs.length > 0) {
+          setLogs(prev => [...prev, ...response.logs])
+          logIndexRef.current = response.next_index
+          
+          // Update progress based on log content
+          const latestLog = response.logs[response.logs.length - 1]?.message || ''
+          if (latestLog.includes('PHASE 1') || latestLog.includes('Research')) setActiveStep(0)
+          else if (latestLog.includes('PHASE 2') || latestLog.includes('PHASE 3') || latestLog.includes('Script')) setActiveStep(1)
+          else if (latestLog.includes('PHASE 4') || latestLog.includes('Media') || latestLog.includes('Veo') || latestLog.includes('Clip')) setActiveStep(2)
+          else if (latestLog.includes('PHASE 5') || latestLog.includes('Assembly')) setActiveStep(3)
+        }
+      } catch (err) {
+        console.error('Failed to fetch logs:', err)
+      }
+    }
+
+    pollLogs()
+    pollingRef.current = window.setInterval(pollLogs, 1500)
+
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current)
+        pollingRef.current = null
+      }
+    }
+  }, [currentTaskId, state])
 
   const handleGenerate = async () => {
     const trimmed = prompt.trim()
@@ -59,14 +80,19 @@ function App() {
 
     setError('')
     setState('generating')
-    startProgressSimulation()
+    setLogs([])
+    setActiveStep(0)
+    setProgress(0.1)
+    logIndexRef.current = 0
 
     try {
-      const response: VideoResult = await generateNarrative(trimmed)
+      const response: VideoResult = await generateNarrative(trimmed, (taskId) => {
+        setCurrentTaskId(taskId)
+      })
       
       // Redirect to video page with the result
       setProgress(1)
-      clearTimers()
+      setCurrentTaskId(null)
       
       // Navigate to video page with state
       navigate(`/video/${response.taskId}`, {
@@ -77,7 +103,7 @@ function App() {
         }
       })
     } catch (err) {
-      clearTimers()
+      setCurrentTaskId(null)
       setState('idle')
       setProgress(0)
       setActiveStep(0)
@@ -86,6 +112,9 @@ function App() {
   }
 
   const isGenerating = state === 'generating'
+  
+  // Calculate progress based on active step
+  const calculatedProgress = isGenerating ? Math.min(0.1 + (activeStep * 0.22), 0.95) : progress
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -200,9 +229,9 @@ function App() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -24 }}
                   transition={{ duration: 0.5, ease: 'easeInOut' }}
-                  className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-2xl"
+                  className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl"
                 >
-                  <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-4">
                     <div className="space-y-2">
                       <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
                         Live Broadcast
@@ -227,19 +256,21 @@ function App() {
                         </h2>
                       </div>
                     </div>
-                    <div className="space-y-4">
+                    
+                    {/* Progress bar */}
+                    <div className="space-y-3">
                       <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                         <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-sky-400 via-indigo-300 to-violet-300"
-                          animate={{ width: `${Math.round(progress * 100)}%` }}
+                          animate={{ width: `${Math.round(calculatedProgress * 100)}%` }}
                           transition={{ duration: 0.8, ease: 'easeInOut' }}
                         />
                       </div>
-                      <div className="grid gap-3 md:grid-cols-4">
+                      <div className="grid gap-2 md:grid-cols-4">
                         {steps.map((step, index) => (
                           <div
                             key={step}
-                            className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] ${
+                            className={`flex items-center gap-2 rounded-xl border px-2 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] ${
                               index === activeStep
                                 ? 'border-sky-200/50 bg-sky-300/10 text-sky-100'
                                 : index < activeStep
@@ -248,7 +279,7 @@ function App() {
                             }`}
                           >
                             <span
-                              className={`h-2 w-2 rounded-full ${
+                              className={`h-1.5 w-1.5 rounded-full ${
                                 index === activeStep
                                   ? 'bg-sky-300 animate-pulse'
                                   : index < activeStep
@@ -260,10 +291,44 @@ function App() {
                           </div>
                         ))}
                       </div>
-                      <p className="text-xs text-slate-400 text-center mt-4">
-                        This may take a few minutes while we research, script, and generate your video...
-                      </p>
                     </div>
+
+                    {/* Live Logs Panel */}
+                    <div className="mt-2">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                          Pipeline Logs
+                        </span>
+                      </div>
+                      <div className="h-48 overflow-y-auto rounded-xl border border-white/10 bg-slate-950/80 p-3 font-mono text-xs">
+                        {logs.length === 0 ? (
+                          <p className="text-slate-500 italic">Waiting for pipeline to start...</p>
+                        ) : (
+                          logs.map((log, i) => (
+                            <div
+                              key={i}
+                              className={`py-0.5 ${
+                                log.level === 'error' ? 'text-red-400' :
+                                log.level === 'warning' ? 'text-yellow-400' :
+                                log.level === 'success' ? 'text-green-400' :
+                                'text-slate-300'
+                              }`}
+                            >
+                              <span className="text-slate-500 mr-2">
+                                {new Date(log.timestamp).toLocaleTimeString()}
+                              </span>
+                              {log.message}
+                            </div>
+                          ))
+                        )}
+                        <div ref={logsEndRef} />
+                      </div>
+                    </div>
+
+                    <p className="text-[10px] text-slate-500 text-center">
+                      This may take several minutes while we research, script, and generate your video...
+                    </p>
                   </div>
                 </motion.div>
               )}

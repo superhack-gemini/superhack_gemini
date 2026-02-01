@@ -229,6 +229,37 @@ async def get_script(task_id: str):
     }
 
 
+@app.get("/logs/{task_id}")
+async def get_task_logs(task_id: str, since: int = 0):
+    """
+    Get real-time logs for a generation task.
+    
+    Args:
+        task_id: The task identifier
+        since: Only return logs after this index (for polling efficiency)
+    
+    Returns:
+        List of log entries with timestamps
+    """
+    status = service.get_task_status(task_id)
+    
+    if not status:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    all_logs = status.get("logs", [])
+    
+    # Return only logs after 'since' index for efficient polling
+    new_logs = all_logs[since:] if since < len(all_logs) else []
+    
+    return {
+        "task_id": task_id,
+        "status": status.get("status"),
+        "logs": new_logs,
+        "total_count": len(all_logs),
+        "next_index": len(all_logs)
+    }
+
+
 @app.post("/generate/sync")
 async def generate_narrative_sync(request: GenerateRequest):
     """
