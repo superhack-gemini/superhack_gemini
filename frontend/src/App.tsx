@@ -1,25 +1,27 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { HeroCinematicBackground } from './components/HeroCinematicBackground'
 import { generateNarrative, type VideoResult } from './services/narrativeService'
 
 type AppState = 'idle' | 'generating' | 'complete'
 
 const steps = [
-  'Footage Ingest',
-  'Commentary Assembly',
-  'Final Replay Cut',
+  'Researching Topic',
+  'Generating Script',
+  'Creating Video',
+  'Final Assembly',
 ]
 
-const progressValues = [0.25, 0.6, 0.9]
-const phaseDurations = [2000, 2200, 2200]
+const progressValues = [0.15, 0.35, 0.65, 0.9]
+const phaseDurations = [3000, 5000, 8000, 4000]
 
 function App() {
+  const navigate = useNavigate()
   const [prompt, setPrompt] = useState('')
   const [state, setState] = useState<AppState>('idle')
   const [activeStep, setActiveStep] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [result, setResult] = useState<VideoResult | null>(null)
   const [error, setError] = useState('')
   const timeoutRef = useRef<number[]>([])
 
@@ -57,42 +59,39 @@ function App() {
 
     setError('')
     setState('generating')
-    setResult(null)
     startProgressSimulation()
 
     try {
-      const response = await generateNarrative(trimmed)
-      setResult(response)
+      const response: VideoResult = await generateNarrative(trimmed)
+      
+      // Redirect to video page with the result
       setProgress(1)
-      setState('complete')
-      setActiveStep(steps.length - 1)
-    } finally {
       clearTimers()
+      
+      // Navigate to video page with state
+      navigate(`/video/${response.taskId}`, {
+        state: {
+          title: response.title,
+          description: response.description,
+          videoUrl: response.videoUrl,
+        }
+      })
+    } catch (err) {
+      clearTimers()
+      setState('idle')
+      setProgress(0)
+      setActiveStep(0)
+      setError(err instanceof Error ? err.message : 'Generation failed')
     }
   }
 
-  const handleReset = () => {
-    clearTimers()
-    setPrompt('')
-    setResult(null)
-    setProgress(0)
-    setActiveStep(0)
-    setState('idle')
-    setError('')
-  }
-
   const isGenerating = state === 'generating'
-  const isComplete = state === 'complete'
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="relative min-h-screen overflow-hidden">
-        {/* 
-          CINEMATIC VIDEO PAGE BACKGROUND - Landing hero section ONLY
-          Shows real football gameplay footage as the page background.
-          Hidden when viewing the generated video showcase to keep focus on output.
-        */}
-        {!isComplete && <HeroCinematicBackground />}
+        {/* Cinematic video background */}
+        <HeroCinematicBackground />
         
         <div className="pointer-events-none absolute inset-0 aurora-bg">
           <div className="absolute -top-64 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[200px]" />
@@ -129,9 +128,8 @@ function App() {
           </header>
 
           <section className="flex flex-1 flex-col justify-center gap-10">
-            {!isComplete && (
+            {!isGenerating && (
               <div className="broadcast-frame hero-shell rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl transition">
-                {/* Cinematic hero layers: soft crowd blur, field glow, and haze for Super Bowl atmosphere. */}
                 <div className="hero-atmosphere" aria-hidden="true">
                   <div className="hero-crowd" />
                   <div className="hero-field-glow" />
@@ -152,7 +150,7 @@ function App() {
                   <div className="console-input">
                     <textarea
                       className="console-textarea min-h-[160px] w-full resize-none rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-lg text-white placeholder:text-slate-500 shadow-[0_0_40px_rgba(15,23,42,0.6)] transition focus:border-sky-200/70 focus:outline-none focus:ring-2 focus:ring-sky-300/20"
-                      placeholder="Describe the Super Bowl narrative you want."
+                      placeholder="Describe the Super Bowl narrative you want..."
                       value={prompt}
                       onChange={(event) => setPrompt(event.target.value)}
                       disabled={isGenerating}
@@ -184,7 +182,7 @@ function App() {
                         <path d="M20.5 7.5c-1.4 1.2-3.2 2-5.4 2.4" />
                         <path d="M20.5 16.5c-1.4-1.2-3.2-2-5.4-2.4" />
                       </svg>
-                      {isGenerating ? 'Broadcasting…' : 'Begin Broadcast'}
+                      Begin Broadcast
                     </button>
                     <p className="text-xs text-slate-400">
                       Broadcast-ready output • 16:9 replay frame
@@ -206,12 +204,12 @@ function App() {
                 >
                   <div className="flex flex-col gap-6">
                     <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
+                      <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
                         Live Broadcast
                       </p>
                       <div className="flex items-center gap-3">
                         <svg
-                          className="h-5 w-5 text-sky-200/80"
+                          className="h-5 w-5 text-sky-200/80 animate-pulse"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -220,9 +218,9 @@ function App() {
                           strokeLinejoin="round"
                           aria-hidden="true"
                         >
-                        <rect x="3.5" y="6" width="10.5" height="8" rx="2" />
-                        <path d="M14 8l6.5-3.5v11L14 12" />
-                        <circle cx="8.75" cy="10" r="1.8" />
+                          <rect x="3.5" y="6" width="10.5" height="8" rx="2" />
+                          <path d="M14 8l6.5-3.5v11L14 12" />
+                          <circle cx="8.75" cy="10" r="1.8" />
                         </svg>
                         <h2 className="text-2xl font-semibold text-white">
                           {steps[activeStep]}
@@ -237,7 +235,7 @@ function App() {
                           transition={{ duration: 0.8, ease: 'easeInOut' }}
                         />
                       </div>
-                      <div className="grid gap-3 md:grid-cols-3">
+                      <div className="grid gap-3 md:grid-cols-4">
                         {steps.map((step, index) => (
                           <div
                             key={step}
@@ -251,87 +249,20 @@ function App() {
                           >
                             <span
                               className={`h-2 w-2 rounded-full ${
-                                index <= activeStep
-                                  ? 'bg-sky-300'
-                                  : 'bg-white/30'
+                                index === activeStep
+                                  ? 'bg-sky-300 animate-pulse'
+                                  : index < activeStep
+                                    ? 'bg-sky-300'
+                                    : 'bg-white/30'
                               }`}
                             />
                             {step}
                           </div>
                         ))}
                       </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* 
-              VIDEO SHOWCASE / OUTPUT PAGE
-              
-              IMPORTANT: This section intentionally uses the ORIGINAL dark gradient background.
-              Do NOT add video backgrounds here. The clean, non-distracting gradient ensures
-              focus remains on the generated content output.
-              
-              The aurora-bg, stadium-lights, cinematic-vignette, and stadium-bloom layers
-              from the parent container provide the broadcast atmosphere without video.
-            */}
-            <AnimatePresence mode="wait">
-              {isComplete && result && (
-                <motion.div
-                  key="result"
-                  initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -24 }}
-                  transition={{ duration: 0.55, ease: 'easeInOut' }}
-                  className="broadcast-frame rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_120px_rgba(5,10,25,0.7)] backdrop-blur-2xl"
-                >
-                  <div className="flex flex-col gap-6">
-                  <div className="lower-third space-y-2">
-                    <p className="text-xs uppercase tracking-[0.35em] text-sky-200/80">
-                        Featured Replay
+                      <p className="text-xs text-slate-400 text-center mt-4">
+                        This may take a few minutes while we research, script, and generate your video...
                       </p>
-                    <h2 className="hero-headline text-3xl font-semibold text-white md:text-5xl">
-                        {result.title}
-                      </h2>
-                      <p className="max-w-3xl text-sm text-slate-300 md:text-base">
-                        {result.description}
-                      </p>
-                    </div>
-                  <div className="replay-frame overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 shadow-[0_30px_80px_rgba(5,10,25,0.75)]">
-                    <span className="replay-label">FEATURED REPLAY</span>
-                      <video
-                        className="aspect-video w-full"
-                        controls
-                        preload="metadata"
-                        src={result.videoUrl}
-                      />
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4">
-                      <button
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/5"
-                        onClick={handleReset}
-                      >
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
-                        >
-                        <path d="M4 12c0-3.3 3.6-6 8-6s8 2.7 8 6-3.6 6-8 6-8-2.7-8-6Z" />
-                        <path d="M8.5 12h7" />
-                        <path d="M10.5 10.5h3" />
-                        <path d="M10.5 13.5h3" />
-                        </svg>
-                        Run another
-                      </button>
-                      <span className="text-xs text-slate-400">
-                        Demo-ready output • Mocked locally
-                      </span>
                     </div>
                   </div>
                 </motion.div>

@@ -10,6 +10,8 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 import json
@@ -33,6 +35,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Static file serving for generated videos
+# Videos are served from /videos/{filename}
+VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "videos")
+os.makedirs(VIDEOS_DIR, exist_ok=True)
+os.makedirs(os.path.join(VIDEOS_DIR, "final"), exist_ok=True)
+
+app.mount("/videos", StaticFiles(directory=VIDEOS_DIR), name="videos")
 
 
 # ============================================================================
@@ -141,11 +151,17 @@ async def get_video_status(task_id: str):
         result = status["result"]
         response.script = result.get("script")
         response.research_context = result.get("research_context")
-        response.videoUrl = result.get("videoUrl")
+        
+        # Build video URL from final_video_path
+        final_video_path = result.get("final_video_path")
+        if final_video_path and os.path.exists(final_video_path):
+            # Extract just the filename from path like /path/to/videos/final/uuid.mp4
+            # and serve it as /videos/final/uuid.mp4
+            video_filename = os.path.basename(final_video_path)
+            response.videoUrl = f"/videos/final/{video_filename}"
+        else:
+            response.videoUrl = result.get("videoUrl")
     
-    return response
-
-
     return response
 
 
@@ -412,4 +428,4 @@ async def get_script_format():
 if __name__ == "__main__":
     import uvicorn
     # Workers must be 1 because we are managing our own multiprocessing manager
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
