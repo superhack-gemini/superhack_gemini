@@ -2,14 +2,14 @@ export interface VideoResult {
   title: string
   description: string
   videoUrl: string
+  taskId: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const POLL_INTERVAL_MS = 1500
-const MAX_POLL_ATTEMPTS = 120 // 3 minutes max
-
-const DEFAULT_VIDEO =
-  'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+// In development, Vite proxy routes /api/* to localhost:8000
+// In production, set VITE_API_URL to your backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+const POLL_INTERVAL_MS = 2000
+const MAX_POLL_ATTEMPTS = 180 // 6 minutes max (video generation takes time)
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -26,6 +26,9 @@ const buildTitle = (prompt: string) => {
   if (lowered.startsWith('how do ')) {
     return `How ${cleaned.slice(7)}`
   }
+  if (lowered.startsWith('why ')) {
+    return cleaned.charAt(0).toUpperCase() + cleaned.slice(1)
+  }
 
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1)
 }
@@ -41,12 +44,13 @@ const buildDescription = (prompt: string) => {
 interface GenerateResponse {
   task_id: string
   status: string
+  message: string
 }
 
 interface TaskStatusResponse {
   task_id: string
   status: 'queued' | 'processing' | 'completed' | 'failed'
-  prompt: string
+  prompt: string | null
   script: unknown | null
   research_context: unknown | null
   videoUrl: string | null
@@ -60,14 +64,19 @@ export const generateNarrative = async (prompt: string): Promise<VideoResult> =>
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ 
+      prompt,
+      duration_seconds: 150  // 2.5 minute video
+    }),
   })
 
   if (!generateResponse.ok) {
-    throw new Error(`Failed to start generation: ${generateResponse.statusText}`)
+    const errorText = await generateResponse.text()
+    throw new Error(`Failed to start generation: ${generateResponse.statusText} - ${errorText}`)
   }
 
   const { task_id }: GenerateResponse = await generateResponse.json()
+  console.log(`🎬 Started generation task: ${task_id}`)
 
   // Step 2: Poll for completion
   let attempts = 0
@@ -82,12 +91,20 @@ export const generateNarrative = async (prompt: string): Promise<VideoResult> =>
     }
 
     const taskStatus: TaskStatusResponse = await statusResponse.json()
+    console.log(`📊 Poll ${attempts}: status=${taskStatus.status}`)
 
     if (taskStatus.status === 'completed') {
+      // Video URL comes from backend as /videos/final/uuid.mp4
+      // This works with both Vite proxy (dev) and production
+      const videoUrl = taskStatus.videoUrl || ''
+      
+      console.log(`✅ Generation complete! Video: ${videoUrl}`)
+      
       return {
         title: buildTitle(prompt),
         description: buildDescription(prompt),
-        videoUrl: taskStatus.videoUrl || DEFAULT_VIDEO,
+        videoUrl,
+        taskId: task_id,
       }
     }
 
@@ -96,5 +113,32 @@ export const generateNarrative = async (prompt: string): Promise<VideoResult> =>
     }
   }
 
-  throw new Error('Generation timed out')
+  throw new Error('Generation timed out after 6 minutes')
+}
+
+/**
+ * Get the status of a generation task
+ */
+export const getTaskStatus = async (taskId: string): Promise<TaskStatusResponse> => {
+  const response = await fetch(`${API_BASE_URL}/getvideo/${taskId}`)
+  
+  if (!response.ok) {
+    throw new Error(`Failed to get task status: ${response.statusText}`)
+  }
+
+  return response.json()
+}
+
+/**
+ * Get the script for a completed task
+ */
+export const getScript = async (taskId: string): Promise<unknown> => {
+  const response = await fetch(`${API_BASE_URL}/script/${taskId}`)
+  
+  if (!response.ok) {
+    throw new Error(`Failed to get script: ${response.statusText}`)
+  }
+
+  const data = await response.json()
+  return data.script
 }
